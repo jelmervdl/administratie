@@ -12,8 +12,12 @@ class Administratie_Contactpersoon_Controller extends IHG_Controller_Abstract {
 			->add_column('ontvangt_factuur', '', array($this, '_format_ontvangt_factuur'));
 	}
 	
-	public function contactpersoon_toevoegen($contactpersoon_id = null, $bedrijf_id) {
-		$contactpersoon = $this->contactpersonen->create();
+	public function contactpersoon_toevoegen($bedrijf_id, $contactpersoon_id = null)
+	{
+		if ($contactpersoon_id)
+			$contactpersoon = $this->contactpersonen->find($contactpersoon_id);
+		else
+			$contactpersoon = $this->contactpersonen->create();
 		
 		$bedrijf = $this->bedrijven->find($bedrijf_id);
 		
@@ -21,8 +25,10 @@ class Administratie_Contactpersoon_Controller extends IHG_Controller_Abstract {
 		
 		$view = $this->views->from_file('administratie_contactpersoon_toevoegen');
 		
-		if($this->_is_post_request()) {
-			try {
+		if ($this->_is_post_request())
+		{
+			try
+			{
 				$contactpersoon->voornaam = $_POST['voornaam'];
 				$contactpersoon->achternaam = $_POST['achternaam'];
 				$contactpersoon->emailadres = $_POST['emailadres'];
@@ -33,23 +39,26 @@ class Administratie_Contactpersoon_Controller extends IHG_Controller_Abstract {
 				$contactpersoon->telefoon = $_POST['telefoon'];
 				$contactpersoon->ontvangt_factuur = !empty($_POST['ontvangt_factuur']);
 				
-				if($contactpersoon->save()) {
-					$view = $this->views->reload();
-					$contactpersoon = $this->contactpersonen->create();
-				}
-			} catch(IHG_Record_Exception $e) {
+				if ( (isset($_POST['delete']) && $contactpersoon->delete())
+					|| $contactpersoon->save())
+					return $this->views->redirect($_POST['_origin']);
+				
+			}
+			catch(IHG_Record_Exception $e)
+			{
 				$view->errors = $e->errors;
 			}
 		}
 		
+		$view->bedrijf = $bedrijf;
 		$view->contactpersoon = $contactpersoon;
 		
 		return $view;
 	}
 	
 	public function _format_naam($id, $contactpersoon) {
-		return sprintf('<a href="%s">%s %s</a>',
-			$this->router->link(__CLASS__, 'contactpersoon', $id),
+		return sprintf('<a href="%s" class="open-in-sheet">%s %s</a>',
+			$this->router->link(__CLASS__, 'contactpersoon_toevoegen', $contactpersoon->bedrijf_id, $id),
 			$contactpersoon->voornaam,
 			$contactpersoon->achternaam);
 	}

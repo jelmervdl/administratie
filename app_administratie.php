@@ -49,12 +49,14 @@ class Administratie_Application extends IHG_Application_Abstract {
 			->register_route('/facturen/%d.pdf',		'Administratie_Factuur_Controller::factuur_pdf')
 			->register_route('/belasting/',				'Administratie_Factuur_Controller::belasting_overzicht')
 			->register_route('/bedrijven/', 			'Administratie_Bedrijf_Controller::bedrijven')
+			->register_route('/bedrijven/nieuw.html', 'Administratie_Bedrijf_Controller::bedrijf_toevoegen')
 			->register_route('/bedrijven/%d.html', 		'Administratie_Bedrijf_Controller::bedrijf')
+			->register_route('/bedrijven/%d/contacten/%d.html', 'Administratie_Contactpersoon_Controller::contactpersoon_toevoegen')
+			->register_route('/bedrijven/%d/contacten/nieuw.html', 'Administratie_Contactpersoon_Controller::contactpersoon_toevoegen')
+			->register_route('/uren/nieuw.html',		'Administratie_Uur_Controller::uur_toevoegen')
 			->register_route('/uren/%d.html', 			'Administratie_Uur_Controller::uur_toevoegen')
-			->register_route('/uur-toevoegen.html',		'Administratie_Uur_Controller::uur_toevoegen')
-			->register_route('/bedrijf-toevoegen.html', 'Administratie_Bedrijf_Controller::bedrijf_toevoegen')
-			->register_route('/tarieven/%d.html', 		'Administratie_Tarief_Controller::tarief_toevoegen')
-			->register_route('/tarief-toevoegen.html', 	'Administratie_Tarief_Controller::tarief_toevoegen');
+			->register_route('/tarieven/nieuw.html', 	'Administratie_Tarief_Controller::tarief_toevoegen')
+			->register_route('/tarieven/%d.html', 		'Administratie_Tarief_Controller::tarief_toevoegen');
 		
 		$this->breadcrumbs->add_crumb('<span id="home-breadcrumb">Home</span>',
 			$this->router->link('Administratie_Index_Controller', 'index'));

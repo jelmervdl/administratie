@@ -1,8 +1,13 @@
-<div class="sheet" id="Administratie_Contactpersoon_Controller_contactpersoon_toevoegen_sheet" <?if(empty($errors)) echo 'style="display: none"'?>>
-	<h2>Contactpersoon toevoegen</h2>
+<div class="sheet">
+	<h2>Contactpersoon <?php echo $contactpersoon->id ? 'Toevoegen' : 'Bewerken' ?></h2>
 	
-	<form method="post" accept-charset="utf-8">
-		<?= $this->form->controller('Administratie_Contactpersoon_Controller', 'contactpersoon_toevoegen') ?>
+	<form
+		method="post"
+		action="<?= $this->router->link('Administratie_Contactpersoon_Controller', 'contactpersoon_toevoegen', $bedrijf->id, $contactpersoon->id) ?>"
+		accept-charset="utf-8">
+
+		<?= $this->form->origin() ?>
+
 		<p>
 			<label>naam:</label>
 			<?= $this->form->textfield('voornaam', $contactpersoon->voornaam, $errors)->set_placeholder('voornaam') ?>
@@ -40,8 +45,17 @@
 		</p>
 		
 		<p class="controls">
-			<button type="submit">Contactperoon Toevoegen</button>
-			<button onclick="hide_sheet('Administratie_Contactpersoon_Controller_contactpersoon_toevoegen_sheet'); return false">Sluiten</button>
+			<?php if ($contactpersoon->is_deletable): ?>
+				<button type="submit" name="delete" value="yes" class="delete">Verwijderen</button>
+			<?php endif ?>
+			
+			<?php if ($contactpersoon->id): ?>
+				<button type="submit">Opslaan</button>
+			<?php else: ?>
+				<button type="submit">Contactperoon Toevoegen</button>
+			<?php endif ?>
+			
+			<button onclick="hide_sheet(this); return false">Sluiten</button>
 		</p>
 	</form>
 </div>

@@ -68,4 +68,9 @@ class Administratie_Contactpersoon extends Administratie_Record {
 			$this->straatnaam, $this->huisnummer,
 			$this->postcode, $this->plaats);
 	}
+	
+	public function is_deletable()
+	{
+		return !!$this->id;
+	}
 }
