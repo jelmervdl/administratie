@@ -1,13 +1,12 @@
-<div class="sheet" id="Administratie_Factuur_Controller_factuur_toevoegen_sheet" <?if(empty($errors)) echo 'style="display: none"'?>>
+<div class="sheet">
 	<h2>Factuur aanmaken</h2>
 	
-	<form method="post" accept-charset="utf-8">
-		<?= $this->form->controller('Administratie_Factuur_Controller', 'factuur_toevoegen') ?>
+	<form
+		method="post"
+		action="<?= $this->router->link('Administratie_Factuur_Controller', 'factuur_toevoegen', $bedrijf->id, $factuur->id) ?>"
+		accept-charset="utf-8">
 		
-		<p>
-			<label for="bedrijf_id">bedrijf:</label>
-			<?= $this->form->popupbutton('bedrijf_id', $this->bedrijven, $factuur->bedrijf, $errors, create_function('$bedrijf', 'return $bedrijf->naam;')) ?>
-		</p>
+		<?= $this->form->origin() ?>
 		
 		<p>
 			<label for="project_naam">projectnaam:</label>
@@ -19,15 +18,19 @@
 			<?= $this->form->textarea('project_beschrijving', $factuur->project_beschrijving, $errors) ?>
 		</p>
 		
+		<?php if ($factuur->is_new): ?>
 		<p>
 			<label for="verzend_datum">verzend datum:</label>
 			<?= $this->form->datepicker('verzend_datum', $factuur->verzend_datum, $errors) ?>
 		</p>
+		<?php endif ?>
 		
 		<p>
 			<label for="uiterste_betaal_datum">uiterste datum van betaling:</label>
 			<?= $this->form->datepicker('uiterste_betaal_datum', $factuur->uiterste_betaal_datum, $errors) ?>
 		</p>
+
+		<?php if ($uren): ?>
 		
 		<div id="urenselector">
 		<?php
@@ -44,9 +47,19 @@
 		
 		<div class="drag-resize-handle" data-target-node="urenselector"></div>
 	
+		<?php endif ?>
+	
 		<p class="controls">
-			<button type="submit" class="default">Factuur Aanmaken</button>
-			<button onclick="hide_sheet('Administratie_Factuur_Controller_factuur_toevoegen_sheet'); return false">Sluiten</button>
+			<?php if ($factuur->is_deletable): ?>
+				<button type="submit" class="delete" name="delete" value="yes">Verwijderen</button>
+			<?php endif ?>
+			
+			<?php if ($factuur->is_new): ?>
+				<button type="submit" class="default">Factuur Aanmaken</button>
+			<?php else: ?>
+				<button type="submit" class="default">Opslaan</button>
+			<?php endif ?>
+			<button onclick="hide_sheet(this); return false">Sluiten</button>
 		</p>
 	</form>
 </div>

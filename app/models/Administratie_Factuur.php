@@ -1,11 +1,16 @@
 <?php
 
-class Administratie_Factuur extends Administratie_Record {
-	protected function _table_name() {
+class Administratie_Factuur extends Administratie_Record
+{
+	private $_uren = array();
+	
+	protected function _table_name()
+	{
 		return 'Facturen';
 	}
 	
-	protected function _properties() {
+	protected function _properties()
+	{
 		return array(
 			'id',
 			'bedrijf_id',
@@ -25,7 +30,8 @@ class Administratie_Factuur extends Administratie_Record {
 		);
 	}
 	
-	protected function _contains_date_indicator($key) {
+	protected function _contains_date_indicator($key)
+	{
 		
 		if($key == 'voldaan' || $key == 'aangegeven')
 			return true;
@@ -33,7 +39,8 @@ class Administratie_Factuur extends Administratie_Record {
 			return parent::_contains_date_indicator($key);
 	}
 	
-	protected function _validate() {
+	protected function _validate()
+	{
 		$errors = array();
 		
 		if(empty($this->bedrijf_id)) 
@@ -60,15 +67,61 @@ class Administratie_Factuur extends Administratie_Record {
 		return $errors;
 	}
 	
-	public function prijs_incl() {
+	public function prijs_incl()
+	{
 		return $this->prijs + $this->btw;
 	}
 	
-	public function nummer() {
+	public function nummer()
+	{
 		return sprintf('%06d', $this->id);
 	}
 	
-	public function aankopen() {
+	public function uren()
+	{
+		return self::find_records($this->pdo, 'Administratie_Uur', array('factuur_id' => $this->id));
+	}
+	
+	public function aankopen()
+	{
 		return self::find_records($this->pdo, 'Administratie_Aankoop', array('factuur_id' => $this->id));
+	}
+	
+	public function is_deletable()
+	{
+		return $this->id && !$this->voldaan;
+	}
+	
+	public function add_uur(Administratie_Uur $uur)
+	{
+		if ($uur->factuur_id && $uur->factuur_id != $this->id)
+			throw new Exception('Je kan niet een uur van een ander factuur aan dit factuur koppelen');
+		
+		$this->_uren[] = $uur;
+	}
+	
+	public function save()
+	{
+		if (!parent::save())
+			return false;
+		
+		foreach ($this->_uren as $uur)
+		{
+			$uur->factuur_id = $this->id;
+			$uur->save();
+		}
+		
+		return true;
+	}
+	
+	public function delete()
+	{
+		foreach ($this->uren() as $uur)
+		{
+			$uur->factuur_id = null;
+			$uur->save();
+		}
+		
+		return parent::delete();
 	}
 }

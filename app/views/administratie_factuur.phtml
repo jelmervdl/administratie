@@ -1,4 +1,7 @@
-<h2>Factuur <?=$this->_html($factuur->nummer)?></h2>
+<h2>
+	Factuur <?=$this->_html($factuur->nummer)?>
+	<small><?= $this->_link_sheet('bewerken', 'Administratie_Factuur_Controller', 'factuur_toevoegen', $factuur->bedrijf_id, $factuur->id) ?></small>
+</h2>
 
 <?php if ($factuur->start_tijd && $factuur->eind_tijd): ?>
 <h5><?=$factuur->start_tijd->format('d/m/Y h:i')?> tot <?=$factuur->eind_tijd->format('d/m/Y h:i')?></h5>

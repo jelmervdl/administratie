@@ -185,11 +185,7 @@ abstract class IHG_Record {
 			$this->_is_dirty = true;
 		}
 
-		if($value === null) {
-			unset($this->_property_values[$key]);
-		} else {
-			$this->_property_values[$key] = $value;
-		}
+		$this->_property_values[$key] = $value;
 		
 		return $value;
 	}
@@ -294,6 +290,10 @@ abstract class IHG_Record {
 		return false;
 	}
 	
+	public function is_new() {
+		return !$this->id;
+	}
+	
 	public function is_dirty() {
 		return (bool) $this->_is_dirty;
 	}
@@ -335,6 +335,8 @@ abstract class IHG_Record {
 				$this->_table_name()));
 		
 		$stmt->execute(array($this->_get_property('id')));
+		
+		return true;
 	}
 	
 	private function _insert_record() {
@@ -368,7 +370,7 @@ abstract class IHG_Record {
 		$sql_assignments = array();
 		
 		foreach($this->__properties() as $id => $property) {
-			if(is_int($id) && $property != 'id' && $this->_get_property($property) !== null) {
+			if(is_int($id) && $property != 'id') {
 				$sql_assignments[] = $property . ' = ?';
 				$sql_values[] = $this->_get_property($property);
 			}
