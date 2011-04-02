@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 
-require_once 'FPDF/fpdf.php';
+require_once 'lib/FPDF/fpdf.php';
 
 function _iso_8859_1($utf8)
 {
