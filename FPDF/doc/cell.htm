@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>Cell</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>Cell</H2>
+<TT>Cell(<B>float</B> w [, <B>float</B> h [, <B>string</B> txt [, <B>mixed</B> border [, <B>int</B> ln [, <B>string</B> align [, <B>int</B> fill [, <B>mixed</B> link]]]]]]])</TT>
+<H4 CLASS='st'>Versie</H4>
+1.0
+<H4 CLASS='st'>Omschrijving</H4>
+Geeft een cel (rechthoekig gebied) met optionele randen, achtergrond kleur en karakter string. De linker bovenhoek van de cel komt overeen met de huidige positie. De tekst kan worden uitgelijnd of gecentreerd. Nadat deze methode is aangeroepen, gaat de huidige positie naar rechts of naar de volgende regel. Het is mogelijk om een link op de tekst te plaatsen.
+<BR>
+Als automatische pagina breaking is geactiveerd en de cel gaat over de limiet van de pagina, dan wordt een pagina break uitgevoerd voordat de pagina wordt weergegeven.
+<H4 CLASS='st'>Parameters</H4>
+<TT><U>w</U></TT>
+<BLOCKQUOTE>
+Cel breedte. Wanneer <TT>0</TT> zal de cel tot de rechtermarge uitbreiden.
+</BLOCKQUOTE>
+<TT><U>h</U></TT>
+<BLOCKQUOTE>
+Cel hoogte.
+Standaard waarde: <TT>0</TT>.
+</BLOCKQUOTE>
+<TT><U>txt</U></TT>
+<BLOCKQUOTE>
+String om weer te geven
+Standaard waarde: lege string.
+</BLOCKQUOTE>
+<TT><U>border</U></TT>
+<BLOCKQUOTE>
+Geeft aan of er randen moeten worden getekend rond de cel. De waarde kan een nummer zijn:
+<UL>
+<LI><TT>0</TT>: Geen rand
+<LI><TT>1</TT>: Rand
+</UL>
+Of de string kan één of meer van de volgende tekens bevatten (in willekeurige volgorde)
+<UL>
+<LI><TT>L</TT>: Links
+<LI><TT>T</TT>: Boven
+<LI><TT>R</TT>: Rechts
+<LI><TT>B</TT>: Onder
+</UL>
+Standaard waarde: <TT>0</TT>.
+</BLOCKQUOTE>
+<TT><U>ln</U></TT>
+<BLOCKQUOTE>
+Geeft aan waar de positie toe moet gaan na de aanroep. Mogelijke waardes zijn:
+<UL>
+<LI><TT>0</TT>: Naar rechts
+<LI><TT>1</TT>: Naar het begin van de volgende regel
+<LI><TT>2</TT>: Omlaag
+</UL>
+De waarde <TT>1</TT> is gelijk aan de waarde is <TT>0</TT> en Ln() er direct achteraan aanroepen.
+Standaard waarde: <TT>0</TT>.
+</BLOCKQUOTE>
+<TT><U>align</U></TT>
+<BLOCKQUOTE>
+Staat toe de tekst te centreren of uit te lijnen. Mogelijke waardes zijn:
+<UL>
+<LI><TT>L</TT> of lege string: Links uitlijnen (standaard waarde)
+<LI><TT>C</TT>: Centreren
+<LI><TT>R</TT>: Rechts uitlijnen
+</UL>
+</BLOCKQUOTE>
+<TT><U>fill</U></TT>
+<BLOCKQUOTE>
+Geeft aan of de cel achtergrond moet worden ingekleurd (<TT>1</TT>) of transparant moet zijn (<TT>0</TT>).
+Standaard waarde: <TT>0</TT>.
+</BLOCKQUOTE>
+<TT><U>link</U></TT>
+<BLOCKQUOTE>
+URL of identifier die door AddLink() wordt teruggegeven.
+</BLOCKQUOTE>
+<H4 CLASS='st'>Voorbeeld</H4>
+<DIV STYLE="background-color:#E0E0E0; padding:3px; margin-top:1em; margin-bottom:1em">
+<TT>
+//Stel lettertype in<BR>
+$pdf-&gt;SetFont('Arial','B',16);<BR>
+//Ga 8 cm naar rechts<BR>
+$pdf-&gt;Cell(80);<BR>
+//Gecentreerde tekst in een 20*10 mm cel met rand en line break<BR>
+$pdf-&gt;Cell(20,10,'Title',1,1,'C');
+</TT>
+</DIV>
+<H4 CLASS='st'>Bekijk ook</H4>
+<A HREF="setfont.htm">SetFont()</A>,
+<A HREF="setdrawcolor.htm">SetDrawColor()</A>,
+<A HREF="setfillcolor.htm">SetFillColor()</A>,
+<A HREF="settextcolor.htm">SetTextColor()</A>,
+<A HREF="setlinewidth.htm">SetLineWidth()</A>,
+<A HREF="addlink.htm">AddLink()</A>,
+<A HREF="ln.htm">Ln()</A>,
+<A HREF="multicell.htm">MultiCell()</A>,
+<A HREF="write.htm">Write()</A>,
+<A HREF="setautopagebreak.htm">SetAutoPageBreak()</A>.
+<HR STYLE="margin-top:1.2em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

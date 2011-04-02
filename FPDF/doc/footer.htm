@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>Footer</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>Footer</H2>
+<TT>Footer()</TT>
+<H4 CLASS='st'>Versie</H4>
+1.0
+<H4 CLASS='st'>Omschrijving</H4>
+Deze methode wordt gebruikt om de pagina voettekst te maken. Het wordt automatisch aangeroepen door AddPage() en Close() en hoeft niet direct aangeroepen te worden door de toepassing. De toepassing in FPDF is leeg, het is dus nodig om deze via een subclass aan te roepen en de methode over te slaan als je een specifieke weergave wilt.
+<H4 CLASS='st'>Voorbeeld</H4>
+<DIV STYLE="background-color:#E0E0E0; padding:3px; margin-top:1em; margin-bottom:1em">
+<TT>
+class PDF extends FPDF<BR>
+{<BR>
+function Footer()<BR>
+{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;//Ga naar 1,5 cm van de onderkant<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;$this-&gt;SetY(-15);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;//Selecteer Arial cursief 8<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;$this-&gt;SetFont('Arial','I',8);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;//Geef gecentreerd weer het pagina nummer<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;$this-&gt;Cell(0,10,'Page '.$this-&gt;PageNo(),0,0,'C');<BR>
+}<BR>
+}
+</TT>
+</DIV>
+<H4 CLASS='st'>Bekijk ook</H4>
+<A HREF="header.htm">Header()</A>.
+<HR STYLE="margin-top:1.2em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

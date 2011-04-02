@@ -1,0 +1,29 @@
+<?php
+header('Content-Type: text/html; charset=utf-8');
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Administratie</title>
+		<base href="http://<?=$_SERVER['HTTP_HOST']?><?=$this->router->root()?>/">
+		<link rel="stylesheet" href="data/blueprint/screen.css" type="text/css" media="screen, projection">
+		<link rel="stylesheet" href="data/blueprint/plugins/breadcrumbs/screen.css" type="text/css" media="screen, projection">
+		<link rel="stylesheet" href="data/blueprint/print.css" type="text/css" media="print">
+		<link rel="stylesheet" href="data/screen.css" type="text/css" media="screen, projection">
+		<!--[if IE]>
+		  <link rel="stylesheet" href="data/blueprint/ie.css" type="text/css" media="screen, projection">
+		<![endif]-->
+		<script src="data/onload.js"></script>
+		<script src="http://www.google.com/jsapi"></script>
+		<script src="data/inline_edit.js"></script>
+		<script src="data/sheet.js"></script>
+		<script src="data/datepicker.js"></script>
+		<script src="data/dragresize.js"></script>
+	</head>
+	<body class="container">
+		<div id="breadcrumbs" class="span-24">
+			<?php $breadcrumbs->draw() ?>
+		</div>
+		<?php $child_view->draw() ?>
+	</body>
+</html>

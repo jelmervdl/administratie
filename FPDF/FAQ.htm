@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>FAQ</title>
+<link type="text/css" rel="stylesheet" href="fpdf.css">
+<style type="text/css">
+ul {list-style-type:none; margin:0; padding:0}
+ul#answers li {margin-top:2em}
+</style>
+</head>
+<body>
+<h2>FAQ</h2>
+<ul>
+<li><b>1.</b> <a href='#q1'>Wat is de licentie van FPDF? Zijn er restricties voor het gebruik?</a>
+<li><b>2.</b> <a href='#q2'>Wanneer ik een PDF probeer aan te maken, krijg ik veel rare tekens op mijn beeldscherm. Waarom?</a>
+<li><b>3.</b> <a href='#q3'>Ik probeer een PDF te genereren en IE geeft een lege pagina. Wat gebeurt er?</a>
+<li><b>4.</b> <a href='#q4'>Ik stuur parameters en ik gebruik de POST methode, maar de waardes verschijnen niet in het PDF document.</a>
+<li><b>5.</b> <a href='#q5'>Wanneer ik een PHP sessie gebruik, geeft IE mijn PDF document niet meer weer maar vraagt mij het te downloaden.</a>
+<li><b>6.</b> <a href='#q6'>Als ik op SSL ben, kan IE het PDF document niet openen.</a>
+<li><b>7.</b> <a href='#q7'>Als ik een script uitvoer krijg ik de melding: "FPDF error: Don't alter the locale before including class file".</a>
+<li><b>8.</b> <a href='#q8'>Ik probeer een PNG afbeelding in te voegen en Acrobat zegt: "There was an error processing a page. A drawing error occurred".</a>
+<li><b>9.</b> <a href='#q9'>Ik kom de volgende fout tegen wanneer ik probeer een PDF document te genereren: "Warning: Cannot add header information - headers already sent by (output started at script.php:X)"</a>
+<li><b>10.</b> <a href='#q10'>Ik probeer een variabele in de Header() methode weer te geven maar er verschijnt niets.</a>
+<li><b>11.</b> <a href='#q11'>Ik heb de Header() en Footer() methodes in mijn PDF class maar er verschijnt niets.</a>
+<li><b>12.</b> <a href='#q12'>Het lukt niet om line breaks te laten werken. Ik heb \n in de string ingevoegd en geprint met Multicell() maar het werkt niet.</a>
+<li><b>13.</b> <a href='#q13'>Ik probeer het euro symbool in te voegen maar dit werkt niet.</a>
+<li><b>14.</b> <a href='#q14'>Ik teken een frame met zeer precieze afmetingen, maar wanneer ik het afgedrukt heb zie ik enkele afwijkingen.</a>
+<li><b>15.</b> <a href='#q15'>Ik wil de hele oppervlakte van het papier gebruiken, maar als ik print heb ik altijd een kleine marge. Hoe kan ik hier van af komen?</a>
+<li><b>16.</b> <a href='#q16'>Wat is de limiet van de bestanden die ik kan genereren met FPDF?</a>
+<li><b>17.</b> <a href='#q17'>Kan ik een PDF document wijzigen met FPDF?</a>
+<li><b>18.</b> <a href='#q18'>Ik wil een zoekmachine maken in PHP en PDF bestanden indexeren. Kan ik dit doen met FPDF?</a>
+<li><b>19.</b> <a href='#q19'>Kan ik een HTMl pagina naar PDF converteren met FPDF?</a>
+<li><b>20.</b> <a href='#q20'>Kan ik PDF bestanden aaneenschakelen met FPDF?</a>
+</ul>
+<ul id='answers'>
+
+<li id='q1'>
+<p><b>1.</b> <span class='st'>Wat is de licentie van FPDF? Zijn er restricties voor het gebruik?</span></p>
+FPDF is Freeware (dit is in het begin van het bronbestand vermeld). Er is geen restrictie voor het gebruik. U mag het gratis in Uw toepassing invoegen (commercieel of niet), met of zonder aanpassingen.
+</li>
+
+<li id='q2'>
+<p><b>2.</b> <span class='st'>Wanneer ik een PDF probeer aan te maken, krijg ik veel rare tekens op mijn beeldscherm. Waarom?</span></p>
+Deze 'rare' tekens zijn in feite de actuele inhoud van het PDF document. Dit gedrag is een fout van IE6. Wanneer het eerst een HTML pagina ontvangt en daarna een PDF van hetzelde adres, toont het deze direct zonder eerst Acrobat op te starten. Dit gebeurt vaker als U een document aan het ontwekpen bent: Bij het kleinste fout in het script wordt een HTML pagina verzonden, en na wijziging komt de PDF aan.
+<br>
+Om dit probleem op te lossen, sluit u simpelweg IE af en start het opnieuw op. U kunt ook naar een andere URL gaan en terugkomen.
+<br>
+Om dit soort fouten te voorkomen tijdens het ontwerpen, kunt U de PDF direct naar een bestand genereren en het openen via de browser.
+</li>
+
+<li id='q3'>
+<p><b>3.</b> <span class='st'>Ik probeer een PDF te genereren en IE geeft een lege pagina. Wat gebeurt er?</span></p>
+Ten eerste, kijk of U niets meer naar de browser stuurt na de PDF (niet eens een spatie of een enter). Je kan een exit statement ( ?> ) na de aanroep naar de Output() methode om zeker te zijn.
+<br>
+Als het nog steeds niet werkt, betekent het dat U het slachtoffer bent van het "lege pagina syndroom". IE gebruikt in combinatie met de Acrobat plugin heeft nog diverse fouten, in alle versies. U zou Uw script met zo veel mogelijk versies van IE als mogelijk moeten proberen (ten minste als U verbonden bent met internet). Het probleem komt vaak voor met de POST methode en het wordt aangeraden deze te ontwijken (ook omdat het nog meer problemen veroorzaakt, zie de volgende vraag). GET werkt beter maar kan falen wanneer de URL te lang wordt: Gebruik geen oproep met meer dan 45 tekens. Toch bestaat er een truc om deze limiet te omzeilen: Beëindig de URL met .pdf . Als U een formulier gebruikt, kunt U een verborgen veld op de laatste positie toevoegen:
+<div class="doc-source">
+<pre><code>&lt;input type=&quot;HIDDEN&quot; name=&quot;ext&quot; value=&quot;.pdf&quot;&gt;</code></pre>
+</div>
+Het gebruik van PHP sessies veroorzaakt ook vaak problemen (vermijdt het gebruik van HTTP headers om caching te voorkomen). Zie vraag 5.<br>
+<br>
+Om al deze problemen in een redelijk eenvoudige manier te ontwijken, bestaan er 2 technieken:
+<br>
+<br>
+- Schakel de plug-in uit en gebruik Acrobat als programma. Start Acrobat, in het menu Bestand, Voorkeuren, Algemeen, zet de optie "Web browser intergratie" uit (voor acrobat 5: Wijzigen, voorkeuren, opties, "Geef PDF weer in browser"). De volgende keer dat U een PDF in IE opent, komt het dialoog scherm "Openen"of "Opslaan" naar voren. Zet de optie "Altijd vragen voor het openen van dit type document" en kies openen. Vanaf nu, zullen PDF bestanden automatisch in een extern Acrobat scherm geopend worden.
+<br>
+De keerzijde van deze methode is dat je de instellingen van de client moet wijzigen, wat je kan doen op een intranet maar niet op het Internet.<br>
+<br>
+- Gebruik een redirect techniek. Dit bestaat uit het genereren van een PDF document in een tijdelijk bestand op de server en redirect de client naar het. Bijvoorbeeld, aan het eind van het script, kunt U het volgende plaatsen:
+<div class="doc-source">
+<pre><code>//Bepaal de naam van het tijdelijke bestand in de huidige directory
+$file=basename(tempnam('.','tmp'));
+rename($file,$file.'.pdf');
+$file.='.pdf';
+//Sla het PDF document op in een bestand
+$pdf-&gt;Output($file);
+//JavaScript redirect
+echo &quot;&lt;html&gt;&lt;head&gt;&lt;script&gt;document.location='$file';&lt;/script&gt;&lt;/head&gt;&lt;/html&gt;&quot;;</code></pre>
+</div>
+Deze methode keert het dynamische PDF document in een statische en vermijdt alle problemen. Maar U moet wel wat schoonmaken om de tijdelijke bestanden te verwijderen. Bijvoorbeeld:
+<div class="doc-source">
+<pre><code>function CleanFiles($dir)
+{
+    //Verwijder tijdelijk bestanden
+    $t=time();
+    $h=opendir($dir);
+    while($file=readdir($h))
+    {
+        if(substr($file,0,3)=='tmp' and substr($file,-4)=='.pdf')
+        {
+            $path=$dir.'/'.$file;
+            if($t-filemtime($path)&gt;3600)
+                @unlink($path);
+        }
+    }
+    closedir($h);
+}</code></pre>
+</div>
+Deze functie verwijdert alle bestanden in de vorm tmp*.pdf ouder dan een uur in de opgegeven directory. U kunt het aanroepen wanneer U wilt, bijvoorbeeld in het script wat de PDF genereert.
+<br>
+<br>
+Opmerking: Het is nodig om het PDF bestand in een nieuw scherm te openen, omdat U niet terug kan vanwege de redirect.
+</li>
+
+<li id='q4'>
+<p><b>4.</b> <span class='st'>Ik stuur parameters en ik gebruik de POST methode, maar de waardes verschijnen niet in het PDF document.</span></p>
+Het probleem komt voor in enkele versies van IE (vooral de eerste 5.5). Zie de vorige vraag voor een manier om het probleem te verhelpen.
+</li>
+
+<li id='q5'>
+<p><b>5.</b> <span class='st'>Wanneer ik een PHP sessie gebruik, geeft IE mijn PDF document niet meer weer maar vraagt mij het te downloaden.</span></p>
+Het is een probleem wat in sommige versies van IE voor komt. Om het te verhelpen, voegt U de volgende regel toe voor session_start():
+<div class="doc-source">
+<pre><code>session_cache_limiter('private');</code></pre>
+</div>
+Of voer een redirect uit zoals uitgelegd in vraag 3.
+</li>
+
+<li id='q6'>
+<p><b>6.</b> <span class='st'>Als ik op SSL ben, kan IE het PDF document niet openen.</span></p>
+Het probleem kan worden opgelost door de volgende regel toe te voegen:
+<div class="doc-source">
+<pre><code>Header('Pragma: public');</code></pre>
+</div>
+</li>
+
+<li id='q7'>
+<p><b>7.</b> <span class='st'>Als ik een script uitvoer krijg ik de melding: "FPDF error: Don't alter the locale before including class file".</span></p>
+Wanneer de decimalen scheider is ingesteld als een komma voor het invoegen van een bestand, is er een <A HREF="http://bugs.php.net/bug.php?id=17105" TARGET="_blank">Fout</a> in PHP en decimale nummers worden afgekapt. Hierom wordt het afgeraden om setlocale() in te stellen voor het invoegen van de class. Op Unix wordt het afgeraden de LC_ALL omgeving variabele in te stellen, omdat het gelijkwaardig is aan de setlocale() aanroep.
+</li>
+
+<li id='q8'>
+<p><b>8.</b> <span class='st'>Ik probeer een PNG afbeelding in te voegen en Acrobat zegt: "There was an error processing a page. A drawing error occurred".</span></p>
+Acrobat 5 heeft een fout en kan geen transparante zwartwit afbeeldingen weergeven (bijvoorbeeld met 1 bit per pixel). Verwijder de transparantheid en sla uw afbeelding op in 16 kleuren (4 bits per pixel) of meer.
+</li>
+
+<li id='q9'>
+<p><b>9.</b> <span class='st'>Ik kom de volgende fout tegen wanneer ik probeer een PDF document te genereren: "Warning: Cannot add header information - headers already sent by (output started at script.php:X)"</span></p>
+U moet niets naar de browser sturen behalve de PDF zelf: geen HTML, geen spaties, geen enters, niet ervoor noch erachter. Het script stuurt iets naar de browser op regel X.
+</li>
+
+<li id='q10'>
+<p><b>10.</b> <span class='st'>Ik probeer een variabele in de Header() methode weer te geven maar er verschijnt niets.</span></p>
+U moet het <tt>global</tt> keyword gebruiken, bijvoorbeeld:
+<div class="doc-source">
+<pre><code>function Header()
+{
+    global $title;
+
+    $this-&gt;SetFont('Arial','B',15);
+    $this-&gt;Cell(0,10,$title,1,1,'C');
+}</code></pre>
+</div>
+</li>
+
+<li id='q11'>
+<p><b>11.</b> <span class='st'>Ik heb de Header() en Footer() methodes in mijn PDF class maar er verschijnt niets.</span></p>
+U moet een object aanmaken vanaf de PDF class, niet FPDF:
+<div class="doc-source">
+<pre><code>$pdf = new PDF();</code></pre>
+</div>
+</li>
+
+<li id='q12'>
+<p><b>12.</b> <span class='st'>Het lukt niet om line breaks te laten werken. Ik heb \n in de string ingevoegd en geprint met Multicell() maar het werkt niet.</span></p>
+U moet Uw string omvatten met dubbele aanhalingstekens, niet met enkele.
+</li>
+
+<li id='q13'>
+<p><b>13.</b> <span class='st'>Ik probeer het euro symbool in te voegen maar dit werkt niet.</span></p>
+De standaard lettertypes hebben het euro teken op positie 128. U kunt een constante definiëren zoals dit voor het gemak:
+<div class="doc-source">
+<pre><code>define('EURO', chr(128));</code></pre>
+</div>
+</li>
+
+<li id='q14'>
+<p><b>14.</b> <span class='st'>Ik teken een frame met zeer precieze afmetingen, maar wanneer ik het afgedrukt heb zie ik enkele afwijkingen.</span></p>
+Om afmetingen aan te houden, kunt U de optie "Aanpassen aan pagina" uitschakelen in het printer dialoog scherm.
+</li>
+
+<li id='q15'>
+<p><b>15.</b> <span class='st'>Ik wil de hele oppervlakte van het papier gebruiken, maar als ik print heb ik altijd een kleine marge. Hoe kan ik hier van af komen?</span></p>
+Alle printers hebben physieke marges (afhankelijk van het model), het is daarom onmogelijk om deze te verwijderen en het gehele papier te beprinten.
+</li>
+
+<li id='q16'>
+<p><b>16.</b> <span class='st'>Wat is de limiet van de bestanden die ik kan genereren met FPDF?</span></p>
+Er is geen bepaalde limiet. Er zijn echter enkele beperkingen:
+<br>
+<br>
+- Het maximale gehoudgen toegedeeld aan PHP scripts staat standaard op 8MB. Voor zeer grote documenten, speciaal met afbeeldingen, zal deze limiet snel bereikt worden (het bestand wordt in het geheugen opgebouwd). De parameter is ingesteld in het php.ini bestand.
+<br>
+<br>
+- De maximale uitvoer tijd toegedeeld is standaard op 30 seconden ingesteld. Deze limiet kan natuurlijk eenvoudig bereikt worden. Het is ingesteld in php.ini en kan dynamisch worden gewijizigd met set_time_limit().
+<br>
+<br>
+- Browsers hebben algemeen een 5 minuten time-out. Als U het PDF document direct naar de browser stuurt en de limiet bereikt, zal het verloren zijn. Het is daarom aangeraden om zeer grote documenten in een bestand te genereren en data van tijd tot tijd naar de browser te seturen (bijvoorbeeld pagina1, pagina2... met flush() om de output te forceren). Wanneer het document is voltooid, kunt U een redirect sturen met javascript of een link aanmaken.
+<br>
+Opmerking: Zelfs als de browser een time-out genereert, kan het script blijven draaien op de server.
+</li>
+
+<li id='q17'>
+<p><b>17.</b> <span class='st'>Kan ik een PDF document wijzigen met FPDF?</span></p>
+Nee.
+</li>
+
+<li id='q18'>
+<p><b>18.</b> <span class='st'>Ik wil een zoekmachine maken in PHP en PDF bestanden indexeren. Kan ik dit doen met FPDF?</span></p>
+Nee. Maar een GPL C programma bestaat, pdftotext, wat de tekstuele inhoud uit het document kan filteren. Het wordt geleverd met het Xpdf pakket:<br>
+<br>
+<a href="http://www.foolabs.com/xpdf/" target="_blank">http://www.foolabs.com/xpdf/</a>
+</li>
+
+<li id='q19'>
+<p><b>19.</b> <span class='st'>Kan ik een HTMl pagina naar PDF converteren met FPDF?</span></p>
+Nee. Maar een GPL C programma bestaat, htmldoc, wat deze taak uitvoert en goede resultaten geeft:<br>
+<br>
+<a href="http://www.htmldoc.org" target="_blank">http://www.htmldoc.org</a>
+</li>
+
+<li id='q20'>
+<p><b>20.</b> <span class='st'>Kan ik PDF bestanden aaneenschakelen met FPDF?</span></p>
+Nee. Maar gratis programma's bestaan voor deze taak:<br>
+<br>
+<a href="http://thierry.schmit.free.fr/spip/spip.php?article15&amp;lang=en" target="_blank">mbtPdfAsm</a><br>
+<a href="http://www.accesspdf.com/pdftk/" target="_blank">pdftk</a>
+</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>FPDF</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>FPDF</H2>
+<TT>FPDF([<B>string</B> orientation [, <B>string</B> unit [, <B>mixed</B> format]]])</TT>
+<H4 CLASS='st'>Versie</H4>
+1.0
+<H4 CLASS='st'>Omschrijving</H4>
+Dit is de class constructor. Het staat toe om het pagina formaat, de orientatie en de meet eenheid in te stellen die gebruikt worden in alle methodes (uitgezonderd de lettergroottes).
+<H4 CLASS='st'>Parameters</H4>
+<TT><U>orientation</U></TT>
+<BLOCKQUOTE>
+Standaard pagina orientatie. Mogelijke waardes zijn (hoofdletter ongevoelig):
+<UL>
+<LI><TT>P</TT> of <TT>Portrait</TT>
+<LI><TT>L</TT> of <TT>Landscape</TT>
+</UL>
+Standaard waarde is <TT>P</TT>.
+</BLOCKQUOTE>
+<TT><U>unit</U></TT>
+<BLOCKQUOTE>
+Meet eenheid. Mogelijke waardes zijn:
+<UL>
+<LI><TT>pt</TT>: punt
+<LI><TT>mm</TT>: millimeter
+<LI><TT>cm</TT>: centimeter
+<LI><TT>in</TT>: inch
+</UL>
+Een punt is gelijk aan 1/72 van een inch, wat gelijkstaat aan ongeveer 0,35 mm (aangenomen dat een inch 2,54 cm is). Dit is een zeer veel voorkomende eenheid in de typografie; Lettergroottes zijn in deze eenheid uitgedrukt.
+<BR>
+<BR>
+Standaard waarde is <TT>mm</TT>.
+</BLOCKQUOTE>
+<TT><U>format</U></TT>
+<BLOCKQUOTE>
+Het pagina formaat gebruikt voor pagina's. Het kan een van de volgende waardes zijn (hoofdletter ongevoelig):
+<UL>
+<LI><TT>A3</TT>
+<LI><TT>A4</TT>
+<LI><TT>A5</TT>
+<LI><TT>Letter</TT>
+<LI><TT>Legal</TT>
+</UL>
+Of een zelf gemaakt formaat in de vorm van een twee-elementen array met de breedte en de hoogte (uitgedrukt in de eenheid gegeven door <TT>unit</TT>).
+</BLOCKQUOTE>
+<HR STYLE="margin-top:1.2em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

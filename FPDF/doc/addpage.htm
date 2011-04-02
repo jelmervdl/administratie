@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>AddPage</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>AddPage</H2>
+<TT>AddPage([<B>string</B> orientation])</TT>
+<H4 CLASS='st'>Versie</H4>
+1.0
+<H4 CLASS='st'>Omschrijving</H4>
+Voegt een nieuwe pagina toe aan het document. Als de pagina al aanwezig is, wordt eerst de Footer() methode aangeroepen om een voettekst te genereren. Daarna wordt de pagina toegevoegd, de huidige positie wordt ingesteld op de linker bovenhoek volgens de linker en boven marges, en Header() wordt aangeroepen om de koptekst weer te geven.
+<BR>
+Het lettertype wat was ingesteld voor het aanroepen wordt automatisch hersteld. Het is niet nodig om Setfont() weer aan te roepen als U wilt verder gaan met hetzelfde lettertype. Hetzelfde geldt voor kleuren en lijn breedtes.
+<BR>
+De oorsprong van het coördinaten systeem is bij de linker boven hoek en de ordinaat (= Y coördinaat) neemt toe als U omlaag gaat.
+<H4 CLASS='st'>Parameters</H4>
+<TT><U>orientation</U></TT>
+<BLOCKQUOTE>
+Pagina oriëntatie. Mogelijke waardes zijn (hoofdletter ongevoelig):
+<UL>
+<LI><TT>P</TT> of <TT>Portrait</TT>
+<LI><TT>L</TT> of <TT>Landscape</TT>
+</UL>
+De standaard waarde is degene ingesteld bij de constructor.
+</BLOCKQUOTE>
+<H4 CLASS='st'>Bekijk ook</H4>
+<A HREF="fpdf.htm">FPDF()</A>,
+<A HREF="header.htm">Header()</A>,
+<A HREF="footer.htm">Footer()</A>,
+<A HREF="setmargins.htm">SetMargins()</A>.
+<HR STYLE="margin-top:1.2em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

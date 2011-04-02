@@ -1,0 +1,190 @@
+/* @override http://localhost/Experimenteel/active_record/data/screen.css */
+
+#breadcrumbs {
+    width:908px;
+    position:fixed;
+    top: 0;
+    opacity: 0.95;
+    -webkit-border-radius: 2px;
+}
+
+body {
+    padding-top: 50px;
+}
+
+table.prijs {
+	width: 150px;
+}
+
+table.prijs th {
+	font-weight: normal;
+}
+
+table.prijs td {
+	text-align: right;
+}
+
+table.prijs tr.summary *{
+	border-top: 1px solid gray;
+}
+
+table.prijs tr.summary td {
+	font-weight: bold;
+}
+
+
+h2 small,
+h3 small {
+	font-size: 0.5em;
+}
+
+
+.FAIL {
+	font-weight: bold;
+	color: red;
+}
+
+.inline_edit {
+	-webkit-transition-property: ;
+	-webkit-transition-duration: 150ms;
+	-webkit-transition-timing-function: ease-in-out;
+	background: rgba(255, 255, 0, 0);
+}
+
+.inline_edit:hover {
+	cursor:pointer;
+	background: rgba(255, 255, 0, 0.5);
+}
+
+.inline_edit input {
+	text-decoration: inherit;
+	font: inherit;
+	width: 100%;
+}
+
+thead th {
+	background-color: #9FB5D1;
+	color: black;
+}
+
+.sheet {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	margin-left: -300px;
+	width: 600px;
+	padding: 20px;
+	background: #eaeaea;
+	border: 1px solid #ababab;
+	border-top: 0;
+	box-shadow: grey 0 3px 20px;
+}
+
+.sheet h2 {
+	margin: -20px -20px 20px -20px;
+	padding: 5px 20px;
+	background: #9FB5D1;
+	color: #324662;
+	border-top: 1px solid #C5E1FD;
+	border-bottom: 1px solid #7A8BA1;
+}
+
+.sheet .controls {
+	border-top: 1px outset #666;
+	margin: 20px 10px;
+	padding: 20px 0 0 0;
+}
+
+.sheet .controls button {
+	margin-left: 15px;
+	float: right;
+	font-size: 12px;
+	padding: 3px 15px;
+}
+
+.sheet .controls button.delete {
+    float: left;
+}
+
+.sheet .controls button.default {
+	-webkit-appearance: default-button;
+}
+
+.sheet .tip {
+	margin-left: 10px;
+}
+
+.sheet form p {
+	margin-bottom: 1.0em;
+}
+
+.sheet form label {
+	display: inline-block;
+	width: 175px;
+	text-align: right;
+	padding-right: 10px;
+	line-height: 24px;
+	vertical-align: top;
+}
+
+.sheet form textarea {
+	width: 395px;
+	height: 75px;
+	
+	font-family: inherit;
+	font-size: 1.0em;
+}
+
+.sheet form input.textfield {
+
+}
+
+.sheet form input.datepicker {
+	width: 130px;
+}
+
+.sheet form input,
+.sheet form select {
+	margin: 0 0 5px 0;
+	padding: 2px;
+}
+
+.sheet form input.wide {
+	width: 395px;
+}
+
+.sheet form input[type=checkbox] {
+	margin: 5px 5px 5px 190px;
+}
+
+.sheet form table input[type=checkbox] {
+	margin: 0;
+}
+
+.sheet form label.for-checkbox {
+	width: auto;
+	font-weight: normal;
+}
+
+.sheet #urenselector {
+	height: 140px;
+	margin: 0 10px 0 10px;
+	overflow-y: scroll;
+	background: white;
+	border: 1px solid #bbb;
+}
+
+.sheet .drag-resize-handle {
+	margin: -5px 10px 0 10px;
+	height: 10px;
+	background: transparent url(resize-y.png) center center no-repeat;
+	cursor:row-resize;
+}
+
+.sheet .drag-resize-handle.active {
+	background-color: #9AC1EF;
+}
+
+.sheet input.placeholder {
+	color: grey;
+}

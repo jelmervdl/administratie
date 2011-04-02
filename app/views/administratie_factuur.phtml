@@ -1,0 +1,41 @@
+<h2>Factuur <?=$this->_html($factuur->nummer)?></h2>
+
+<?php if ($factuur->start_tijd && $factuur->eind_tijd): ?>
+<h5><?=$factuur->start_tijd->format('d/m/Y h:i')?> tot <?=$factuur->eind_tijd->format('d/m/Y h:i')?></h5>
+<?php endif ?>
+
+<div class="span-6">
+	<table class="prijs">
+		<tr>
+			<th>Prijs:</th>
+			<td>&euro; <?=number_format($factuur->prijs, 2, '.', ',')?></td>
+		</tr>
+		<tr>
+			<th>BTW:</th>
+			<td>&euro; <?=number_format($factuur->btw, 2, '.', ',')?></td>
+		</tr>
+		<tr class="summary">
+			<th>Totaal:</th>
+			<td>&euro; <?=number_format($factuur->prijs_incl, 2, '.', ',')?></td>
+		</tr>
+	</table>
+	
+	<p><strong>Geadresseerde:</strong> <?=nl2br($this->_html($factuur->contactpersoon->adres))?></p>
+	
+	<p><strong>Verzenddatum:</strong> <?=$factuur->verzend_datum->format('d/m/Y')?><br>
+	Uiterste betaaldatum: <?=$factuur->uiterste_betaal_datum->format('d/m/Y')?><br>
+	Voldaan: <?=$factuur->voldaan ? 'Ja' : ($factuur->termijn_resterend > 0 ? ('Nee (' . $factuur->termijn_resterend . ' dagen)') : '<span class="FAIL">Nee</span>')?></p>
+
+        <p><a href="<?=$this->router->link('Administratie_Factuur_Controller', 'factuur_pdf', $factuur->id)?>" target="_new">Exporteer naar PDF</a></p>
+</div>
+<div class="span-18 last">
+	<p><strong><?=$this->_inline_edit(
+		$this->router->link('Administratie_Factuur_Controller', 'post_project_naam', $factuur->id),
+		$factuur->project_naam)?></strong><br>
+		<?=$this->_inline_edit(
+			$this->router->link('Administratie_Factuur_Controller', 'post_project_beschrijving', $factuur->id),
+			$factuur->project_beschrijving) ?>
+	</p>
+	<?/*=$this->_partial('Administratie_Uur_Controller', 'factuur', $factuur->id)*/?>
+	<?=$this->_partial('Administratie_Aankoop_Controller', 'factuur', $factuur->id)?>
+</div>

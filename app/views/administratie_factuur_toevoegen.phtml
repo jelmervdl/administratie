@@ -1,0 +1,52 @@
+<div class="sheet" id="Administratie_Factuur_Controller_factuur_toevoegen_sheet" <?if(empty($errors)) echo 'style="display: none"'?>>
+	<h2>Factuur aanmaken</h2>
+	
+	<form method="post" accept-charset="utf-8">
+		<?= $this->form->controller('Administratie_Factuur_Controller', 'factuur_toevoegen') ?>
+		
+		<p>
+			<label for="bedrijf_id">bedrijf:</label>
+			<?= $this->form->popupbutton('bedrijf_id', $this->bedrijven, $factuur->bedrijf, $errors, create_function('$bedrijf', 'return $bedrijf->naam;')) ?>
+		</p>
+		
+		<p>
+			<label for="project_naam">projectnaam:</label>
+			<?= $this->form->textfield('project_naam', $factuur->project_naam, $errors)->add_class('wide') ?>
+		</p>
+	
+		<p>
+			<label for="project_beschrijving">beschrijving:</label>
+			<?= $this->form->textarea('project_beschrijving', $factuur->project_beschrijving, $errors) ?>
+		</p>
+		
+		<p>
+			<label for="verzend_datum">verzend datum:</label>
+			<?= $this->form->datepicker('verzend_datum', $factuur->verzend_datum, $errors) ?>
+		</p>
+		
+		<p>
+			<label for="uiterste_betaal_datum">uiterste datum van betaling:</label>
+			<?= $this->form->datepicker('uiterste_betaal_datum', $factuur->uiterste_betaal_datum, $errors) ?>
+		</p>
+		
+		<div id="urenselector">
+		<?php
+			$this->views->from_record($this->uren)
+				->set_data($uren)
+				->add_column('id', '', IHG_HTML_Table::checkbox_decorator('uur'))
+				->add_column('beschrijving', 'Beschrijving', 'summary')
+				->add_column('start_tijd', 'Datum', create_function('$x', 'return $x->format("d-m-Y");'))
+				->add_column('duur', 'Duur')
+				->add_column('prijs', 'Prijs', create_function('$x', 'return "&euro;" . number_format($x, 2, ",", ".");'))
+				->draw();
+		?>
+		</div>
+		
+		<div class="drag-resize-handle" data-target-node="urenselector"></div>
+	
+		<p class="controls">
+			<button type="submit" class="default">Factuur Aanmaken</button>
+			<button onclick="hide_sheet('Administratie_Factuur_Controller_factuur_toevoegen_sheet'); return false">Sluiten</button>
+		</p>
+	</form>
+</div>

@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>Write</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>Write</H2>
+<TT>Write(<B>float</B> h, <B>string</B> txt [, <B>mixed</B> link])</TT>
+<H4 CLASS='st'>Versie</H4>
+1.5
+<H4 CLASS='st'>Omschrijving</H4>
+Deze methode geeft een tekst weer vanaf de huidige positie. Wanneer de rechtermarge is bereikt (of het \n karakter gevonden is) wordt een line break uitgevoerd en gaat de tekst verder vanaf de linker marge. Wanneer het commando stopt, wordt de huidige positie aan het einde van de tekst gelaten.
+<BR>
+Het is mogelijk om een link op de tekst te plaatsen.
+<H4 CLASS='st'>Parameters</H4>
+<TT><U>h</U></TT>
+<BLOCKQUOTE>
+Regel hoogte.
+</BLOCKQUOTE>
+<TT><U>txt</U></TT>
+<BLOCKQUOTE>
+String om weer te geven.
+</BLOCKQUOTE>
+<TT><U>link</U></TT>
+<BLOCKQUOTE>
+URL of identifier die door AddLink() wordt teruggegeven.
+</BLOCKQUOTE>
+<H4 CLASS='st'>Voorbeeld</H4>
+<DIV STYLE="background-color:#E0E0E0; padding:3px; margin-top:1em; margin-bottom:1em">
+<TT>
+//Begin met een normaal lettertype<BR>
+$pdf-&gt;SetFont('Arial','',14);<BR>
+$pdf-&gt;Write(5,'Visit ');<BR>
+//Plaats dan een blauw onderstreepte link<BR>
+$pdf-&gt;SetTextColor(0,0,255);<BR>
+$pdf-&gt;SetFont('','U');<BR>
+$pdf-&gt;Write(5,'www.fpdf.org','http://www.fpdf.org');
+</TT>
+</DIV>
+<H4 CLASS='st'>Bekijk ook</H4>
+<A HREF="setfont.htm">SetFont()</A>,
+<A HREF="settextcolor.htm">SetTextColor()</A>,
+<A HREF="addlink.htm">AddLink()</A>,
+<A HREF="multicell.htm">MultiCell()</A>,
+<A HREF="setautopagebreak.htm">SetAutoPageBreak()</A>.
+<HR STYLE="margin-top:1.2em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

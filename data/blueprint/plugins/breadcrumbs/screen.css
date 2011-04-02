@@ -1,0 +1,48 @@
+#breadcrumbs
+{
+    background-image:url('bc_bg.png'); 
+    background-repeat:repeat-x;
+    height:30px;
+    line-height:30px;
+    color:#9b9b9b;
+    border:solid 1px #cacaca;
+border-top: 0;
+    width:100%;
+    overflow:hidden;
+    margin:0px;
+    padding:0px;
+}
+
+#breadcrumbs li 
+{
+    list-style-type:none;
+    float:left;
+    padding-left:10px;
+}
+
+#breadcrumbs a
+{
+    height:30px;
+    display:block;
+    background-image:url('bc_separator.png'); 
+    background-repeat:no-repeat; 
+    background-position:right;
+    padding-right: 15px;
+    text-decoration: none;
+    color:#454545;
+}
+
+#breadcrumbs a:hover
+{
+	color:#35acc5;
+}
+
+#home-breadcrumb {
+	display: block;
+	background: transparent url('home_alt.png') center left no-repeat;
+	width: 16px;
+	height: 30px;
+	margin-left: -15px;
+	overflow: hidden;
+	text-indent: 20px;
+}

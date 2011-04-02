@@ -1,0 +1,26 @@
+<div class="sheet">
+	<h2>Bedrijf toevoegen</h2>
+	
+	<form
+		method="post"
+		action="<?=$this->router->link('Administratie_Bedrijf_Controller', 'bedrijf_toevoegen') ?>"
+		accept-charset="utf-8">
+		
+		<?= $this->form->origin() ?>
+		
+		<p>
+			<label for="naam">bedrijfsnaam:</label>
+			<?= $this->form->textfield('naam', $bedrijf->naam, $errors) ?>
+		</p>
+	
+		<p>
+			<label for="url">website:</label>
+			<?= $this->form->textfield('url', $bedrijf->url, $errors)->set_size(40)->set_placeholder('http://') ?>
+		</p>
+	
+		<p class="controls">
+			<button type="submit">Bedrijf Toevoegen</button>
+			<button onclick="hide_sheet(this); return false">Sluiten</button>
+		</p>
+	</form>
+</div>

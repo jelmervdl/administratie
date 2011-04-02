@@ -1,0 +1,46 @@
+<div
+	class="sheet"
+	onsheetopen="document.getElementById('bedrijf_id').focus()">
+	<h2>Werktijd Registreren</h2>
+	
+	<form
+		method="post"
+		action="<?=$this->router->link('Administratie_Uur_Controller', 'uur_toevoegen', $uur->id)?>"
+		accept-charset="utf-8">
+		
+		<?= $this->form->origin() ?>
+		
+		<p>
+			<label for="bedrijf_id">bedrijf:</label>
+			<?= $this->form->popupbutton('bedrijf_id', $this->bedrijven, $uur->bedrijf, $errors, create_function('$bedrijf', 'return $bedrijf->naam;')) ?>
+		</p>
+	
+		<p>
+			<label for="tarief_id">tarief:</label>
+			<?= $this->form->popupbutton('tarief_id', $this->tarieven, $uur->tarief, $errors, create_function('$tarief', 'return sprintf("%s (&euro; %01.2f)", $tarief->naam, $tarief->prijs_per_uur);')) ?>
+		</p>
+
+		<p>
+			<label for="start_tijd">Starttijd:</label>
+			<?=$this->form->datepicker('start_tijd', $uur->start_tijd, $errors)?>
+		</p>
+	
+		<p>
+			<label for="eind_tijd">Eindtijd:</label>
+			<?=$this->form->datepicker('eind_tijd', $uur->eind_tijd, $errors)?>
+		</p>
+
+		<p>
+			<label for="beschrijving">Beschrijving:</label>
+			<?=$this->form->textarea('beschrijving', $uur->beschrijving, $errors)?>
+		</p>
+	
+		<p class="controls">
+			<?php if ($uur->is_deletable): ?>
+			<button type="submit" name="delete" value="yes" class="delete">Verwijderen</button>
+			<?php endif ?>
+			<button type="submit"><?=$uur->id ? 'Opslaan' : 'Toevoegen' ?></button>
+			<button onclick="hide_sheet(this); return false">Sluiten</button>
+		</p>
+	</form>
+</div>

@@ -1,0 +1,265 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>Nieuwe lettertypes toevoegen en ondersteuning voor codering</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>Nieuwe lettertypes toevoegen en ondersteuning voor codering</H2>
+Deze tutorial toont hoe U TrueType of Type1 lettertypes kunt gebruiken zodat U niet meer gelimiteerd bent tot de standaard lettertypes. Een ander voordeel is dat U de codering van het lettertype kan kiezen, waarmee het mogelijk wordt andere talen dan de Westerse te gebruiken (de standaard lettertypes hebben te weinig beschikbare tekens).
+<BR>
+<BR>
+Er zijn twee manieren om een nieuw lettertype te gebruiken: Het in de PDF invoegen of niet. Wanneer het lettertype is ingevoegd, wordt het gezocht in het systeem. Het voordeel is dat het PDF bestand kleiner is; er zal echter, als deze niet beschikbaar is, een vervangingslettertype gebruikt worden. De voorkeur is dus zeker te zijn dat het betreffende lettertype geïnstalleerd is op de client systemen. Als het bestand voor een groot publiek bestemd is, is het beter deze in te voegen in het bestand.
+<BR>
+<BR>
+Om een lettertype toe te voegen zijn er drie stappen nodig voor TrueTypes:
+<UL>
+<LI>Het aanmaken van het metric bestand (.afm)
+<LI>Het aanmaken van het lettertype definitie bestand (.php)
+<LI>Declaratie van het lettertype in het script
+</UL>
+Voor Type1 is de eerste theoretisch niet noodzakelijk omdat het AFM bestand meestal met het lettertype geleverd wordt. Het het geval dat U alleen een metric bestand in PFM formaat heeft, kunt u de convertor <A HREF="http://www.fpdf.org/fr/dl.php?id=34">hier</A> downloaden.
+<H4 CLASS='st'>Het aanmaken van het metric bestand</H4>
+De eerste stap voor een TrueType bestaat uit het aanmaken van het AFM bestand. Een programma bestaat om deze taak uit te voeren: <A HREF="http://ttf2pt1.sourceforge.net" TARGET="_blank">ttf2pt1</A>. Het Windows binary bestand is <A HREF="http://www.fpdf.org/fr/dl.php?id=22">hier</A> beschikbaar. De commando regel om het te gebruiken is als volgt:
+<BR>
+<BR>
+<TT>ttf2pt1 -a font.ttf font</TT>
+<BR>
+<BR>
+Bijvoorbeeld, voor Comic Sans MS Standaard:
+<BR>
+<BR>
+<TT>ttf2pt1 -a c:\windows\fonts\comic.ttf comic</TT>
+<BR>
+<BR>
+Er worden twee bestanden aangemaakt; de ene waar we geïnteresseerd in zijn is comic.afm.
+<H4 CLASS='st'>Het aanmaken van het lettertype definitie bestand</H4>
+De tweede stap bestaat uit het genereren van een PHP bestand dat alle informatie dat nodig is voor FPDF bevat; Daarnaast wordt het lettertype bestand gecomprimeerd. Om dit te doen
+The second step consists in generating a PHP file containing all the information needed by FPDF; Om dit te doen is een hulp script bijgeleverd in de font/makefont/ directory van het pakket: makefont.php. Het bevat de volgende functie:
+<BR>
+<BR>
+<TT>MakeFont(<B>string</B> fontfile, <B>string</B> afmfile [, <B>string</B> enc [, <B>array</B> patch [, <B>string</B> type]]])</TT>
+<BR>
+<BR>
+<TT><U>fontfile</U></TT>
+<BLOCKQUOTE>
+Path naar het .ttf of .pfb bestand.
+</BLOCKQUOTE>
+<TT><U>afmfile</U></TT>
+<BLOCKQUOTE>
+Path naar het .afm bestand.
+</BLOCKQUOTE>
+<TT><U>enc</U></TT>
+<BLOCKQUOTE>
+Naam van de codering die gebruikt moet worden. Standaard waarde: <TT>cp1252</TT>.
+</BLOCKQUOTE>
+<TT><U>patch</U></TT>
+<BLOCKQUOTE>
+Optionele modificatie van de codering. Standaard leeg.
+</BLOCKQUOTE>
+<TT><U>type</U></TT>
+<BLOCKQUOTE>
+Type lettertype (<TT>TrueType</TT> of <TT>Type1</TT>). Standaard waarde: <TT>TrueType</TT>.
+</BLOCKQUOTE>
+<BR>
+De eerste parameter is de naam van het lettertype bestand. De extensie moet .ttf of .pfb zijn en bepaalt het type van het lettertype. Als U een over een Type1 lettertype in ASCII formaat (.pfa) beschikt, kunt U het converteren naar binary formaat met <A HREF="http://www.lcdf.org/~eddietwo/type/#t1utils" TARGET="_blank">t1utils</A>.
+<BR>
+Als U geen lettertype wilt invoegen, geef dan een lege string op. In dit geval wordt het type gegeven door het <TT>type</TT> parameter.
+<BR>
+Opmerking: In het geval dat een lettertype dezelfde naam heeft als een standaard naam, bijvoorbeeld arial.ttf, is het noodzakelijk deze in te voegen. Zo niet, zal Acrobat het eigen letterype gebruiken.
+<BR>
+<BR>
+Het AFM bestand is degene die eerder is gegenereerd.
+<BR>
+<BR>
+De codering defineert de associatie met de code (van 0 tot 255) en een teken. De eerste 128 staan vast en komen overeen met ASCII. De daaropvolgenden zijn variabelen. De coderingen worden opgeslagen in .map bestanden. De volgende zijn beschikbaar:
+<UL>
+<LI>cp1250 (Centraal Europa)
+<LI>cp1251 (Cyrillisch)
+<LI>cp1252 (West Europa)
+<LI>cp1253 (Grieks)
+<LI>cp1254 (Turks)
+<LI>cp1255 (Hebreeuws)
+<LI>cp1257 (Baltisch)
+<LI>cp1258 (Vietnamees)
+<LI>cp874 (Thai)
+<LI>ISO-8859-1 (West Europe)
+<LI>ISO-8859-2 (Centraal Europe)
+<LI>ISO-8859-4 (Baltisch)
+<LI>ISO-8859-5 (Cyrillisch)
+<LI>ISO-8859-7 (Grieks)
+<LI>ISO-8859-9 (Turks)
+<LI>ISO-8859-11 (Thai)
+<LI>ISO-8859-15 (West Europe)
+<LI>ISO-8859-16 (Centraal Europe)
+<LI>KOI8-R (Russisch)
+<LI>KOI8-U (Oekraïnisch)
+</UL>
+Natuurlijk moet het lettertype de tekens bevatten die met de codering overeenkomen.
+<BR>
+In het bijzondere geval van een lettertype met symbolen (wat betekent dat het geen letters bevat, zoals Symbol of ZapfDingbats), kunt U een lege string opgeven.
+<BR>
+De coderingen die beginnen met cp worden gebruikt door windows; Linux systemen gebruiken meestal ISO.
+<BR>
+Opmerking: Standaard lettertypes gebruiken cp1252.
+<BR>
+<BR>
+De vierde parameter geeft de mogelijkheid om de codering te wijzigen. Soms is het handig over de mogelijkheid te beschikken om sommige tekens te wijzigen. Een voorbeeld. ISO-8859-1 bevat geen euro symbool. Als U het wilt toevoegen op positie 164, geef dan <TT>array(164=>'Euro')</TT> op.
+<BR>
+<BR>
+De laatste parameter wordt gebruikt om het type van het lettertype in te stellen wanneer dit niet ingevoegd is (met andere woorden, wanneer de eerste parameter leeg is).
+<BR>
+<BR>
+Nadat U de functie heeft aangeroepen (maak een nieuw bestand hiervoor aan en voeg de makefont.php er in, of voeg de aanroep direct toe in het bestand), wordt een .php bestand aangemaakt, wat de zelfde naam heeft als het .afm bestand. U kunt het hernoemen als U wilt. In het geval dat het lettertype is ingevoegd in het bestand, wordt het lettertype bestand gecompresseerd en wordt een tweede bestand met .z als extensie aangemaakt (behalve wanneer de compressie functie niet beschikbaar is, dit vereist zlib). Deze kunt U ook hernoemen, maar U dient dan ook de variabele <TT>$file</TT> in het .php bestand op de zelfde manier te wijzigen.
+<BR>
+<BR>
+Voorbeeld:
+<BR>
+<BR>
+<TT>MakeFont('c:\\windows\\fonts\\comic.ttf','comic.afm','cp1252');</TT>
+<BR>
+<BR>
+Dit geeft U de bestanden comic.php en comic.z.
+<BR>
+<BR>
+Dan dient U de gegenereerde bestanden in de font directory. Het het bestand niet gecompresseerd moet worden, kopiëer dan het .ttf of het .pfb bestand in plaats van het .z bestand.
+<H4 CLASS='st'>Declaratie van het lettertype in het script</H4>
+De laatste stap is de meest eenvoudige. U moet de <A HREF='../doc/addfont.htm'>AddFont()</A> methode aanroepen. Een voorbeeld:
+<BR>
+<BR>
+<TABLE WIDTH="100%" STYLE="color:#4040C0; border-style:ridge" BORDERCOLORLIGHT="#B0B0E0" BORDERCOLORDARK="#000000" BORDER="2" CELLPADDING=6 CELLSPACING=0 BGCOLOR="#F0F5FF"><TR><TD style="border-width:0px">
+<NOBR><code><font color="#000000">
+$pdf<font class="kw">-&gt;</font>AddFont<font class="kw">(</font><font class="str">'Comic'</font><font class="kw">,</font><font class="str">''</font><font class="kw">,</font><font class="str">'comic.php'</font><font class="kw">);</font><br>
+</font>
+</code></NOBR></TD></TR></TABLE><P></P>
+of eenvoudig:
+<BR>
+<BR>
+<TABLE WIDTH="100%" STYLE="color:#4040C0; border-style:ridge" BORDERCOLORLIGHT="#B0B0E0" BORDERCOLORDARK="#000000" BORDER="2" CELLPADDING=6 CELLSPACING=0 BGCOLOR="#F0F5FF"><TR><TD style="border-width:0px">
+<NOBR><code><font color="#000000">
+$pdf<font class="kw">-&gt;</font>AddFont<font class="kw">(</font><font class="str">'Comic'</font><font class="kw">);</font><br>
+</font>
+</code></NOBR></TD></TR></TABLE><P></P>
+En het lettertype is nu beschikbaar in standaard en onderstreepte stijlen, bruikbaar als de anderen. Als we hadden gewerkt met Comic Sans MS vET (comicbd.ttf), hadden we het volgende gebruikt:
+<BR>
+<BR>
+<TABLE WIDTH="100%" STYLE="color:#4040C0; border-style:ridge" BORDERCOLORLIGHT="#B0B0E0" BORDERCOLORDARK="#000000" BORDER="2" CELLPADDING=6 CELLSPACING=0 BGCOLOR="#F0F5FF"><TR><TD style="border-width:0px">
+<NOBR><code><font color="#000000">
+$pdf<font class="kw">-&gt;</font>AddFont<font class="kw">(</font><font class="str">'Comic'</font><font class="kw">,</font><font class="str">'B'</font><font class="kw">,</font><font class="str">'comicbd.php'</font><font class="kw">);</font><br>
+</font>
+</code></NOBR></TD></TR></TABLE><P></P>
+<H4 CLASS='st'>Voorbeeld</H4>
+Laten we nu een klein maar compleet voorbeeld bekijken. Het gebruikte lettertype is Calligrapher, beschikbaar op <A HREF="http://www.abstractfonts.com/fonts/" TARGET="_blank">www.abstractfonts.com</A> (een site die diverse gratis TrueType lettertypes aanbiedt). De eerste stap is de generatie van het AFM bestand:
+<BR>
+<BR>
+<TT>ttf2pt1 -a calligra.ttf calligra</TT>
+<BR>
+<BR>
+wat calligra.afm geeft (en calligra.t1a die we kunnen verwijderen). Daarna maken we het definitiebestand aan:
+<BR>
+<BR>
+<TABLE WIDTH="100%" STYLE="color:#4040C0; border-style:ridge" BORDERCOLORLIGHT="#B0B0E0" BORDERCOLORDARK="#000000" BORDER="2" CELLPADDING=6 CELLSPACING=0 BGCOLOR="#F0F5FF"><TR><TD style="border-width:0px">
+<NOBR><code><font color="#000000">
+&lt;?php<br><font class="kw">require(</font><font class="str">'font/makefont/makefont.php'</font><font class="kw">);<br><br></font>MakeFont<font class="kw">(</font><font class="str">'calligra.ttf'</font><font class="kw">,</font><font class="str">'calligra.afm'</font><font class="kw">);<br></font>?&gt;
+</font>
+</code></NOBR></TD></TR></TABLE><P></P>
+De functie geeft het volgende weer:
+<BR>
+<BR>
+<B>Warning:</B> character Euro is missing<BR>
+<B>Warning:</B> character Zcaron is missing<BR>
+<B>Warning:</B> character zcaron is missing<BR>
+<B>Warning:</B> character eth is missing<BR>
+Font file compressed (calligra.z)<BR>
+Font definition file generated (calligra.php)<BR>
+<BR>
+Het euro teken is niet aanwezig in het lettertype (het is te oud). Er zijn ook drie andere tekens missend, maar daar waren we toch niet in geïnteresseerd.
+<BR>
+We kunnen nu de twee nieuwe bestanden in de directory met lettertypes kopiëren en het script schrijven:
+<BR>
+<BR>
+<TABLE WIDTH="100%" STYLE="color:#4040C0; border-style:ridge" BORDERCOLORLIGHT="#B0B0E0" BORDERCOLORDARK="#000000" BORDER="2" CELLPADDING=6 CELLSPACING=0 BGCOLOR="#F0F5FF"><TR><TD style="border-width:0px">
+<NOBR><code><font color="#000000">
+&lt;?php<br><font class="kw">require(</font><font class="str">'fpdf.php'</font><font class="kw">);<br><br></font>$pdf<font class="kw">=new </font>FPDF<font class="kw">();<br></font>$pdf<font class="kw">-&gt;</font>AddFont<font class="kw">(</font><font class="str">'Calligrapher'</font><font class="kw">,</font><font class="str">''</font><font class="kw">,</font><font class="str">'calligra.php'</font><font class="kw">);<br></font>$pdf<font class="kw">-&gt;</font>AddPage<font class="kw">();<br></font>$pdf<font class="kw">-&gt;</font>SetFont<font class="kw">(</font><font class="str">'Calligrapher'</font><font class="kw">,</font><font class="str">''</font><font class="kw">,</font>30<font class="kw">);<br></font>$pdf<font class="kw">-&gt;</font>Cell<font class="kw">(</font>0<font class="kw">,</font>10<font class="kw">,</font><font class="str">'Geniet van nieuwe lettertypes met FPDF!'</font><font class="kw">);<br></font>$pdf<font class="kw">-&gt;</font>Output<font class="kw">();<br></font>?&gt;
+</font>
+</code></NOBR></TD></TR></TABLE><P></P>
+<SCRIPT>
+<!--
+if(document.location.href.indexOf('http:')==0)
+{
+document.write("<P CLASS='demo'><A HREF='tuto7.php' TARGET='_blank' CLASS='demo'>[Demo]</A></P>");
+}
+//-->
+</SCRIPT>
+<H4 CLASS='st'>Over het euro symbool</H4>
+Het euro teken is niet aanwezig in alle coderingen, en is niet altijd op de zelfde positie geplaatst:
+<BR>
+<BR>
+<STYLE>
+TH {text-align:left; background:#E0EBFF}
+TH, TD {padding-left:10px; padding-right:10px; border-bottom-width:0px; border-left-width:1px; border-right-width:0px; border-top-width:1px}
+TR.alt0 {background:#FFFFEE}
+TR.alt1 {background:#FFFFDF}
+</STYLE>
+<TABLE STYLE="margin-left:15px; border-style:outset" BORDER="2" CELLSPACING="0" CELLPADDING="2" BGCOLOR2="#FFFFEE">
+<TR><TH CLASS="st">Encoding</TH><TH CLASS="st">Positie</TH></TR>
+<TR CLASS="alt0"><TD>cp1250</TD><TD>128<BR></TD></TR>
+<TR CLASS="alt1"><TD>cp1251</TD><TD>136<BR></TD></TR>
+<TR CLASS="alt0"><TD>cp1252</TD><TD>128<BR></TD></TR>
+<TR CLASS="alt1"><TD>cp1253</TD><TD>128<BR></TD></TR>
+<TR CLASS="alt0"><TD>cp1254</TD><TD>128<BR></TD></TR>
+<TR CLASS="alt1"><TD>cp1255</TD><TD>128<BR></TD></TR>
+<TR CLASS="alt0"><TD>cp1257</TD><TD>128<BR></TD></TR>
+<TR CLASS="alt1"><TD>cp1258</TD><TD>128<BR></TD></TR>
+<TR CLASS="alt0"><TD>cp874</TD><TD>128<BR></TD></TR>
+<TR CLASS="alt1"><TD>ISO-8859-1</TD><TD>afwezig<BR></TD></TR>
+<TR CLASS="alt0"><TD>ISO-8859-2</TD><TD>afwezig<BR></TD></TR>
+<TR CLASS="alt1"><TD>ISO-8859-4</TD><TD>afwezig<BR></TD></TR>
+<TR CLASS="alt0"><TD>ISO-8859-5</TD><TD>afwezig<BR></TD></TR>
+<TR CLASS="alt1"><TD>ISO-8859-7</TD><TD>afwezig<BR></TD></TR>
+<TR CLASS="alt0"><TD>ISO-8859-9</TD><TD>afwezig<BR></TD></TR>
+<TR CLASS="alt1"><TD>ISO-8859-11</TD><TD>afwezig<BR></TD></TR>
+<TR CLASS="alt0"><TD>ISO-8859-15</TD><TD>164<BR></TD></TR>
+<TR CLASS="alt1"><TD>ISO-8859-16</TD><TD>164<BR></TD></TR>
+<TR CLASS="alt0"><TD>KOI8-R</TD><TD>afwezig<BR></TD></TR>
+<TR CLASS="alt1"><TD>KOI8-U</TD><TD>afwezig<BR></TD></TR>
+</TABLE>
+<BR>
+ISO-8859-1 is uitgebreid maar beschikt niet over een euro teken. Als U het nodig heeft is de eenvoudigste oplossing om cp1252 of ISO-8859-15 te gebruiken, welke bijna gelijk zijn maar het waardevolle symbool wel bevatten.
+<BR>
+Ook bij ISO-8859-2 is het mogelijk om ISO-8859-16 te gebruiken, maar hierin kunnen enkele verschillen in zitten. Het is daarom eenvoudiger om de codering aan te passen en het euro teken toe te voegen, zoals hierboven uitgelegd is. Hetzelfde geldt voor andere coderingen.
+<H4 CLASS='st'>Constructie van Lettertypes onder Windows</H4>
+Wanneer een TrueType lettertype niet beschikbaar is in een bepaalde stijl kan windows het construeren van de normale verise. Een voorbeeld. Er bestaat geen Comic Sans MS Cursief, maar het kan worden opgebouwd uit Comic Sans MS Standaard. Deze functie kan worden gebruikt in een PDF bestand, maar het vereist dat het lettertype beschikbaar is op het systeem (U moet het niet in het document invoegen). Hier staat hoe U dit doet:
+<UL>
+<LI>Genereer het definitie bestand voor het standaard lettertype zonder deze toe te voegen (U kunt het hernoemen om de gewenste stijl weer te geven).
+<LI>Open het en voeg aan de variabele <TT>$name</TT> een komma gevolgd door de gewenste stijl (<TT>Italic</TT>, <TT>Bold</TT> of <TT>BoldItalic</TT>).
+</UL>
+Bijvoorbeeld, voor het bestand comici.php:
+<BR>
+<BR>
+<TT>$name='ComicSansMS,Italic';</TT>
+<BR>
+<BR>
+Het kan dan normaal worden gebruikt:
+<BR>
+<BR>
+<TABLE WIDTH="100%" STYLE="color:#4040C0; border-style:ridge" BORDERCOLORLIGHT="#B0B0E0" BORDERCOLORDARK="#000000" BORDER="2" CELLPADDING=6 CELLSPACING=0 BGCOLOR="#F0F5FF"><TR><TD style="border-width:0px">
+<NOBR><code><font color="#000000">
+$pdf<font class="kw">-&gt;</font>AddFont<font class="kw">(</font><font class="str">'Comic'</font><font class="kw">,</font><font class="str">'I'</font><font class="kw">,</font><font class="str">'comici.php'</font><font class="kw">);</font><br>
+</font>
+</code></NOBR></TD></TR></TABLE><P></P>
+<H4 CLASS='st'>De grootte van Truetype bestanden reduceren</H4>
+Lettertype bestanden zijn meestal aardig aan de grote kant (meer dan 100, zelfs 200kb); Dit is door het feit dat ze tekens die corresponderen met veel coderingen bevatten. zlib compressie verkleint de bestanden aardig maar ondanks dit blijven de bestanden redelijk groot. Er bestaat een techniek om deze verder te reduceren. Het bestaat uit het converteren van het bestand naar een Type1 formaat met ttf2pt1 door de codering waar U in geïnteresseerd bent op te geven; alle andere tekens zullen worden verwijderd.
+<BR>
+Een voorbeeld. Het arial.ttf lettertype wordt in Windows 98 geleverd met een grootte van 267KB (het bevat 1296 tekens). Na compressie blijft het bestand redelijk groot, namelijk 147kb. Laten we het converteren naar Type1 door alleen de cp1250 tekens te behouden:
+<BR>
+<BR>
+<TT>ttf2pt1 -b -L cp1250.map c:\windows\fonts\arial.ttf arial</TT>
+<BR>
+<BR>
+De .map kunnen worden gevonden in de font/makefont/ directory van het pakket. Het commando maakt arial.pfb en arial.afm aan. Het arial.pfb bestand is slechts 35KB, en 30KB na compressie.
+<BR>
+<BR>
+Het is mogelijk om zelfs nog verder te gaan. Als U alleen geïnteresseerd bent in een kleine set tekens (U zult waarschijnlijk niet alle 217 karakters nodig hebben), kunt U het .map bestand openen en de regels weghalen waar U niet in geïnteresseerd bent. Afhankelijk hiervan zal de bestandsgrootte ook dalen.
+</BODY>
+</HTML>

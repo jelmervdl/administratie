@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>MultiCell</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>MultiCell</H2>
+<TT>MultiCell(<B>float</B> w, <B>float</B> h, <B>string</B> txt [, <B>mixed</B> border [, <B>string</B> align [, <B>int</B> fill]]])</TT>
+<H4 CLASS='st'>Versie</H4>
+1.3
+<H4 CLASS='st'>Omschrijving</H4>
+Deze methode staat het weergeven van tekst met line breaks toe. Deze line breaks kunnen automatisch zijn (zodra ze de rechterkant van de cel bereiken) of expliciet zijn (via het \n karakter). Er worden zoveel cellen als nodig zijn weergegeven, de een onder de ander.
+<BR>
+De tekst kan worden uitgelijnd, gecentreerd of uitgetrokken (over de hele breedte zetten). Van het cellen blok kan je een rand instellen en de achtergrond kan worden ingekleurd.
+<H4 CLASS='st'>Parameters</H4>
+<TT><U>w</U></TT>
+<BLOCKQUOTE>
+Cel breedte. Wanneer <TT>0</TT> zal de cel tot de rechtermarge uitbreiden.
+</BLOCKQUOTE>
+<TT><U>h</U></TT>
+<BLOCKQUOTE>
+Cel hoogte
+</BLOCKQUOTE>
+<TT><U>txt</U></TT>
+<BLOCKQUOTE>
+String om weer te geven.
+</BLOCKQUOTE>
+<TT><U>border</U></TT>
+<BLOCKQUOTE>
+Geeft aan of er randen moeten worden getekend rond de cel. De waarde kan een nummer zijn:
+<UL>
+<LI><TT>0</TT>: Geen rand
+<LI><TT>1</TT>: Rand
+</UL>
+Of de string kan één of meer van de volgende tekens bevatten (in willekeurige volgorde)
+<UL>
+<LI><TT>L</TT>: Links
+<LI><TT>T</TT>: Boven
+<LI><TT>R</TT>: Rechts
+<LI><TT>B</TT>: Onder
+</UL>
+Standaard waarde: <TT>0</TT>.
+</BLOCKQUOTE>
+<TT><U>align</U></TT>
+<BLOCKQUOTE>
+Staat toe de tekst te centreren of uit te lijnen. Mogelijke waardes zijn:
+<UL>
+<LI><TT>L</TT> of lege string: Links uitlijnen
+<LI><TT>C</TT>: Centreren
+<LI><TT>R</TT>: Rechts uitlijnen
+<LI><TT>J</TT>: Uitvullen (standaard waarde)
+</UL>
+</BLOCKQUOTE>
+<TT><U>fill</U></TT>
+<BLOCKQUOTE>
+Geeft aan of de cel achtergrond moet worden ingekleurd (<TT>1</TT>) of transparant moet zijn (<TT>0</TT>).
+Standaard waarde: <TT>0</TT>.
+</BLOCKQUOTE>
+<H4 CLASS='st'>Bekijk ook</H4>
+<A HREF="setfont.htm">SetFont()</A>,
+<A HREF="setdrawcolor.htm">SetDrawColor()</A>,
+<A HREF="setfillcolor.htm">SetFillColor()</A>,
+<A HREF="settextcolor.htm">SetTextColor()</A>,
+<A HREF="setlinewidth.htm">SetLineWidth()</A>,
+<A HREF="cell.htm">Cell()</A>,
+<A HREF="write.htm">Write()</A>,
+<A HREF="setautopagebreak.htm">SetAutoPageBreak()</A>.
+<HR STYLE="margin-top:1.5em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

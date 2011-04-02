@@ -1,0 +1,24 @@
+<h1>Administratie</h1>
+<div class="span-5">
+	<h2>Bedrijven</h2>
+	<?php $this->_partial('Administratie_Bedrijf_Controller', 'list_bedrijven') ?>
+	<ul>
+		<li><?=$this->_link_sheet('bedrijf toevoegen...', 'Administratie_Bedrijf_Controller', 'bedrijf_toevoegen')?></li>
+	</ul>
+	
+	<h2>Hulpmiddelen</h2>
+	<ul>
+		<li><a href="<?=$this->router->link('Administratie_Factuur_Controller', 'belasting_overzicht')?>">Belasting</a></li>
+		<li><?=$this->_link_sheet('tarief toevoegen...', 'Administratie_Tarief_Controller', 'tarief_toevoegen')?></li>
+	</ul>
+</div>
+
+<div class="span-18">
+	<h2>Openstaande Facturen <small><a href="<?=$this->router->link('Administratie_Factuur_Controller', 'index')?>">overzicht alle facturen</a></small></h2>
+	<?php $this->_partial('Administratie_Factuur_Controller', 'openstaande_facturen') ?>
+</div>
+
+<div class="span-18">
+	<h2>Ongefactureerde Uren <small><?=$this->_link_sheet('toevoegen', 'Administratie_Uur_Controller', 'uur_toevoegen') ?></small></h2>
+	<?php $this->_partial('Administratie_Uur_Controller', 'onbetaalde_uren') ?>
+</div>

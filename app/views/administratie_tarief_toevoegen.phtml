@@ -1,0 +1,33 @@
+<div class="sheet">
+	<h2>Tarief toevoegen</h2>
+	
+	<form
+		method="post"
+		action="<?=$this->router->link('Administratie_Tarief_Controller', 'tarief_toevoegen', $tarief->id)?>"
+		accept-charset="utf-8">
+		
+		<?= $this->form->origin() ?>
+		
+		<p>
+			<label for="naam">naam:</label>
+			<?= $this->form->textfield('naam', $tarief->naam, $errors) ?>
+		</p>
+	
+		<p>
+			<label for="prijs_per_uur">prijs per uur:</label>
+			<?= $this->form->textfield('prijs_per_uur', $tarief->prijs_per_uur, $errors)->set_size(5)->set_placeholder('0,00') ?>
+		</p>
+	
+		<p class="controls">
+			<?php if ($tarief->is_deletable): ?>
+				<button class="delete" type="submit" name="delete" value="yes">Verwijderen</button>
+			<?php endif ?>
+			<?php if ($tarief->id): ?>
+				<button type="submit">Opslaan</button>
+			<?php else: ?>
+				<button type="submit">Tarief Toevoegen</button>
+			<?php endif ?>
+			<button onclick="hide_sheet(this); return false">Sluiten</button>
+		</p>
+	</form>
+</div>

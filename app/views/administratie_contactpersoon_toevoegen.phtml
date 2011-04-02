@@ -1,0 +1,47 @@
+<div class="sheet" id="Administratie_Contactpersoon_Controller_contactpersoon_toevoegen_sheet" <?if(empty($errors)) echo 'style="display: none"'?>>
+	<h2>Contactpersoon toevoegen</h2>
+	
+	<form method="post" accept-charset="utf-8">
+		<?= $this->form->controller('Administratie_Contactpersoon_Controller', 'contactpersoon_toevoegen') ?>
+		<p>
+			<label>naam:</label>
+			<?= $this->form->textfield('voornaam', $contactpersoon->voornaam, $errors)->set_placeholder('voornaam') ?>
+			<?= $this->form->textfield('achternaam', $contactpersoon->achternaam, $errors)->set_placeholder('achternaam') ?>
+		</p>
+		
+		<br>
+		
+		<p>
+			<label for="telefoon">telefoonnr:</label>
+			<?= $this->form->textfield('telefoon', $contactpersoon->telefoon, $errors) ?>
+		</p>
+		
+		<p>
+			<label for="emailadres">emailadres</label>
+			<?= $this->form->textfield('emailadres', $contactpersoon->emailadres, $errors)->set_size(30) ?>
+		</p>
+	
+		<br>
+	
+		<p>
+			<label>adres:</label>
+			<span style="display: inline-block">
+			<?= $this->form->textfield('straatnaam', $contactpersoon->straatnaam, $errors)->set_placeholder('straatnaam') ?>
+			<?= $this->form->textfield('huisnummer', $contactpersoon->huisnummer, $errors)->set_size(3)->set_placeholder('nr') ?>
+			<br>
+			<?= $this->form->textfield('postcode', $contactpersoon->postcode, $errors)->set_placeholder('postcode')->set_size(6) ?>
+			<?= $this->form->textfield('plaats', $contactpersoon->plaats, $errors)->set_placeholder('plaatsnaam') ?>
+			</span>
+		</p>
+		
+		<p>
+			<?= $this->form->checkbox('ontvangt_factuur', $contactpersoon->ontvangt_factuur, $errors) ?>
+			<label class="for-checkbox" for="ontvangt_factuur">deze persoon ontvangt de facturen</label>
+		</p>
+		
+		<p class="controls">
+			<button type="submit">Contactperoon Toevoegen</button>
+			<button onclick="hide_sheet('Administratie_Contactpersoon_Controller_contactpersoon_toevoegen_sheet'); return false">Sluiten</button>
+		</p>
+	</form>
+</div>

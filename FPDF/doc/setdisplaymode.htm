@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>SetDisplayMode</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>SetDisplayMode</H2>
+<TT>SetDisplayMode(<B>mixed</B> zoom [, <B>string</B> layout])</TT>
+<H4 CLASS='st'>Versie</H4>
+1.2
+<H4 CLASS='st'>Omschrijving</H4>
+Definieert de manier waarop het document wordt weergeven bij de bezichtiger. Het zoom level kan worden ingesteld: Paginas kunnen worden weergegeven geheel op het scherm, de volle breedte van het scherm innemend, ware grootte, geschaald door een specifieke zoom factor of de standaard van de bezichtiger (geconfigureerd in het Voorkeuren menu van Acrobat). De pagina layout kan worden gespecificeerd naar: Eén per keer, doorlopende weergave, twee kolommen of de standaard van de bezichtiger.<BR>
+Standaard gebruiken documenten de volle breedte met doorlopende weergave.
+<H4 CLASS='st'>Parameters</H4>
+<TT><U>zoom</U></TT>
+<BLOCKQUOTE>
+Het zoom level dat gebruikt wordt. Het kan een van de volgende waardes zijn:
+<UL>
+<LI><TT>fullpage</TT>: Geeft de hele pagina weer op het scherm
+<LI><TT>fullwidth</TT>: Gebruikt de maximale breedte van het scherm
+<LI><TT>real</TT>: Gebruikt ware grootte (gelijkwaardig aan 100% zoom)
+<LI><TT>default</TT>: Gebruikt standaad van de bezichtiger
+</UL>
+Of een nummer van de zoom factor die gebruikt moet worden.
+</BLOCKQUOTE>
+<TT><U>layout</U></TT>
+<BLOCKQUOTE>
+De pagina layout. Mogelijke waardes zijn:
+<UL>
+<LI><TT>single</TT>: Geeft één pagina per keer weer
+<LI><TT>continuous</TT>: Geeft pagina's doorlopend weer
+<LI><TT>two</TT>: Geeft twee pagina's op twee kolommen weer
+<LI><TT>default</TT>: Standaard van de bezichtiger
+</UL>
+Standaard waarde is <TT>continuous</TT>.
+</BLOCKQUOTE>
+<HR STYLE="margin-top:1.2em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

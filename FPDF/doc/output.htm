@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>Output</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>Output</H2>
+<TT><B>string</B> Output([<B>string</B> name [, <B>string</B> dest]])</TT>
+<H4 CLASS='st'>Versie</H4>
+1.0
+<H4 CLASS='st'>Omschrijving</H4>
+Stuurt het document naar de gegeven bestemming: String, lokaal bestand of browser.
+In het laatste geval wordt of de plug-in gebruikt (wanneer aanwezig) of een download
+("Opslaan als" dialoog scherm) geforceerd.
+<BR>
+Deze methode roept eerst Close() aan wanneer nodig om het document te beëindigen.
+<H4 CLASS='st'>Parameters</H4>
+<TT><U>name</U></TT>
+<BLOCKQUOTE>
+De naam van het bestand. Wanneer niet gegeven zal het document naar de browser
+worden verstuurd. (Bestemming <TT>I</TT>) met de naam <TT>doc.pdf</TT>.
+</BLOCKQUOTE>
+<TT><U>dest</U></TT>
+<BLOCKQUOTE>
+Bestemming waar het bestand naar toe moet worden verstuurd. Het kan een van de
+volgende waarden aannemen:
+<UL>
+<LI><TT>I</TT>: Verstuurt het bestand naar de browser. De plug-in wordt gebruikt wanneer
+beschikbaar. De naam ingegeven door <TT>name</TT> wordt gebruikt wanneer men de "Opslaan
+als" optie gebruikt bij de link die de PDF genereert.
+<LI><TT>D</TT>: Verstuurt het naar de browser en forceert een download met de naam gegeven
+door <TT>name</TT>.
+<LI><TT>F</TT>: Slaat het op als een lokaal bestand met de naam gegeven door <TT>name</TT>.
+<LI><TT>S</TT>: Geeft het document terug als een string. <TT>name</TT> wordt genegeerd.
+</UL>
+Als de parameter niet gespecificeerd is maar een naam is wel gegeven, dan is de bestemming
+<TT>F</TT>. Als er helemaal geen parameter gespecificeerd is, is de bestemming <TT>I</TT>.<BR>
+<BR>
+Opmerking: Om goed te kunnen werken met vorige versies wordt ook een boolean waarde geaccepteerd.
+(<TT>false</TT> voor <TT>F</TT> en <TT>true</TT> voor <TT>D</TT>).
+</BLOCKQUOTE>
+<H4 CLASS='st'>Bekijk ook</H4>
+<A HREF="close.htm">Close()</A>.
+<HR STYLE="margin-top:1.2em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

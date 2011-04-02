@@ -1,0 +1,15 @@
+<h1><?=$bedrijf->naam?></h1>
+
+<div class="span-5">
+	<p><strong>Website:</strong> <?=sprintf('<a href="%s">%1$s</a>', $bedrijf->url)?></p>
+</div>
+<div class="span-18">
+	<h2>Contactpersonen <small><?=$this->_link_sheet('toevoegen', 'Administratie_Contactpersoon_Controller', 'contactpersoon_toevoegen', null, $bedrijf->id) ?></small></h2>
+	<?php $this->_partial('Administratie_Contactpersoon_Controller', 'list_contactpersonen', $bedrijf->id) ?>
+	
+	<h2>Ongefactureerde Uren <small><?=$this->_link_sheet('toevoegen', 'Administratie_Uur_Controller', 'uur_toevoegen', null, $bedrijf->id) ?></small></h2>
+	<?php $this->_partial('Administratie_Uur_Controller', 'onbetaalde_uren', $bedrijf->id) ?>
+	
+	<h2>Facturen <small><?=$this->_link_sheet('toevoegen', 'Administratie_Factuur_Controller', 'factuur_toevoegen', null, $bedrijf->id) ?></small></h2>
+	<?php $this->_partial('Administratie_Factuur_Controller', 'list_facturen', $bedrijf->id) ?>
+</div>

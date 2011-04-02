@@ -1,0 +1,16 @@
+<h2>BTW</h2>
+
+<div class="span-6">
+	<?php $prijs_totaal->draw() ?><br>
+	<?php $btw_totaal->draw() ?>
+</div>
+
+
+<div class="span-18 last">
+	<form method="post">
+		<?= $this->form->controller('Administratie_Factuur_Controller', 'belasting_overzicht') ?>
+		
+		<?php $facturen->draw() ?>
+		<button type="submit">Markeer als aangegeven</button>
+	</form>
+</div>

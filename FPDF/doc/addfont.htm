@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>AddFont</TITLE>
+<LINK TYPE="text/css" REL="stylesheet" HREF="../fpdf.css">
+</HEAD>
+<BODY>
+<H2>AddFont</H2>
+<TT>AddFont(<B>string</B> family [, <B>string</B> style [, <B>string</B> file]])</TT>
+<H4 CLASS='st'>Versie</H4>
+1.5
+<H4 CLASS='st'>Omschrijving</H4>
+Importeert een TrueType of Type1 lettertype en maakt het beschikbaar. Het is noodzakelijk eerst een definitie van het
+lettertype te genereren met het makefont.php programma.
+<BR>
+Het definitie bestand (en het lettertype bestand zelf wanneer deze wordt ingevoegd) moet aanwezig zijn in de font directory.
+Als het niet gevonden kan worden, zal de fout "Could not include font definition file"
+(= "Kan het lettertype definitie bestand niet toevoegen") worden gegenereerd.
+<H4 CLASS='st'>Parameters</H4>
+<TT><U>family</U></TT>
+<BLOCKQUOTE>
+Lettertype Familie. De naam kan willekeurig gekozen worden. Als het een standaard familie naam is, zal het het huidige lettertype overslaan.
+</BLOCKQUOTE>
+<TT><U>style</U></TT>
+<BLOCKQUOTE>
+Stijl van het lettertype. Mogelijk waardes zijn (hoofdletter ongevoelig):
+<UL>
+<LI>lege string: normaal
+<LI><TT>B</TT>: Vet
+<LI><TT>I</TT>: Cursief
+<LI><TT>BI</TT> of <TT>IB</TT>: Vet Cursief
+</UL>
+De standaard waarde is normaal.
+</BLOCKQUOTE>
+<TT><U>file</U></TT>
+<BLOCKQUOTE>
+Het lettertype definitie bestand.
+<BR>
+Standaard, de naam is opgebouwd uit de familie en stijl, in kleine letters zonder spaties.
+</BLOCKQUOTE>
+<H4 CLASS='st'>Voorbeeld</H4>
+<DIV STYLE="background-color:#E0E0E0; padding:3px; margin-top:1em; margin-bottom:1em">
+<TT>
+$pdf-&gt;AddFont('Comic','I');
+</TT>
+</DIV>
+is gelijk aan:
+<DIV STYLE="background-color:#E0E0E0; padding:3px; margin-top:1em; margin-bottom:1em">
+<TT>
+$pdf-&gt;AddFont('Comic','I','comici.php');
+</TT>
+</DIV>
+<H4 CLASS='st'>Bekijk ook</H4>
+<A HREF="setfont.htm">SetFont()</A>.
+<HR STYLE="margin-top:1.2em">
+<DIV STYLE="text-align:center"><A HREF="index.htm">Index</A></DIV>
+</BODY>
+</HTML>

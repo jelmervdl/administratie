@@ -1,0 +1,16 @@
+<form method="post">
+	<fieldset>
+		<legend>Aanmelden</legend>
+		<p>
+			<label for="login-email">E-mail:</label>
+			<input type="text" name="email" id="login-email" value="<?=$this->_attr($email)?>">
+		</p>
+		<p>
+			<label for="login-password">Wachtwoord:</label>
+			<input type="password" name="password" id="login-password">
+		</p>
+		<p>
+			<input type="hidden" name="referer" value="<?=$this->_attr($referer)?>">
+			<button type="submit">Log in</button>
+		</p>
+</form>
