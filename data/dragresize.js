@@ -40,7 +40,7 @@ add_onload_listener(function(root) {
 	for(var i = 0; i < nodes.length; i++) {
 		if(nodes[i].className.match(pattern)) {
 			var target_node_id = nodes[i].getAttribute('data-target-node');
-			new DragResize(root.getElementById(target_node_id), nodes[i]);
+			new DragResize(document.getElementById(target_node_id), nodes[i]);
 		}
 	}
 }, false);
