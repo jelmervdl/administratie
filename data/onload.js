@@ -20,5 +20,5 @@
 	
 	window.addEventListener('DOMContentLoaded', function() {
 		window.notify_onload_listeners(document);
-	});
+	}, false);
 })();
