@@ -3,6 +3,12 @@ abstract class IHG_Record {
 	
 	const SERIALIZED_FLAG = '%serialized%';
 	
+	const SELECT_QUERY = 'select';
+	
+	const UPDATE_QUERY = 'update';
+	
+	const DELETE_QUERY = 'delete';
+	
 	private static $_date_indicators = array('_date', 'datum', '_tijd', '_time');
 	
 	private $_pdo;
@@ -15,7 +21,7 @@ abstract class IHG_Record {
 		
 	abstract protected function _properties();
 	
-	protected function _table_name() {
+	protected function _table_name($query_type) {
 		return get_class($this);
 	}
 	
@@ -34,11 +40,11 @@ abstract class IHG_Record {
 		foreach($this->__properties() as $key => $property) {
 			if(is_int($key)) {
 				$sql_columns[] = sprintf('%s.%s AS %2$s',
-					$this->_table_name(),
+					$this->_table_name(self::SELECT_QUERY),
 					$property);
 			} /*elseif($property instanceof IHG_SQL_Join_Interface) {
 				
-				$join_condition_atom = $this->_generate_condition_atom($property->join_conditions());
+				$join_condition_atom = $this->_generate_condition_atom($property->join_conditions(), self::SELECT_QUERY);
 				
 				$sql_columns[] = sprintf('(SELECT %s FROM %s AS %s WHERE %s) AS %s',
 					$property->sql_atom(),
@@ -60,7 +66,7 @@ abstract class IHG_Record {
 		return new IHG_SQL_Atom("\t" . implode(", \n\t", $sql_columns), $sql_values);
 	}
 	
-	private function _generate_condition_atom(array $conditions = null) {
+	private function _generate_condition_atom(array $conditions = null, $query_type) {
 		
 		if(!$conditions) {
 			return new IHG_SQL_Atom('1'); // geen voorwaarden <=> altijd waar :)
@@ -85,7 +91,7 @@ abstract class IHG_Record {
 				}
 				
 				$sql_atoms[] = sprintf('%s.%s IN(%s)',
-					$this->_table_name(),
+					$this->_table_name($query_type),
 					$column,
 					implode(', ', $sql_value_placeholders)
 				);
@@ -100,7 +106,7 @@ abstract class IHG_Record {
 			// => field IN(expression(?))
 			elseif($value instanceof IHG_SQL_Atom_Interface) {
 				$sql_atoms[] = sprintf('%s.%s IN(%s)',
-					$this->_table_name(),
+					$this->_table_name($query_type),
 					$column,
 					$value->sql_atom()
 				);
@@ -110,7 +116,7 @@ abstract class IHG_Record {
 			// => field_id = ?(value.id)
 			elseif($value instanceof IHG_Record && $this->_property_exists($column . '_id')) {
 				$sql_atoms[] = sprintf('%s.%s_id = ?',
-					$this->_table_name(),
+					$this->_table_name($query_type),
 					$column
 				);
 				$sql_values[] = $value->_get_property('id');
@@ -119,14 +125,14 @@ abstract class IHG_Record {
 			// => field IS NULL
 			elseif($value === null) {
 				$sql_atoms[] = sprintf('%s.%s IS NULL',
-					$this->_table_name(),
+					$this->_table_name($query_type),
 					$column);
 			}
 			// field => value
 			// => field = ?(value)
 			else {
 				$sql_atoms[] = sprintf('%s.%s = ?',
-					$this->_table_name(),
+					$this->_table_name($query_type),
 					$column);
 				$sql_values[] = $value;
 			}
@@ -141,7 +147,7 @@ abstract class IHG_Record {
 		
 		$column = array_key_exists('id', $properties) ? $properties['id'] : new IHG_SQL_Atom('id');
 		
-		$column->prepend_table_name($this->_table_name());
+		$column->prepend_table_name($this->_table_name(self::SELECT_QUERY));
 		
 		return $column;
 	}
@@ -204,10 +210,7 @@ abstract class IHG_Record {
 		} else {
 			$value = $this->_get_property($key);
 		
-			if($key == 'id' && $value !== null) {
-				$value = (int) $value;
-			}
-			elseif($this->_contains_date_indicator($key)) {
+			if($this->_contains_date_indicator($key)) {
 				try {
 					return $value !== null ? new IHG_DateTime($value) : null;
 				} catch(Exception $e) {
@@ -332,7 +335,7 @@ abstract class IHG_Record {
 		
 		$stmt = $this->pdo()->prepare(
 			sprintf("UPDATE %s SET deleted = NOW() WHERE id = ?",
-				$this->_table_name()));
+				$this->_table_name(self::UPDATE_QUERY)));
 		
 		$stmt->execute(array($this->_get_property('id')));
 		
@@ -352,7 +355,7 @@ abstract class IHG_Record {
 		}
 		
 		$stmt = $this->pdo()->prepare(sprintf('INSERT INTO %s (%s) VALUES (%s)',
-			$this->_table_name(),
+			$this->_table_name(self::INSERT_QUERY),
 			implode(', ', $sql_assignments),
 			str_repeat('?, ', count($sql_assignments) - 1) . '?'
 		));
@@ -377,7 +380,7 @@ abstract class IHG_Record {
 		}
 		
 		$stmt = $this->pdo()->prepare(sprintf("UPDATE %s SET %s WHERE id = ? AND deleted IS NULL",
-			$this->_table_name(),
+			$this->_table_name(self::UPDATE_QUERY),
 			implode(', ', $sql_assignments)
 		));
 		
@@ -423,12 +426,12 @@ abstract class IHG_Record {
 				$conditions = array('id' => $conditions);
 			}
 			
-			$condition_atom = $dummy_record->_generate_condition_atom($conditions);
+			$condition_atom = $dummy_record->_generate_condition_atom($conditions, self::SELECT_QUERY);
 		}
 		
 		$stmt = $pdo->prepare(sprintf("SELECT %s \nFROM \n\t%s \nWHERE %s AND deleted IS NULL \nGROUP BY %s \nLIMIT 1",
 			$selector_atom->sql_atom(),
-			$dummy_record->_table_name(),
+			$dummy_record->_table_name(self::SELECT_QUERY),
 			$condition_atom->sql_atom(),
 			$group_by_atom->sql_atom()));
 		
@@ -454,12 +457,12 @@ abstract class IHG_Record {
 		$dummy_record = new $record_type();
 		
 		$selector_atom  = $dummy_record->_generate_selector_atom();
-		$condition_atom = $dummy_record->_generate_condition_atom($conditions);
+		$condition_atom = $dummy_record->_generate_condition_atom($conditions, self::SELECT_QUERY);
 		$group_by_atom = $dummy_record->_generate_group_by_atom();
 		
 		$stmt = new IHG_SQL_Atom(sprintf("SELECT %s \nFROM \n\t%s \nWHERE %s AND deleted IS NULL \nGROUP BY %s",
 			$selector_atom->sql_atom(),
-			$dummy_record->_table_name(),
+			$dummy_record->_table_name(self::SELECT_QUERY),
 			$condition_atom->sql_atom(),
 			$group_by_atom->sql_atom()),
 			array_merge(
@@ -495,9 +498,9 @@ abstract class IHG_Record {
 		*/
 	}
 
-	static public function table_name_for_record($record_type) {
+	static public function table_name_for_record($record_type, $query_type) {
 		$dummy_record = new $record_type();
-		return $dummy_record->_table_name();
+		return $dummy_record->_table_name($query_type);
 	}
 	
 	static public function properties_for_record($record_type) {

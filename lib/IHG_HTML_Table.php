@@ -8,6 +8,16 @@ class IHG_HTML_Table implements IHG_View_Interface {
 	
 	protected $_data;
 	
+	protected $_walker;
+	
+	const PROPERTY_NAME = 0;
+	
+	const LABEL = 1;
+	
+	const FORMATTER = 2;
+	
+	const SUMMARIZER = 3;
+	
 	public function __construct($record_type) {
 		if($record_type instanceof IHG_Record_Provider) {
 			$record_type = $record_type->record_type();
@@ -18,10 +28,10 @@ class IHG_HTML_Table implements IHG_View_Interface {
 			
 			foreach(IHG_Record::properties_for_record($record_type) as $key => $value) {
 				$this->_available_columns[] = array(
-					is_int($key) ? $value : $key,
-					is_int($key) ? $value : $key,
-					array($this, '_default_formatter'),
-					null);
+					self::PROPERTY_NAME => is_int($key) ? $value : $key,
+					self::LABEL 		=> is_int($key) ? $value : $key,
+					self::FORMATTER		=> array($this, '_default_formatter'),
+					self::SUMMARIZER	=> null);
 			}
 		}
 		
@@ -32,16 +42,25 @@ class IHG_HTML_Table implements IHG_View_Interface {
 	
 	public function add_column($property_name, $label = null, $formatter = null, $summary = null) {
 		$this->_preferred_columns[] = array(
-			$property_name,
-			$label !== null ? $label : $property_name,
-			$formatter ? $formatter : array($this, '_default_formatter'),
-			$summary);
+			self::PROPERTY_NAME => $property_name,
+			self::LABEL 		=> $label !== null ? $label : $property_name,
+			self::FORMATTER		=> $formatter ? $formatter : array($this, '_default_formatter'),
+			self::SUMMARIZER	=> $summary);
 		
 		return $this;
 	}
 	
 	public function set_data($data) {
 		$this->_data = $data;
+		
+		return $this;
+	}
+	
+	public function set_walker($walker) {
+		if (!is_callable($walker))
+			throw new InvalidArgumentException("Walker function is not callable");
+		
+		$this->_walker = $walker;
 		
 		return $this;
 	}
@@ -68,7 +87,7 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		$has_summaries = false;
 		foreach ($columns as $column)
 		{
-			if ($column[3])
+			if ($column[self::SUMMARIZER])
 			{
 				$has_summaries = true;
 				break;
@@ -81,17 +100,13 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		echo '	<thead>', $n;
 		echo '		<tr>', $n;
 		foreach($columns as $column):
-		echo '			<th>' . $column[1] . '</th>', $n;
+		echo '			<th>' . $column[self::LABEL] . '</th>', $n;
 		endforeach;
 		echo '		</tr>', $n;
 		echo '	</thead>', $n;
 		echo '	<tbody>', $n;
 		foreach($this->_data as $object):
-		echo '		<tr>', $n;
-		foreach($columns as $column):
-		echo '			<td>' . call_user_func($column[2], $object->{$column[0]}, $object) . '</td>', $n;
-		endforeach;
-		echo '		</tr>', $n;
+			$this->_draw_row_recursive($object, $columns, 0);
 		endforeach;
 		echo '	</tbody>', $n;
 		if ($has_summaries):
@@ -99,7 +114,7 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		echo '		<tr>', $n;
 		foreach ($columns as $column):
 		if ($column[3]):
-			echo '			<td>' . call_user_func($column[2], call_user_func($column[3], $this->_pluck_data($column[0]))) . '</td>', $n;
+			echo '			<td>' . call_user_func($column[self::FORMATTER], call_user_func($column[self::SUMMARIZER], $this->_pluck_data($column[self::PROPERTY_NAME]))) . '</td>', $n;
 		else:
 			echo '			<td></td>', $n;
 		endif;
@@ -108,6 +123,25 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		echo '	</tfoot>', $n;
 		endif;
 		echo '</table>', $n;
+	}
+	
+	protected function _draw_row_recursive($object, $columns, $level)
+	{
+		$n = "\n";
+		
+		echo '		<tr class="level-' . $level . '">', $n;
+		foreach($columns as $column):
+		echo '			<td>' . call_user_func($column[self::FORMATTER], $object->{$column[self::PROPERTY_NAME]}, $object) . '</td>', $n;
+		endforeach;
+		echo '		</tr>', $n;
+		
+		if (!$this->_walker)
+			return;
+		
+		$children = call_user_func($this->_walker, $object);
+		
+		foreach ($children as $child)
+			$this->_draw_row_recursive($child, $columns, $level + 1);
 	}
 	
 	protected function _pluck_data($attribute)

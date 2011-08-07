@@ -17,4 +17,16 @@ class Administratie_Aankoop extends Administratie_Record {
 			'prijs_incl' => new IHG_SQL_Atom('prijs + btw')
 			);
 	}
+	
+	public function details()
+	{
+		if (substr($this->id, 0, 3) == 'uur')
+			return self::find_records($this->pdo(),
+				'Administratie_Uur',
+				array(
+					'aankopenoverzicht_id' => $this->id
+				));
+		else
+			return new EmptyIterator();
+	}
 }

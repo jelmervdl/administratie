@@ -2,8 +2,10 @@
 
 class Administratie_Uur extends Administratie_Record {
 	
-	protected function _table_name() {
-		return 'Uren';
+	protected function _table_name($query_type) {
+		return $query_type == self::SELECT_QUERY
+			? 'UrenOverzicht'
+			: 'Uren';
 	}
 	
 	protected function _properties() {
@@ -15,8 +17,11 @@ class Administratie_Uur extends Administratie_Record {
 			'eind_tijd',
 			'beschrijving',
 			'tarief_id',
+			'aankopenoverzicht_id',
+			'aantal',
 			'duur'	=> new IHG_SQL_Atom('TIMESTAMPDIFF(SECOND, start_tijd, eind_tijd) / 3600.0'),
-			'prijs' => new IHG_SQL_Atom('(TIMESTAMPDIFF(SECOND, Uren.start_tijd, Uren.eind_tijd) / 3600.0) * (SELECT Tarieven.prijs_per_uur FROM Tarieven WHERE Tarieven.id = tarief_id)')
+			'prijs',
+			'btw'
 		);
 	}
 	

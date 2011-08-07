@@ -278,14 +278,60 @@ from (`OnbetaaldeUren` left join `Bedrijven` on((`OnbetaaldeUren`.`bedrijf_id` =
 
 DROP TABLE `AankopenOverzicht`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `AankopenOverzicht`
-AS select
-   concat(_latin1'uur',`UrenOverzicht`.`tarief_id`,
-   `UrenOverzicht`.`bedrijf_id`,if(`UrenOverzicht`.`factuur_id`,
-   `UrenOverzicht`.`factuur_id`,0)) AS `id`,cast(concat(_latin1'Uren ',`Tarieven`.`prijs_per_uur`,_latin1' euro per uur') as char charset latin1) AS `beschrijving`,sum(`UrenOverzicht`.`aantal`) AS `aantal`,sum(`UrenOverzicht`.`prijs`) AS `prijs`,sum(`UrenOverzicht`.`btw`) AS `btw`,
+AS SELECT
+   concat(
+      _latin1'uur',
+      `UrenOverzicht`.`tarief_id`, ':',
+      `UrenOverzicht`.`bedrijf_id`, ':',
+      if(`UrenOverzicht`.`factuur_id`,
+         `UrenOverzicht`.`factuur_id`,
+         0
+      )
+   ) AS `id`,
+   cast(
+      concat(
+         _latin1'Uren ',
+         `Tarieven`.`prijs_per_uur`,
+         _latin1' euro per uur'
+      ) as char charset latin1
+   ) AS `beschrijving`,
+   sum(`UrenOverzicht`.`aantal`) AS `aantal`,
+   sum(`UrenOverzicht`.`prijs`) AS `prijs`,
+   sum(`UrenOverzicht`.`btw`) AS `btw`,
    `UrenOverzicht`.`bedrijf_id` AS `bedrijf_id`,
    `UrenOverzicht`.`factuur_id` AS `factuur_id`,
    `UrenOverzicht`.`deleted` AS `deleted`
-from (`UrenOverzicht` left join `Tarieven` on((`UrenOverzicht`.`tarief_id` = `Tarieven`.`id`))) group by `UrenOverzicht`.`factuur_id`,`UrenOverzicht`.`bedrijf_id`,`UrenOverzicht`.`tarief_id` union select concat(_latin1'aankoop',`Aankopen`.`factuur_id`,`Aankopen`.`bedrijf_id`,`Aankopen`.`product_id`) AS `id`,cast(`Producten`.`beschrijving` as char charset latin1) AS `beschrijving`,count(`Aankopen`.`product_id`) AS `aantal`,(`Producten`.`prijs` * count(`Aankopen`.`product_id`)) AS `prijs`,((`Producten`.`prijs` * count(`Aankopen`.`product_id`)) * 0.19) AS `btw`,`Aankopen`.`bedrijf_id` AS `bedrijf_id`,`Aankopen`.`factuur_id` AS `factuur_id`,`Aankopen`.`deleted` AS `deleted` from (`Aankopen` left join `Producten` on((`Aankopen`.`product_id` = `Producten`.`id`))) group by `Aankopen`.`factuur_id`,`Aankopen`.`bedrijf_id`,`Aankopen`.`product_id`;
+FROM
+   `UrenOverzicht`
+RIGHT JOIN `Tarieven` ON
+   `UrenOverzicht`.`tarief_id` = `Tarieven`.`id`
+GROUP BY
+   `UrenOverzicht`.`factuur_id`,
+   `UrenOverzicht`.`bedrijf_id`,
+   `UrenOverzicht`.`tarief_id`
+UNION
+SELECT
+   concat(
+      _latin1'aankoop',
+      `Aankopen`.`factuur_id`, ':',
+      `Aankopen`.`bedrijf_id`, ':',
+      `Aankopen`.`product_id`
+   ) AS `id`,
+   cast(`Producten`.`beschrijving` as char charset latin1) AS `beschrijving`,
+   count(`Aankopen`.`product_id`) AS `aantal`,
+   (`Producten`.`prijs` * count(`Aankopen`.`product_id`)) AS `prijs`,
+   ((`Producten`.`prijs` * count(`Aankopen`.`product_id`)) * 0.19) AS `btw`,
+   `Aankopen`.`bedrijf_id` AS `bedrijf_id`,
+   `Aankopen`.`factuur_id` AS `factuur_id`,
+   `Aankopen`.`deleted` AS `deleted`
+FROM
+   `Aankopen`
+RIGHT JOIN `Producten` ON
+   `Aankopen`.`product_id` = `Producten`.`id`
+GROUP BY
+   `Aankopen`.`factuur_id`,
+   `Aankopen`.`bedrijf_id`,
+   `Aankopen`.`product_id`;
 
 
 # Replace placeholder table for OnbetaaldeUren with correct view syntax
@@ -314,19 +360,31 @@ where (isnull(`UrenOverzicht`.`factuur_id`) and (`UrenOverzicht`.`prijs` is not 
 
 DROP TABLE `UrenOverzicht`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `UrenOverzicht`
-AS select
+AS SELECT
    `Uren`.`id` AS `id`,
    `Uren`.`bedrijf_id` AS `bedrijf_id`,
    `Uren`.`factuur_id` AS `factuur_id`,
    `Uren`.`start_tijd` AS `start_tijd`,
    `Uren`.`eind_tijd` AS `eind_tijd`,
-   `Uren`.`tarief_id` AS `tarief_id`,(timestampdiff(SECOND,`Uren`.`start_tijd`,
-   `Uren`.`eind_tijd`) / 3600.0) AS `aantal`,((timestampdiff(SECOND,`Uren`.`start_tijd`,
-   `Uren`.`eind_tijd`) / 3600.0) * `Tarieven`.`prijs_per_uur`) AS `prijs`,(((timestampdiff(SECOND,`Uren`.`start_tijd`,
-   `Uren`.`eind_tijd`) / 3600.0) * `Tarieven`.`prijs_per_uur`) * 0.19) AS `btw`,
+   `Uren`.`tarief_id` AS `tarief_id`,
+   concat(
+      _latin1'uur',
+      `Uren`.`tarief_id`,':',
+      `Uren`.`bedrijf_id`,':',
+      if(`Uren`.`factuur_id`,
+         `Uren`.`factuur_id`,
+         0
+      )
+   ) AS `aankopenoverzicht_id`,
+   timestampdiff(SECOND,`Uren`.`start_tijd`,`Uren`.`eind_tijd`) / 3600.0 AS `aantal`,
+   (timestampdiff(SECOND,`Uren`.`start_tijd`,`Uren`.`eind_tijd`) / 3600.0) * `Tarieven`.`prijs_per_uur` AS `prijs`,
+   ((timestampdiff(SECOND,`Uren`.`start_tijd`,`Uren`.`eind_tijd`) / 3600.0) * `Tarieven`.`prijs_per_uur`) * 0.19 AS `btw`,
    `Uren`.`beschrijving` AS `beschrijving`,
    `Uren`.`deleted` AS `deleted`
-from (`Uren` left join `Tarieven` on((`Tarieven`.`id` = `Uren`.`tarief_id`)));
+FROM
+   `Uren`
+RIGHT JOIN `Tarieven` ON
+   `Tarieven`.`id` = `Uren`.`tarief_id`;
 
 
 # Replace placeholder table for FacturenOverzicht with correct view syntax
