@@ -18,7 +18,7 @@ class Administratie_Aankoop_Controller extends IHG_Controller_Abstract
 			->set_walker($walker)
 			//->add_column('bedrijf', 'Bedrijf', array($this, '_format_bedrijf'))
 			->add_column('beschrijving', 'Beschrijving', new IHG_Formatter_Rich())
-			->add_column('aantal', 'Aantal', function($aantal) { return number_format($aantal, 1); })
-			->add_column('prijs', 'Prijs', function($prijs) { return '&euro;' . number_format($prijs, 2, ',', '.'); });
+			->add_column('aantal', 'Aantal', function($aantal) { return number_format($aantal, 1); }, 'array_sum')
+			->add_column('prijs', 'Prijs', function($prijs) { return '&euro;' . number_format($prijs, 2, ',', '.'); }, 'array_sum');
 	}
 }
