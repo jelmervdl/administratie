@@ -1,49 +1,21 @@
 /* Sheets */
 (function() {
 
-	// Utility: Math functions for animation calucations - From http://www.robertpenner.com/easing/
-	//
-	// t = time, b = begin, c = change, d = duration
-	// time = current frame, begin is fixed, change is basically finish - begin, duration is fixed (frames),
-
-	function linear(t, b, c, d) {
-		return c*t/d + b;
-	}
-
-	function sineInOut(t, b, c, d) {
-		return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
-	}
-
-	function cubicIn(t, b, c, d) {
-		return c*(t/=d)*t*t + b;
-	}
-
-	function cubicOut(t, b, c, d) {
-		return c*((t=t/d-1)*t*t + 1) + b;
-	}
-
-	function cubicInOut(t, b, c, d) {
-		if ((t/=d/2) < 1) return c/2*t*t*t + b;
-		return c/2*((t-=2)*t*t + 2) + b;
-	}
-
-	function bounceOut(t, b, c, d) {
-		if ((t/=d) < (1/2.75)){
-			return c*(7.5625*t*t) + b;
-		} else if (t < (2/2.75)){
-			return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
-		} else if (t < (2.5/2.75)){
-			return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
-		} else {
-			return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
-		}
-	}
-
-	var _fps = 50;
-	
-	var _duration = 0.5;
+	var _duration = 350;
 	
 	var _open_sheet = null;
+	
+	function defer(callback)
+	{
+		setTimeout(callback, 1);
+	}
+	
+	function set_transition(node, transition)
+	{
+		node.style.transition       = transition;
+		node.style.mozTransition    = transition;
+		node.style.webkitTransition = transition;
+	}
 	
 	function get_sheet(sheet)
 	{
@@ -81,31 +53,20 @@
 			
 			var frame = 0;
 			
-			sheet_node.style.top = (height * -1) + 'px';
+			sheet_node.style.top = -height + 'px';
 			
 			sheet_node.style.visibility = 'visible';
-			
-			var _slide_down = function() {
-				
-				var offset = cubicOut(frame, height * -1, height, _fps * _duration);
-				
-				if(offset > 0) offset = 0;
-				
-				sheet_node.style.top = offset + 'px';
-				
-				if(++frame < _fps * _duration)
-					setTimeout(_slide_down, 1000 / _fps);
-				else
-				{
-					if (callback)
-						callback();
-				}
-			}
 			
 			if (sheet_node.hasAttribute('onsheetopen'))
 				new Function(sheet_node.getAttribute('onsheetopen')).call(sheet_node);
 			
-			setTimeout(_slide_down, 1000 / _fps);
+			defer(function() {
+				set_transition(sheet_node, 'top ease-out ' + _duration + 'ms');
+				sheet_node.style.top = '0px';
+				
+				if (callback)
+					setTimeout(callback, _duration);
+			});
 			
 			return true;
 		} catch(e) {
@@ -127,28 +88,18 @@
 			
 			var frame = 0;
 			
-			var _slide_up = function() {
-				
-				var offset = cubicIn(frame++, 0, height * -1, _fps * _duration);
-				
-				sheet_node.style.top = offset + 'px';
-				
-				if (++frame < _fps * _duration)
-					setTimeout(_slide_up, 1000 / _fps);
-				else
-				{
-					sheet_node.style.display = 'none';
+			setTimeout(function() {
+				sheet_node.style.display = 'none';
 					
-					if (callback)
-						callback();
-					
-					if (sheet_node.hasAttribute('onsheetclose'))
-						new Function(sheet_node.getAttribute('onsheetclose')).call(sheet_node);
-				}
-			}
+				if (callback)
+					callback();
+				
+				if (sheet_node.hasAttribute('onsheetclose'))
+					new Function(sheet_node.getAttribute('onsheetclose')).call(sheet_node);
+			}, _duration);
 			
-			setTimeout(_slide_up, 1000 / _fps);
-			
+			set_transition(sheet_node, 'top ease-in ' + _duration + 'ms');
+			sheet_node.style.top = -height + 'px';
 			
 			return true;
 		} catch(e) {
