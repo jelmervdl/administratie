@@ -27,3 +27,11 @@ class IHG_HTML_TestSuite extends TestSuite {
 		$this->addFile(ROOT.'IHG_HTML_Writer.php');
 	}
 }
+
+class IHG_Formatter_TestSuite extends TestSuite
+{
+	public function __construct()
+	{
+		$this->addFile(ROOT . 'IHG_Formatter_List.php');
+	}
+}
