@@ -32,7 +32,7 @@
 
 		<?php if ($uren): ?>
 		
-		<div id="urenselector">
+		<div class="urenselector">
 		<?php
 			$this->views->from_record($this->uren)
 				->set_data($uren)
@@ -45,7 +45,7 @@
 		?>
 		</div>
 		
-		<div class="drag-resize-handle" data-target-node="urenselector"></div>
+		<div class="drag-resize-handle" data-target-node=".urenselector"></div>
 	
 		<?php endif ?>
 	

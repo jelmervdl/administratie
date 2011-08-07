@@ -248,8 +248,10 @@ add_onload_listener(function(root) {
 		if (node.type == 'checkbox' && node.parentNode.parentNode.nodeName == 'TR') {
 			(function(node) { // functie tegen het memorization probleem
 				node.parentNode.parentNode.addEventListener('click', function(e) {
-					node.checked = !node.checked;
-					e.preventDefault();
+					if (e.srcElement.type != 'checkbox') {
+						node.checked = !node.checked;
+						e.preventDefault();
+					}
 				}, false);
 			})(node);
 		}
