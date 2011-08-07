@@ -4,11 +4,13 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 {
 	public function onbetaalde_uren($bedrijf_id = null)
 	{
+		$router = $this->router;
+		
 		return $this->views->from_record($this->uren)
 			->set_data($this->uren->find_all(array('factuur_id' => null) 
 				+ ($bedrijf_id !== null ? array('bedrijf_id' => $bedrijf_id) : array())))
 			//->add_column('bedrijf', 'Bedrijf', array($this, '_format_bedrijf'))
-			->add_column('id', '#', function($id) { return sprintf('<a href="uren/%d.html" class="open-in-sheet">%1$d</a>', $id); })
+			->add_column('id', '#', function($id, $uur) use ($router) { return sprintf('<a href="%s" class="open-in-sheet">%d</a>', $router->link('Administratie_Uur_Controller', 'uur_toevoegen', $uur->bedrijf_id, $id), $id); })
 			->add_column('beschrijving', 'Beschrijving', 'summary')
 			->add_column('start_tijd', 'Datum', array($this, '_format_start_tijd'))
 			->add_column('duur', 'Duur', create_function('$x', 'return number_format($x, 2);'), 'array_sum')
@@ -26,14 +28,14 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 			->add_column('prijs', 'Prijs', create_function('$x', 'return "&euro;" . number_format($x, 2, ",", ".");'));
 	}
 	
-	public function uur_toevoegen($uur_id = null, $bedrijf_id = null)
+	public function uur_toevoegen($bedrijf_id = null, $uur_id = null)
 	{	
 		if ($uur_id)
 			$uur = $this->uren->find($uur_id);
 		else
 			$uur = $this->_create_new_uur();
 		
-		if ($bedrijf_id)
+		if (!$uur_id && $bedrijf_id)
 		{
 			$bedrijf = $this->bedrijven->find($bedrijf_id);
 			$uur->bedrijf = $bedrijf;

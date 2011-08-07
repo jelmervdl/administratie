@@ -55,8 +55,9 @@ class Administratie_Application extends IHG_Application_Abstract {
 			->register_route('/bedrijven/%d/contacten/%d.html', 'Administratie_Contactpersoon_Controller::contactpersoon_toevoegen')
 			->register_route('/bedrijven/%d/facturen/nieuw.html', 'Administratie_Factuur_Controller::factuur_toevoegen')
 			->register_route('/bedrijven/%d/facturen/%d.html', 'Administratie_Factuur_Controller::factuur_toevoegen')
+			->register_route('/bedrijven/%d/uren/%d.html', 'Administratie_Uur_Controller::uur_toevoegen')
+			->register_route('/bedrijven/%d/uren/nieuw.html', 'Administratie_Uur_Controller::uur_toevoegen')
 			->register_route('/uren/nieuw.html',		'Administratie_Uur_Controller::uur_toevoegen')
-			->register_route('/uren/%d.html', 			'Administratie_Uur_Controller::uur_toevoegen')
 			->register_route('/tarieven/nieuw.html', 	'Administratie_Tarief_Controller::tarief_toevoegen')
 			->register_route('/tarieven/%d.html', 		'Administratie_Tarief_Controller::tarief_toevoegen');
 		

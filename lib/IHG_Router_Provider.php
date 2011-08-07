@@ -95,7 +95,7 @@ class IHG_Router_Provider extends IHG_Component_Abstract
 	
 	public function link_controller($controller, $action, array $arguments = array())
 	{
-		$arguments = array_filter($arguments, function($arg) { return !empty($arg); });
+		//$arguments = array_filter($arguments, function($arg) { return !empty($arg); });
 		
 		$arguments = array_map('urlencode', $arguments);
 		
