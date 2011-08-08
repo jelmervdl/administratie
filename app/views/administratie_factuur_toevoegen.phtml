@@ -38,9 +38,9 @@
 				->set_data($uren)
 				->add_column('id', '', IHG_HTML_Table::checkbox_decorator('uur'))
 				->add_column('beschrijving', 'Beschrijving', 'summary')
-				->add_column('start_tijd', 'Datum', create_function('$x', 'return $x->format("d-m-Y");'))
-				->add_column('duur', 'Duur')
-				->add_column('prijs', 'Prijs', create_function('$x', 'return "&euro;" . number_format($x, 2, ",", ".");'))
+				->add_column('start_tijd', 'Datum', function($x) { return $x->format("d-m-Y"); })
+				->add_column('duur', 'Duur', function($aantal) { return number_format($aantal, 1); })
+				->add_column('prijs', 'Prijs', function($x) { return "&euro;" . number_format($x, 2, ",", "."); })
 				->draw();
 		?>
 		</div>
