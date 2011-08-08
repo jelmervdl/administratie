@@ -77,14 +77,15 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		return true;
 	}
 	
-	public function draw() {
-		if(count($this->_preferred_columns) === 0) {
-			$columns = $this->_available_columns;
-		} else {
-			$columns = $this->_preferred_columns;
-		}
-		
+	public function draw()
+	{
+		$has_data = false;
 		$has_summaries = false;
+		
+		$columns = count($this->_preferred_columns)
+			? $this->_preferred_columns
+			: $this->_available_columns;
+		
 		foreach ($columns as $column)
 		{
 			if ($column[self::SUMMARIZER])
@@ -106,10 +107,11 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		echo '	</thead>', $n;
 		echo '	<tbody>', $n;
 		foreach($this->_data as $object):
+			$has_data = true; // this trick, because count($this->_data may be inefficient)
 			$this->_draw_row_recursive($object, $columns, 0);
 		endforeach;
 		echo '	</tbody>', $n;
-		if ($has_summaries):
+		if ($has_summaries && $has_data):
 		echo '	<tfoot>', $n;
 		echo '		<tr>', $n;
 		foreach ($columns as $column):
