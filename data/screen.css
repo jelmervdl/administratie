@@ -86,6 +86,8 @@ thead th {
 	border: 1px solid #ababab;
 	border-top: 0;
 	box-shadow: grey 0 3px 20px;
+	-webkit-box-shadow: grey 0 3px 20px;
+	-webkit-user-select: none;
 }
 
 .sheet h2 {
@@ -115,7 +117,8 @@ thead th {
     float: left;
 }
 
-.sheet .controls button.default {
+.sheet .controls button.default,
+.sheet .controls button[type=submit] {
 	-webkit-appearance: default-button;
 }
 
