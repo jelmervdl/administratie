@@ -11,12 +11,12 @@
 		<?= $this->form->origin() ?>
 		
 		<p>
-			<label for="bedrijf_id">bedrijf:</label>
+			<label for="bedrijf_id">Bedrijf:</label>
 			<?= $this->form->popupbutton('bedrijf_id', $this->bedrijven, $uur->bedrijf, $errors, create_function('$bedrijf', 'return $bedrijf->naam;')) ?>
 		</p>
 	
 		<p>
-			<label for="tarief_id">tarief:</label>
+			<label for="tarief_id">Tarief:</label>
 			<?= $this->form->popupbutton('tarief_id', $this->tarieven, $uur->tarief, $errors, create_function('$tarief', 'return sprintf("%s (&euro; %01.2f)", $tarief->naam, $tarief->prijs_per_uur);')) ?>
 		</p>
 
@@ -31,15 +31,19 @@
 		</p>
 
 		<p>
-			<label for="beschrijving">Beschrijving:</label>
+			<label for="beschrijving">Omschrijving:</label>
 			<?=$this->form->textarea('beschrijving', $uur->beschrijving, $errors)?>
 		</p>
 	
 		<p class="controls">
 			<?php if ($uur->is_deletable): ?>
-			<button type="submit" name="delete" value="yes" class="delete">Verwijderen</button>
+				<button type="submit" name="delete" value="yes" class="delete">Verwijderen</button>
 			<?php endif ?>
-			<button type="submit"><?=$uur->id ? 'Opslaan' : 'Toevoegen' ?></button>
+			<?php if ($uur->id): ?>
+				<button type="submit">Opslaan</button>
+			<?php else: ?>
+				<button type="submit">Uur toevoegen</button>
+			<?php endif ?>
 			<button onclick="hide_sheet(this); return false">Sluiten</button>
 		</p>
 	</form>

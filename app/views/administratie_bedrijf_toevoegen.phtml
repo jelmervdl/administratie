@@ -9,12 +9,12 @@
 		<?= $this->form->origin() ?>
 		
 		<p>
-			<label for="naam">bedrijfsnaam:</label>
+			<label for="naam">Bedrijfsnaam:</label>
 			<?= $this->form->textfield('naam', $bedrijf->naam, $errors) ?>
 		</p>
 	
 		<p>
-			<label for="url">website:</label>
+			<label for="url">Website:</label>
 			<?= $this->form->textfield('url', $bedrijf->url, $errors)->set_size(40)->set_placeholder('http://') ?>
 		</p>
 	

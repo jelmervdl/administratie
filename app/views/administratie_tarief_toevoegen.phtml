@@ -9,12 +9,12 @@
 		<?= $this->form->origin() ?>
 		
 		<p>
-			<label for="naam">naam:</label>
+			<label for="naam">Naam:</label>
 			<?= $this->form->textfield('naam', $tarief->naam, $errors) ?>
 		</p>
 	
 		<p>
-			<label for="prijs_per_uur">prijs per uur:</label>
+			<label for="prijs_per_uur">Prijs per uur:</label>
 			<?= $this->form->textfield('prijs_per_uur', $tarief->prijs_per_uur, $errors)->set_size(5)->set_placeholder('0,00') ?>
 		</p>
 	
@@ -25,7 +25,7 @@
 			<?php if ($tarief->id): ?>
 				<button type="submit">Opslaan</button>
 			<?php else: ?>
-				<button type="submit">Tarief Toevoegen</button>
+				<button type="submit">Tarief toevoegen</button>
 			<?php endif ?>
 			<button onclick="hide_sheet(this); return false">Sluiten</button>
 		</p>

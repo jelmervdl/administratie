@@ -9,7 +9,7 @@
 		<?= $this->form->origin() ?>
 
 		<p>
-			<label>naam:</label>
+			<label>Naam:</label>
 			<?= $this->form->textfield('voornaam', $contactpersoon->voornaam, $errors)->set_placeholder('voornaam') ?>
 			<?= $this->form->textfield('achternaam', $contactpersoon->achternaam, $errors)->set_placeholder('achternaam') ?>
 		</p>
@@ -17,19 +17,19 @@
 		<br>
 		
 		<p>
-			<label for="telefoon">telefoonnr:</label>
+			<label for="telefoon">Telefoonnr:</label>
 			<?= $this->form->textfield('telefoon', $contactpersoon->telefoon, $errors) ?>
 		</p>
 		
 		<p>
-			<label for="emailadres">emailadres</label>
+			<label for="emailadres">E-mailadres</label>
 			<?= $this->form->textfield('emailadres', $contactpersoon->emailadres, $errors)->set_size(30) ?>
 		</p>
 	
 		<br>
 	
 		<p>
-			<label>adres:</label>
+			<label>Adres:</label>
 			<span style="display: inline-block">
 			<?= $this->form->textfield('straatnaam', $contactpersoon->straatnaam, $errors)->set_placeholder('straatnaam') ?>
 			<?= $this->form->textfield('huisnummer', $contactpersoon->huisnummer, $errors)->set_size(3)->set_placeholder('nr') ?>

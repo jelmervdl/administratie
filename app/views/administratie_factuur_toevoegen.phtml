@@ -9,24 +9,24 @@
 		<?= $this->form->origin() ?>
 		
 		<p>
-			<label for="project_naam">projectnaam:</label>
+			<label for="project_naam">Projectnaam:</label>
 			<?= $this->form->textfield('project_naam', $factuur->project_naam, $errors)->add_class('wide') ?>
 		</p>
 	
 		<p>
-			<label for="project_beschrijving">beschrijving:</label>
+			<label for="project_beschrijving">Omschrijving:</label>
 			<?= $this->form->textarea('project_beschrijving', $factuur->project_beschrijving, $errors) ?>
 		</p>
 		
 		<?php if ($factuur->is_new): ?>
 		<p>
-			<label for="verzend_datum">verzend datum:</label>
+			<label for="verzend_datum">Verzenddatum:</label>
 			<?= $this->form->datepicker('verzend_datum', $factuur->verzend_datum, $errors) ?>
 		</p>
 		<?php endif ?>
 		
 		<p>
-			<label for="uiterste_betaal_datum">uiterste datum van betaling:</label>
+			<label for="uiterste_betaal_datum">Uiterste datum van betaling:</label>
 			<?= $this->form->datepicker('uiterste_betaal_datum', $factuur->uiterste_betaal_datum, $errors) ?>
 		</p>
 
@@ -55,7 +55,7 @@
 			<?php endif ?>
 			
 			<?php if ($factuur->is_new): ?>
-				<button type="submit" class="default">Factuur Aanmaken</button>
+				<button type="submit" class="default">Factuur aanmaken</button>
 			<?php else: ?>
 				<button type="submit" class="default">Opslaan</button>
 			<?php endif ?>
