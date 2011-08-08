@@ -12,9 +12,9 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 			//->add_column('bedrijf', 'Bedrijf', array($this, '_format_bedrijf'))
 			->add_column('id', '#', function($id, $uur) use ($router) { return sprintf('<a href="%s" class="open-in-sheet">%d</a>', $router->link('Administratie_Uur_Controller', 'uur_toevoegen', $uur->bedrijf_id, $id), $id); })
 			->add_column('beschrijving', 'Beschrijving', 'summary')
-			->add_column('start_tijd', 'Datum', array($this, '_format_start_tijd'))
+			->add_column('start_tijd', 'Datum', new IHG_Formatter_Date())
 			->add_column('duur', 'Duur', create_function('$x', 'return number_format($x, 2);'), 'array_sum')
-			->add_column('prijs', 'Prijs', create_function('$x', 'return "&euro;" . number_format($x, 2, ",", ".");'), 'array_sum');
+			->add_column('prijs', 'Prijs', new IHG_Formatter_Price(), 'array_sum');
 	}
 	
 	public function factuur($factuur_id)
@@ -23,9 +23,9 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 			->set_data($this->uren->find_all(array('factuur_id' => $factuur_id)))
 			//->add_column('bedrijf', 'Bedrijf', array($this, '_format_bedrijf'))
 			->add_column('beschrijving', 'Beschrijving')
-			->add_column('start_tijd', 'Datum', array($this, '_format_start_tijd'))
+			->add_column('start_tijd', 'Datum', new IHG_Formatter_Date())
 			->add_column('duur', 'Duur', create_function('$x', 'return number_format($x, 2);'))
-			->add_column('prijs', 'Prijs', create_function('$x', 'return "&euro;" . number_format($x, 2, ",", ".");'));
+			->add_column('prijs', 'Prijs', new IHG_Formatter_Price());
 	}
 	
 	public function uur_toevoegen($bedrijf_id = null, $uur_id = null)
@@ -82,13 +82,6 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 		$uur->start_tijd = new DateTime('now');
 		$uur->eind_tijd	= new DateTime('now');
 		return $uur;
-	}
-	
-	public function _format_start_tijd($start_tijd)
-	{
-		return $start_tijd instanceof DateTime 
-			? $start_tijd->format('d-m-Y')
-			: '[null]';
 	}
 	
 	public function _format_bedrijf($bedrijf)

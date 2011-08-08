@@ -101,7 +101,7 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		echo '	<thead>', $n;
 		echo '		<tr>', $n;
 		foreach($columns as $column):
-		echo '			<th>' . $column[self::LABEL] . '</th>', $n;
+		echo '			<th class="' .$column[self::PROPERTY_NAME]. '">' . $column[self::LABEL] . '</th>', $n;
 		endforeach;
 		echo '		</tr>', $n;
 		echo '	</thead>', $n;
@@ -116,7 +116,7 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		echo '		<tr>', $n;
 		foreach ($columns as $column):
 		if ($column[3]):
-			echo '			<td>' . call_user_func($column[self::FORMATTER], call_user_func($column[self::SUMMARIZER], $this->_pluck_data($column[self::PROPERTY_NAME]))) . '</td>', $n;
+			echo '			<td class="' .$column[self::PROPERTY_NAME]. '">' . call_user_func($column[self::FORMATTER], call_user_func($column[self::SUMMARIZER], $this->_pluck_data($column[self::PROPERTY_NAME]))) . '</td>', $n;
 		else:
 			echo '			<td></td>', $n;
 		endif;
@@ -133,7 +133,7 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		
 		echo '		<tr class="level-' . $level . '">', $n;
 		foreach($columns as $column):
-		echo '			<td>' . call_user_func($column[self::FORMATTER], $object->{$column[self::PROPERTY_NAME]}, $object) . '</td>', $n;
+		echo '			<td class="' . $column[self::PROPERTY_NAME] . '">' . call_user_func($column[self::FORMATTER], $object->{$column[self::PROPERTY_NAME]}, $object) . '</td>', $n;
 		endforeach;
 		echo '		</tr>', $n;
 		

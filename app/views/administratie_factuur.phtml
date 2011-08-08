@@ -11,22 +11,22 @@
 	<table class="prijs">
 		<tr>
 			<th>Prijs:</th>
-			<td>&euro; <?=number_format($factuur->prijs, 2, '.', ',')?></td>
+			<td><?=$this->_format_price($factuur->prijs)?></td>
 		</tr>
 		<tr>
 			<th>BTW:</th>
-			<td>&euro; <?=number_format($factuur->btw, 2, '.', ',')?></td>
+			<td><?=$this->_format_price($factuur->btw)?></td>
 		</tr>
 		<tr class="summary">
 			<th>Totaal:</th>
-			<td>&euro; <?=number_format($factuur->prijs_incl, 2, '.', ',')?></td>
+			<td><?=$this->_format_price($factuur->prijs_incl)?></td>
 		</tr>
 	</table>
 	
 	<p><strong>Geadresseerde:</strong> <?=nl2br($this->_html($factuur->contactpersoon->adres))?></p>
 	
-	<p><strong>Verzenddatum:</strong> <?=$factuur->verzend_datum->format('d/m/Y')?><br>
-	Uiterste betaaldatum: <?=$factuur->uiterste_betaal_datum->format('d/m/Y')?><br>
+	<p><strong>Verzenddatum:</strong> <?=$this->_format_date($factuur->verzend_datum)?><br>
+	Uiterste betaaldatum: <?=$this->_format_date($factuur->uiterste_betaal_datum)?><br>
 	Voldaan: <?=$factuur->voldaan ? 'Ja' : ($factuur->termijn_resterend > 0 ? ('Nee (' . $factuur->termijn_resterend . ' dagen)') : '<span class="FAIL">Nee</span>')?></p>
 
         <p><a href="<?=$this->router->link('Administratie_Factuur_Controller', 'factuur_pdf', $factuur->id)?>" target="_new">Exporteer naar PDF</a></p>

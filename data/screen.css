@@ -40,6 +40,20 @@ table .level-1 td:first-child {
    padding-left: 16px;
 }
 
+td.start_tijd,
+td.eind_tijd,
+td.verzend_datum,
+td.uiterste_betaal_datum,
+td.aantal,
+td.prijs {
+   white-space: nowrap;
+}
+
+table .duur,
+table .aantal,
+table .prijs {
+   text-align: right;
+}
 
 h2 small,
 h3 small {

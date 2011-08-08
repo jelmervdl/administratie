@@ -43,6 +43,8 @@ class IHG_View_Template_Native implements IHG_View_Interface
 		include $this->_template_file;
 	}
 	
+	// XXX These helper functions shouldn't be here, they should be more plugin-like.
+	
 	protected function _attr($x)
 	{
 		return htmlentities((string) $x, ENT_QUOTES, 'UTF-8');
@@ -76,6 +78,18 @@ class IHG_View_Template_Native implements IHG_View_Interface
 		
 		return sprintf('<span id="%s" class="inline_edit" rel="%s">%s</span>',
 			$id, $this->_attr($postback_url), $this->_html($value));
+	}
+	
+	protected function _format_date(DateTime $date)
+	{
+		$formatter = new IHG_Formatter_Date();
+		return $formatter($date);
+	}
+	
+	protected function _format_price($price)
+	{
+		$formatter = new IHG_Formatter_Price();
+		return $formatter($price);
 	}
 	
 	static public function from_file(IHG_Application_Abstract $application, $file)

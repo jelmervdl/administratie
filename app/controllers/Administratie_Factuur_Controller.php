@@ -28,16 +28,18 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 			}
 		}
 		
+		$price_format = new IHG_Formatter_Price();
+		
 		$factuur_view = $this->views->from_record($this->facturen)
 			->set_data($facturen)
 			->add_column('nummer', '', IHG_HTML_Table::checkbox_decorator('factuur_nummers'))
 			->add_column('nummer', '#', array($this, '_link_factuur'))
 			->add_column('bedrijf', 'Bedrijf', create_function('$bedrijf', 'return $bedrijf->naam;'))
 			->add_column('verzend_datum', 'Verzonden op')
-			->add_column('btw', 'BTW', create_function('$btw', 'return sprintf("&euro; %0.2f", $btw);'));
+			->add_column('btw', 'BTW', $price_format);
 		
-		$prijs_totaal_view=$this->views->from_string(sprintf('Totaal prijs: &euro; %0.2f', $facturen->sum('prijs')));
-		$btw_totaal_view = $this->views->from_string(sprintf('Totaal BTW: &euro; %0.2f', $facturen->sum('btw')));
+		$prijs_totaal_view=$this->views->from_string(sprintf('Totaal prijs: %s', $price_format($facturen->sum('prijs'))));
+		$btw_totaal_view = $this->views->from_string(sprintf('Totaal BTW: %s', $price_format($facturen->sum('btw'))));
 		
 		$view = $this->views->from_file('administratie_belasting');
 		$view->facturen = $factuur_view;
@@ -61,8 +63,8 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 			->add_column('nummer', '#', array($this, '_link_factuur'))
 			->add_column('bedrijf', 'Bedrijf', create_function('$bedrijf', 'return $bedrijf->naam;'))
 			->add_column('termijn_resterend', 'Termijn', create_function('$x', 'return $x . " dagen";'))
-			->add_column('verzend_datum', 'Verzonden op')
-			->add_column('uiterste_betaal_datum', 'Uiterlijk betaald op');
+			->add_column('verzend_datum', 'Verzonden op', new IHG_Formatter_Date())
+			->add_column('uiterste_betaal_datum', 'Uiterlijk betaald op', new IHG_Formatter_Date());
 	}
 	
 	public function list_facturen($bedrijf_id = null)
@@ -72,8 +74,8 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 		return $this->views->from_record($this->facturen)
 			->set_data($facturen)
 			->add_column('nummer', '#', array($this, '_link_factuur'))
-			->add_column('verzend_datum', 'Verzonden op')
-			->add_column('uiterste_betaal_datum', 'Uiterlijk betaald op')
+			->add_column('verzend_datum', 'Verzonden op', new IHG_Formatter_Date())
+			->add_column('uiterste_betaal_datum', 'Uiterlijk betaald op', new IHG_Formatter_Date())
 			->add_column('voldaan', 'Voldaan', array($this, '_format_voldaan'))
 			->add_column('id', 'Download', array($this, '_link_factuur_pdf'));
 	}
