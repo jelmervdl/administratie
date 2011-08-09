@@ -1,12 +1,39 @@
 <?php
 
+class Administratie_Uur_Grouper implements IHG_HTML_Table_Grouper
+{
+	private $application;
+	
+	public function __construct($application)
+	{
+		$this->application = $application;
+	}
+	
+	public function has_header($bedrijf_id)
+	{
+		return true;
+	}
+	
+	public function format_header($bedrijf_id)
+	{
+		return sprintf('<a href="%s">%s</a>',
+			$this->application->router->link('Administratie_Bedrijf_Controller', 'bedrijf', $bedrijf_id),
+			$this->application->bedrijven->find($bedrijf_id)->naam);
+	}
+	
+	public function classify($uur)
+	{
+		return $uur->bedrijf_id;
+	}
+}
+
 class Administratie_Uur_Controller extends IHG_Controller_Abstract
 {
 	public function onbetaalde_uren($bedrijf_id = null)
 	{
 		$router = $this->router;
 		
-		return $this->views->from_record($this->uren)
+		$view = $this->views->from_record($this->uren)
 			->set_data($this->uren->find_all(array('factuur_id' => null) 
 				+ ($bedrijf_id !== null ? array('bedrijf_id' => $bedrijf_id) : array())))
 			//->add_column('bedrijf', 'Bedrijf', array($this, '_format_bedrijf'))
@@ -15,6 +42,11 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 			->add_column('start_tijd', 'Datum', new IHG_Formatter_Date())
 			->add_column('duur', 'Duur', create_function('$x', 'return number_format($x, 2);'), 'array_sum')
 			->add_column('prijs', 'Prijs', new IHG_Formatter_Price(), 'array_sum');
+		
+		if ($bedrijf_id === null)
+			$view->set_grouper(new Administratie_Uur_Grouper($this->application));
+		
+		return $view;
 	}
 	
 	public function factuur($factuur_id)

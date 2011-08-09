@@ -1,5 +1,32 @@
 <?php
 
+interface IHG_HTML_Table_Grouper
+{
+	public function has_header($group);
+	
+	public function format_header($group);
+	
+	public function classify($object);
+}
+
+class IHG_HTML_Table_DefaultGrouper implements IHG_HTML_Table_Grouper
+{
+	public function has_header($group)
+	{
+		return false;
+	}
+	
+	public function format_header($group)
+	{
+		return "";
+	}
+	
+	public function classify($object)
+	{
+		return "default";
+	}
+}
+
 class IHG_HTML_Table implements IHG_View_Interface {
 	
 	protected $_available_columns;
@@ -9,6 +36,8 @@ class IHG_HTML_Table implements IHG_View_Interface {
 	protected $_data;
 	
 	protected $_walker;
+	
+	protected $_grouper;
 	
 	const PROPERTY_NAME = 0;
 	
@@ -38,6 +67,8 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		if(!$this->_available_columns) {
 			throw new InvalidArgumentException('IHG_HTML_Table::__construct requires the first argument to be the name or the provider of a record type. ' . gettype($record_type) . ' was given');
 		}
+		
+		$this->_grouper = new IHG_HTML_Table_DefaultGrouper();
 	}
 	
 	public function add_column($property_name, $label = null, $formatter = null, $summary = null) {
@@ -65,6 +96,13 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		return $this;
 	}
 	
+	public function set_grouper(IHG_HTML_Table_Grouper $grouper)
+	{
+		$this->_grouper = $grouper;
+		
+		return $this;
+	}
+	
 	public function _default_formatter($x) {
 		if($x instanceof DateTime) {
 			$x = $x->format('d/m/Y');
@@ -79,12 +117,11 @@ class IHG_HTML_Table implements IHG_View_Interface {
 	
 	public function draw()
 	{
-		$has_data = false;
-		$has_summaries = false;
-		
 		$columns = count($this->_preferred_columns)
 			? $this->_preferred_columns
 			: $this->_available_columns;
+		
+		$has_summaries = false;
 		
 		foreach ($columns as $column)
 		{
@@ -95,9 +132,18 @@ class IHG_HTML_Table implements IHG_View_Interface {
 			}
 		}
 		
+		$data = array();
+		
+		foreach ($this->_data as $object)
+		{
+			$group = $this->_grouper->classify($object);
+			$data[$group][] = $this->_format_row_recursive($object, $columns, 0);
+		}
+		
 		$n = "\n";
 		
 		echo '<table>', $n;
+		
 		echo '	<thead>', $n;
 		echo '		<tr>', $n;
 		foreach($columns as $column):
@@ -105,13 +151,20 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		endforeach;
 		echo '		</tr>', $n;
 		echo '	</thead>', $n;
-		echo '	<tbody>', $n;
-		foreach($this->_data as $object):
-			$has_data = true; // this trick, because count($this->_data may be inefficient)
-			$this->_draw_row_recursive($object, $columns, 0);
-		endforeach;
+		
+		foreach ($data as $group => $rows):
+		echo '	<tbody' . ($this->_grouper->has_header($group) ?  ' class="group"' : '') . '>', $n;
+		if ($this->_grouper->has_header($group)):
+		echo '		<tr class="group-header">', $n;
+		echo '			<th colspan="' . count($columns) . '">' . $this->_grouper->format_header($group) . '</th>', $n;
+		echo '		</tr>', $n;
+		endif;
+		foreach ($rows as $row)
+			echo $row;
 		echo '	</tbody>', $n;
-		if ($has_summaries && $has_data):
+		endforeach;
+		
+		if ($has_summaries && count($data)):
 		echo '	<tfoot>', $n;
 		echo '		<tr>', $n;
 		foreach ($columns as $column):
@@ -127,23 +180,28 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		echo '</table>', $n;
 	}
 	
-	protected function _draw_row_recursive($object, $columns, $level)
+	protected function _format_row_recursive($object, $columns, $level)
 	{
 		$n = "\n";
 		
-		echo '		<tr class="level-' . $level . '">', $n;
-		foreach($columns as $column):
-		echo '			<td class="' . $column[self::PROPERTY_NAME] . '">' . call_user_func($column[self::FORMATTER], $object->{$column[self::PROPERTY_NAME]}, $object) . '</td>', $n;
-		endforeach;
-		echo '		</tr>', $n;
+		$data = "\t\t<tr class=\"level-{$level}\">\n";
+
+		foreach($columns as $column)
+			$data .= "\t\t\t<td class=\"{$column[self::PROPERTY_NAME]}\">"
+				.  call_user_func($column[self::FORMATTER], $object->{$column[self::PROPERTY_NAME]}, $object)
+				. "</td>\n";
+
+		$data .= "\t\t</tr>\n";
 		
-		if (!$this->_walker)
-			return;
+		if ($this->_walker)
+		{
+			$children = call_user_func($this->_walker, $object);
 		
-		$children = call_user_func($this->_walker, $object);
+			foreach ($children as $child)
+				$data .= $this->_draw_row_recursive($child, $columns, $level + 1);
+		}
 		
-		foreach ($children as $child)
-			$this->_draw_row_recursive($child, $columns, $level + 1);
+		return $data;
 	}
 	
 	protected function _pluck_data($attribute)

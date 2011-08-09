@@ -55,6 +55,10 @@ table .prijs {
    text-align: right;
 }
 
+table tbody.group tr:last-child td {
+   padding-bottom: 20px;
+}
+
 h2 small,
 h3 small {
 	font-size: 0.5em;
