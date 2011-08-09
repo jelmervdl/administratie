@@ -1,34 +1,7 @@
 <?php
 
-interface IHG_HTML_Table_Grouper
+class IHG_HTML_Table implements IHG_View_Interface
 {
-	public function has_header($group);
-	
-	public function format_header($group);
-	
-	public function classify($object);
-}
-
-class IHG_HTML_Table_DefaultGrouper implements IHG_HTML_Table_Grouper
-{
-	public function has_header($group)
-	{
-		return false;
-	}
-	
-	public function format_header($group)
-	{
-		return "";
-	}
-	
-	public function classify($object)
-	{
-		return "default";
-	}
-}
-
-class IHG_HTML_Table implements IHG_View_Interface {
-	
 	protected $_available_columns;
 	
 	protected $_preferred_columns = array();
@@ -47,31 +20,31 @@ class IHG_HTML_Table implements IHG_View_Interface {
 	
 	const SUMMARIZER = 3;
 	
-	public function __construct($record_type) {
-		if($record_type instanceof IHG_Record_Provider) {
+	public function __construct($record_type)
+	{
+		if ($record_type instanceof IHG_Record_Provider)
 			$record_type = $record_type->record_type();
-		}
 		
-		if(is_string($record_type)) {
+		if (is_string($record_type))
+		{
 			$this->_available_columns = array();
 			
-			foreach(IHG_Record::properties_for_record($record_type) as $key => $value) {
+			foreach (IHG_Record::properties_for_record($record_type) as $key => $value)
 				$this->_available_columns[] = array(
 					self::PROPERTY_NAME => is_int($key) ? $value : $key,
 					self::LABEL 		=> is_int($key) ? $value : $key,
 					self::FORMATTER		=> array($this, '_default_formatter'),
 					self::SUMMARIZER	=> null);
-			}
 		}
 		
-		if(!$this->_available_columns) {
+		if (!$this->_available_columns)
 			throw new InvalidArgumentException('IHG_HTML_Table::__construct requires the first argument to be the name or the provider of a record type. ' . gettype($record_type) . ' was given');
-		}
 		
 		$this->_grouper = new IHG_HTML_Table_DefaultGrouper();
 	}
 	
-	public function add_column($property_name, $label = null, $formatter = null, $summary = null) {
+	public function add_column($property_name, $label = null, $formatter = null, $summary = null)
+	{
 		$this->_preferred_columns[] = array(
 			self::PROPERTY_NAME => $property_name,
 			self::LABEL 		=> $label !== null ? $label : $property_name,
@@ -81,37 +54,37 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		return $this;
 	}
 	
-	public function set_data($data) {
+	public function set_data($data)
+	{
 		$this->_data = $data;
-		
 		return $this;
 	}
 	
-	public function set_walker($walker) {
+	public function set_walker($walker)
+	{
 		if (!is_callable($walker))
 			throw new InvalidArgumentException("Walker function is not callable");
 		
 		$this->_walker = $walker;
-		
 		return $this;
 	}
 	
 	public function set_grouper(IHG_HTML_Table_Grouper $grouper)
 	{
 		$this->_grouper = $grouper;
-		
 		return $this;
 	}
 	
-	public function _default_formatter($x) {
-		if($x instanceof DateTime) {
+	public function _default_formatter($x)
+	{
+		if ($x instanceof DateTime)
 			$x = $x->format('d/m/Y');
-		}
 		
-		return htmlentities($x, ENT_QUOTES, 'UTF-8');
+		return htmlspecialchars($x, ENT_QUOTES, 'UTF-8');
 	}
 	
-	public function is_embedded() {
+	public function is_embedded()
+	{
 		return true;
 	}
 	
@@ -146,8 +119,8 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		
 		echo '	<thead>', $n;
 		echo '		<tr>', $n;
-		foreach($columns as $column):
-		echo '			<th class="' .$column[self::PROPERTY_NAME]. '">' . $column[self::LABEL] . '</th>', $n;
+		foreach ($columns as $column):
+		echo '			<th class="' . $column[self::PROPERTY_NAME] . '">' . $column[self::LABEL] . '</th>', $n;
 		endforeach;
 		echo '		</tr>', $n;
 		echo '	</thead>', $n;
@@ -169,7 +142,7 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		echo '		<tr>', $n;
 		foreach ($columns as $column):
 		if ($column[3]):
-			echo '			<td class="' .$column[self::PROPERTY_NAME]. '">' . call_user_func($column[self::FORMATTER], call_user_func($column[self::SUMMARIZER], $this->_pluck_data($column[self::PROPERTY_NAME]))) . '</td>', $n;
+			echo '			<td class="' . $column[self::PROPERTY_NAME] . '">' . call_user_func($column[self::FORMATTER], call_user_func($column[self::SUMMARIZER], $this->_pluck_data($column[self::PROPERTY_NAME]))) . '</td>', $n;
 		else:
 			echo '			<td></td>', $n;
 		endif;
@@ -214,13 +187,31 @@ class IHG_HTML_Table implements IHG_View_Interface {
 		return $values;
 	}
 	
-	static public function default_decorator() {
+	static public function default_decorator()
+	{
 		return array($this, '_default_formatter');
 	}
 	
-	static public function checkbox_decorator($element_name) {
+	static public function checkbox_decorator($element_name)
+	{
 		return array(new IHG_HTML_Decorator_Checkbox($element_name), 'decorate');
 	}
 }
 
-?>
+class IHG_HTML_Table_DefaultGrouper implements IHG_HTML_Table_Grouper
+{
+	public function has_header($group)
+	{
+		return false;
+	}
+	
+	public function format_header($group)
+	{
+		return "";
+	}
+	
+	public function classify($object)
+	{
+		return "default";
+	}
+}
