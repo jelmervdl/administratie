@@ -198,7 +198,7 @@ class IHG_HTML_Table implements IHG_View_Interface {
 			$children = call_user_func($this->_walker, $object);
 		
 			foreach ($children as $child)
-				$data .= $this->_draw_row_recursive($child, $columns, $level + 1);
+				$data .= $this->_format_row_recursive($child, $columns, $level + 1);
 		}
 		
 		return $data;
