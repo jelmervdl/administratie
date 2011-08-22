@@ -3,6 +3,8 @@ abstract class IHG_Record {
 	
 	const SERIALIZED_FLAG = '%serialized%';
 	
+	const INSERT_QUERY = 'insert';
+
 	const SELECT_QUERY = 'select';
 	
 	const UPDATE_QUERY = 'update';

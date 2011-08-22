@@ -41,3 +41,11 @@ function ihg_in_array($needle, $haystack) {
 		return false;
 	}
 }
+
+function array_trim(&$array)
+{
+	// while the array still has elements and the last element evaluates to false
+	while (count($array) && !end($array))
+		array_pop($array); // pop it off
+}
+

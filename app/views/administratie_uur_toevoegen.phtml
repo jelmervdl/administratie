@@ -5,7 +5,7 @@
 	
 	<form
 		method="post"
-		action="<?=$this->router->link('Administratie_Uur_Controller', 'uur_toevoegen', $uur->id)?>"
+		action="<?=$this->router->link('Administratie_Uur_Controller', 'uur_toevoegen', $uur->bedrijf_id, $uur->id)?>"
 		accept-charset="utf-8">
 		
 		<?= $this->form->origin() ?>
