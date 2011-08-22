@@ -38,7 +38,7 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 				+ ($bedrijf_id !== null ? array('bedrijf_id' => $bedrijf_id) : array())))
 			//->add_column('bedrijf', 'Bedrijf', array($this, '_format_bedrijf'))
 			->add_column('id', '#', function($id, $uur) use ($router) { return sprintf('<a href="%s" class="open-in-sheet">%d</a>', $router->link('Administratie_Uur_Controller', 'uur_toevoegen', $uur->bedrijf_id, $id), $id); })
-			->add_column('beschrijving', 'Beschrijving', 'summary')
+			->add_column('beschrijving', 'Beschrijving', new IHG_Formatter_Rich())
 			->add_column('start_tijd', 'Datum', new IHG_Formatter_Date())
 			->add_column('duur', 'Duur', create_function('$x', 'return number_format($x, 2);'), 'array_sum')
 			->add_column('prijs', 'Prijs', new IHG_Formatter_Price(), 'array_sum');

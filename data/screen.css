@@ -40,6 +40,10 @@ table .level-1 td:first-child {
    padding-left: 16px;
 }
 
+td {
+	vertical-align: top;
+}
+
 td.start_tijd,
 td.eind_tijd,
 td.verzend_datum,
@@ -49,10 +53,14 @@ td.prijs {
    white-space: nowrap;
 }
 
-table .duur,
-table .aantal,
-table .prijs {
-   text-align: right;
+td.duur,
+td.aantal,
+td.prijs {
+	text-align: right;
+}
+
+td.beschrijving ul {
+	margin: 0 0 0 1.5em;
 }
 
 table tbody.group tr:last-child td {
