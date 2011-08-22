@@ -92,7 +92,7 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 				$uur->tarief		= $this->tarieven->find($_POST['tarief_id']);
 			
 				if ( (isset($_POST['delete']) && $uur->delete())
-					|| ($uur->save() && $uur_id === null) )
+					|| ($uur->save() && !empty($_POST['_origin'])) )
 				{
 					return $this->views->redirect($_POST['_origin']);
 				}
