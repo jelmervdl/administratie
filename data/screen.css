@@ -145,7 +145,7 @@ thead th {
 
 .sheet .controls button.default,
 .sheet .controls button[type=submit] {
-	-webkit-appearance: default-button;
+	font-weight: bold;
 }
 
 .sheet .tip {
