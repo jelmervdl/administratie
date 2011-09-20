@@ -2,9 +2,11 @@
 
 class IHG_Formatter_Date
 {
-	public function __invoke(DateTime $date)
+	public function __invoke(DateTime $date = null)
 	{
-		return $date->format('d–m–Y');
+		return $date !== null
+			? $date->format('d–m–Y')
+			: '';
 	}
 }
 
