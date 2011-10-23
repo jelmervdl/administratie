@@ -13,9 +13,13 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 	{
 		$this->breadcrumbs->add_crumb('Belasting');
 		
-		$facturen = $this->facturen->find_all(array(
-			'aangegeven' => null));
-		
+		$conditions = array('aangegeven' => null);
+
+		if (!empty($_GET['quarter']))
+			$conditions[] = new IHG_SQL_Atom('QUARTER(verzend_datum) = :quarter', array('quarter' => $_GET['quarter']));
+
+		$facturen = $this->facturen->find_all($conditions);
+
 		if ($this->_is_post_request())
 		{
 			foreach ($facturen as $factuur)

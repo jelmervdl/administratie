@@ -226,3 +226,8 @@ thead th {
 .sheet input.placeholder {
 	color: grey;
 }
+
+#kwartaal-selector {
+	float: right;
+	margin-right: 40px;
+}

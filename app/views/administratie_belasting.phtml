@@ -1,3 +1,12 @@
+<form method="get" id="kwartaal-selector">
+	<select name="quarter" onchange="this.form.submit()">
+		<option value="">Alle kwartalen</option>
+		<?php foreach (range(1, 4) as $kwartaal): ?>
+		<option value="<?=$kwartaal?>" <?php if (ifsetor($_GET['quarter']) == $kwartaal) echo 'selected' ?>><?=$kwartaal?>e kwartaal</option>
+		<?php endforeach ?>
+	</select>
+</form>
+
 <h2>BTW</h2>
 
 <div class="span-6">
