@@ -30,6 +30,8 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 					$factuur->save();
 				}
 			}
+
+			return $this->views->redirect($this->router->link('Administratie_Factuur_Controller', 'belasting_overzicht') . '?quarter=' . ifsetor($_GET['quarter']));
 		}
 		
 		$price_format = new IHG_Formatter_Price();
