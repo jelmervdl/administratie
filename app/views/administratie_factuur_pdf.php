@@ -49,7 +49,7 @@ $pdf->setFont(FONT_NORMAL, '', 7);
 $pdf->setLeftMargin(12.6);
 $pdf->setXY(12.6, 105.8);
 // adresblokje
-$pdf->write($lineheight, "Eelsmastate 38\n8925 HM Leeuwarden");
+$pdf->write($lineheight, "Moesstraat 72a\n9741 AC Groningen");
 $pdf->ln($breakheight);
 // referentieblokje
 $pdf->write($lineheight, "KvK: 01110869\nBTW: 0133.47.408");
@@ -58,7 +58,7 @@ $pdf->ln($breakheight);
 $pdf->setFont(FONT_BOLD, '', 7);
 $pdf->write($lineheight, 'T');
 $pdf->setFont(FONT_NORMAL, '', 7);
-$pdf->write($lineheight, ' +31 (0)58 2665289');
+$pdf->write($lineheight, ' +31 (0)6 248 244 31');
 $pdf->ln($breakheight);
 // email-adres & link
 $pdf->setTextColor(0, 0, 153);
@@ -133,7 +133,7 @@ $pdf->cell(33.2, 5.65, number_format($factuur->prijs_incl, 2, '.', ','), 'TB', 0
 // Mededeling
 $pdf->setFont(FONT_NORMAL, '', 9);
 $pdf->ln(12);
-$pdf->write($lineheight, 'Gelieve het bovenstaande bedrag binnen het vastgestelde termijn over te maken op GIRO rekeningnummer 88 90 250 op naam van Jelmer van der Linde te Leeuwarden.');
+$pdf->write($lineheight, 'Gelieve het bovenstaande bedrag binnen het vastgestelde termijn over te maken op GIRO rekeningnummer 88 90 250 op naam van Jelmer van der Linde te Groningen.');
 $pdf->ln(); $pdf->ln();
 $pdf->write($lineheight, 'En als u ook nog even het factuurnummer bij de omschrijving zou willen vermelden zou dat helemaal te gek zijn.');
 
