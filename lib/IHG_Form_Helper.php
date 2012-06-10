@@ -53,20 +53,27 @@ class IHG_Form_Helper extends IHG_Component_Abstract
 		return $field;
 	}
 	
-	public function datepicker($name, $value, &$errors = null)
+	public function datepicker($name, $value, &$errors = null, $format = '##-##-#### ##:##')
 	{
-		return $this->_helper_element->reset_with(
-			'<input type="text" %s value="%s">%s',
-			$name, $value->format('d-m-Y H:i'), $errors)->add_class('datepicker');
+		$i = 0; $symbols = array('d', 'm', 'Y', 'H', 'i', 's');
+
+		$date_format = preg_replace_callback('/(##+)/', function($match) use (&$i, $symbols) {
+			return $symbols[$i++];
+		}, $format);
 		
-		return $field;
+		return $this->_helper_element->reset_with(
+			'<input type="text" data-format="'.$format.'" %s value="%s">%s',
+			$name, $value ? $value->format($date_format) : null, $errors)->add_class('datepicker');
 	}
 	
-	public function popupbutton($name, $options, $selected_option, &$errors = null, $decorator = null)
+	public function popupbutton($name, $options, $selected_option, &$errors = null, $decorator = null, $allow_null = false)
 	{
 		if(!$decorator) $decorator = array(get_class($this), '_escape');
 		
 		$field = sprintf('<select id="%s" name="%1$s">', $name);
+
+		if ($allow_null)
+			$field .= '<option></option>';
 		
 		foreach($options as $option) {
 			$field .= sprintf('<option value="%s"%s>%s</option>',

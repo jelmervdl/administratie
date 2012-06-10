@@ -212,7 +212,8 @@ abstract class IHG_Record {
 		} else {
 			$value = $this->_get_property($key);
 		
-			if($this->_contains_date_indicator($key)) {
+			if ($this->_is_datetime_field($key))
+			{
 				try {
 					return $value !== null ? new IHG_DateTime($value) : null;
 				} catch(Exception $e) {
@@ -242,25 +243,30 @@ abstract class IHG_Record {
 		return $value;
 	}
 	
-	public function __set($key, $value) {
-		
-		if($key == 'id') {
-			throw new LogicException('Sorry, but the "id" property is read-only');
-		}
-		elseif($value instanceof DateTime && $this->_contains_date_indicator($key)) {
+	public function __set($key, $value)
+	{
+		if ($this->_is_readonly_field($key))
+			throw new LogicException('Sorry, but the property is read-only');
+
+		elseif ($value instanceof DateTime && $this->_is_datetime_field($key))
 			$value = $value->format('Y-m-d H:i:s');
-		}
-		elseif($value instanceof IHG_Record && $this->_property_exists($key . '_id')) {
-			if(!$value->_property_isset('id')) {
+		
+		elseif ($this->_property_exists($key . '_id') &&
+		  ($value instanceof IHG_Record || $value === null))
+		{
+			if ($value && !$value->_property_isset('id'))
 				throw new InvalidArgumentException('Only a previously saved IHG_Record instances can start a relationship');
-			}
 			
-			$key = $key . '_id';
-			$value = $value->_get_property('id');
+			$key .= '_id';
+			$value = $value === null ? null : $value->_get_property('id');
 		}
+
+		/*
+		// This functionality isn't used, is it? It should not be I think..
 		elseif(is_object($value)) {
 			
-			/* Omdat IHG_Record een gebonden PDO heeft, wil dat nog wel eens mis gaan met serializen */
+			// Omdat IHG_Record een gebonden PDO heeft,
+			// wil dat nog wel eens mis gaan met serializen.
 			if($value instanceof IHG_Record) {
 				$value = clone $value;
 				$value->_pdo = null;
@@ -268,6 +274,7 @@ abstract class IHG_Record {
 			
 			$value = self::SERIALIZED_FLAG . serialize($value);
 		}
+		*/
 		
 		$this->_set_property($key, $value);
 	}
@@ -284,7 +291,17 @@ abstract class IHG_Record {
 		$this->_set_property($key, null);
 	}
 	
-	protected function _contains_date_indicator($key) {
+	protected function _is_readonly_field($key)
+	{
+		return $key == 'id';
+	}
+
+	protected function _is_datetime_field($key)
+	{
+		return $this->_contains_date_indicator($key);
+	}
+
+	private function _contains_date_indicator($key) {
 		foreach(self::$_date_indicators as $indicator) {
 			$pos = strrpos($key, $indicator);
 			if($pos !== false && strlen($key) - $pos == strlen($indicator)) {

@@ -59,7 +59,9 @@ class Administratie_Application extends IHG_Application_Abstract {
 			->register_route('/bedrijven/%d/uren/nieuw.html', 'Administratie_Uur_Controller::uur_toevoegen')
 			->register_route('/uren/nieuw.html',		'Administratie_Uur_Controller::uur_toevoegen')
 			->register_route('/tarieven/nieuw.html', 	'Administratie_Tarief_Controller::tarief_toevoegen')
-			->register_route('/tarieven/%d.html', 		'Administratie_Tarief_Controller::tarief_toevoegen');
+			->register_route('/tarieven/%d.html', 		'Administratie_Tarief_Controller::tarief_toevoegen')
+			->register_route('/werken/nieuw.html', 		'Administratie_Werk_Controller::werk_toevoegen')
+			->register_route('/werken/%d.html', 		'Administratie_Werk_Controller::werk_toevoegen');
 		
 		$this->breadcrumbs->add_crumb('<span id="home-breadcrumb">Home</span>',
 			$this->router->link('Administratie_Index_Controller', 'index'));
@@ -84,6 +86,9 @@ class Administratie_Application extends IHG_Application_Abstract {
 			
 		$this->register_component('producten',
 			new IHG_Record_Provider($pdo, 'Administratie_Product'));
+
+		$this->register_component('werken',
+			new IHG_Record_Provider($pdo, 'Administratie_Werk'));
 	}
 	
 	public function snapshot_callback($snapshot) {

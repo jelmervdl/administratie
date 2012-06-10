@@ -13,6 +13,7 @@ class Administratie_Uur extends Administratie_Record {
 			'id',
 			'bedrijf_id',
 			'factuur_id',
+			'werk_id',
 			'start_tijd',
 			'eind_tijd',
 			'beschrijving',

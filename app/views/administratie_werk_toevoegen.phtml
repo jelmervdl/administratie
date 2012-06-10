@@ -1,0 +1,55 @@
+<div
+	class="sheet"
+	onsheetopen="document.getElementById('naam').focus()">
+	<h2>Werk toevoegen</h2>
+	
+	<form
+		method="post"
+		action="<?=$this->router->link('Administratie_Werk_Controller', 'werk_toevoegen', $werk->id)?>"
+		accept-charset="utf-8">
+		
+		<?= $this->form->origin() ?>
+		
+		<p>
+			<label for="naam">Naam:</label>
+			<?= $this->form->textfield('naam', $werk->naam, $errors)->set_size(40) ?>
+		</p>
+		
+		<p>
+			<label for="bedrijf_id">Bedrijf:</label>
+			<?= $this->form->popupbutton('bedrijf_id', $this->bedrijven, $werk->bedrijf, $errors, create_function('$bedrijf', 'return $bedrijf->naam;'), false) ?>
+		</p>
+	
+		<p>
+			<label for="tarief_id">Tarief:</label>
+			<?= $this->form->popupbutton('tarief_id', $this->tarieven, $werk->tarief, $errors, create_function('$tarief', 'return sprintf("%s (&euro; %01.2f)", $tarief->naam, $tarief->prijs_per_uur);'), true) ?>
+		</p>
+
+		<p>
+			<label for="budget">Budget:</label>
+			<?= $this->form->textfield('budget', $werk->budget, $errors)->set_size(7)->set_placeholder('0,00') ?>
+		</p>
+
+		<p>
+			<label for="deadline">Deadline:</label>
+			<?=$this->form->datepicker('deadline', $werk->deadline, $errors, '##-##-####')?>
+		</p>
+	
+		<p>
+			<label for="taakomschrijving">Taakomschrijving:</label>
+			<?=$this->form->textarea('taakomschrijving', $werk->taakomschrijving, $errors)?>
+		</p>
+
+		<p class="controls">
+			<?php if ($werk->is_deletable): ?>
+				<button type="submit" name="delete" value="yes" class="delete">Verwijderen</button>
+			<?php endif ?>
+			<?php if ($werk->id): ?>
+				<button type="submit">Opslaan</button>
+			<?php else: ?>
+				<button type="submit">Werk toevoegen</button>
+			<?php endif ?>
+			<button onclick="hide_sheet(this); return false">Sluiten</button>
+		</p>
+	</form>
+</div>

@@ -1,6 +1,6 @@
 <div
 	class="sheet"
-	onsheetopen="document.getElementById('bedrijf_id').focus()">
+	onsheetopen="document.getElementById('werk_id').focus()">
 	<h2>Werktijd Registreren</h2>
 	
 	<form
@@ -9,6 +9,19 @@
 		accept-charset="utf-8">
 		
 		<?= $this->form->origin() ?>
+		
+		<p>
+			<label for="werk_id">Werk:</label>
+			<select id="werk_id" name="werk_id" onchange="template_field(this)">
+				<option value=""></option>
+				<?php foreach ($this->werken as $werk): ?>
+				<option
+					value="<?=$werk->id?>"
+					<?php if ($werk->id == $uur->werk_id) echo 'selected="selected' ?>
+					data-prefill="<?=$this->_attr(json_encode(array('[id=bedrijf_id]' => $werk->bedrijf_id, '[id=tarief_id]' => $werk->tarief_id )))?>"><?=$this->_html($werk->naam)?></option>
+				<?php endforeach ?>
+			</select>
+		</p>
 		
 		<p>
 			<label for="bedrijf_id">Bedrijf:</label>
@@ -34,7 +47,7 @@
 			<label for="beschrijving">Omschrijving:</label>
 			<?=$this->form->textarea('beschrijving', $uur->beschrijving, $errors)?>
 		</p>
-	
+
 		<p class="controls">
 			<?php if ($uur->is_deletable): ?>
 				<button type="submit" name="delete" value="yes" class="delete">Verwijderen</button>

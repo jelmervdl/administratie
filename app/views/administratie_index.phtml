@@ -1,15 +1,21 @@
 <h1>Administratie</h1>
 <div class="span-5">
+	<h2>Werken</h2>
+	<?php $this->_partial('Administratie_Werk_Controller', 'list_actieve_werken') ?>
+	<ul>
+		<li><?=$this->_link_sheet('werk toevoegen…', 'Administratie_Werk_Controller', 'werk_toevoegen') ?></li>
+	</ul>
+
 	<h2>Bedrijven</h2>
 	<?php $this->_partial('Administratie_Bedrijf_Controller', 'list_bedrijven') ?>
 	<ul>
-		<li><?=$this->_link_sheet('bedrijf toevoegen...', 'Administratie_Bedrijf_Controller', 'bedrijf_toevoegen')?></li>
+		<li><?=$this->_link_sheet('bedrijf toevoegen…', 'Administratie_Bedrijf_Controller', 'bedrijf_toevoegen')?></li>
 	</ul>
 	
 	<h2>Hulpmiddelen</h2>
 	<ul>
 		<li><a href="<?=$this->router->link('Administratie_Factuur_Controller', 'belasting_overzicht')?>">Belasting</a></li>
-		<li><?=$this->_link_sheet('tarief toevoegen...', 'Administratie_Tarief_Controller', 'tarief_toevoegen')?></li>
+		<li><?=$this->_link_sheet('tarief toevoegen…', 'Administratie_Tarief_Controller', 'tarief_toevoegen')?></li>
 	</ul>
 </div>
 

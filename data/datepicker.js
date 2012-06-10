@@ -2,9 +2,9 @@
 var DatePicker = function(dom_node) {
 
 	var date_elements = [
-		/* day */	new DatePicker.DateElement([0,  2],  [1, 31], '##'),
-		/* month */	new DatePicker.DateElement([3,  5],  [1, 12], '##'),
-		/* year */	new DatePicker.DateElement([6,  10], [1970, 2038], '####'),
+		/* day */	new DatePicker.DateElement([0,  2],  [1, 31], '##', function() { return new Date().getDate(); }),
+		/* month */	new DatePicker.DateElement([3,  5],  [1, 12], '##', function() { return new Date().getMonth() + 1; }),
+		/* year */	new DatePicker.DateElement([6,  10], [1970, 2038], '####', function() { return new Date().getFullYear(); }),
 		/* hour */	new DatePicker.DateElement([11, 13], [0, 23], '##'),
 		/* minute */new DatePicker.DateElement([14, 16], [0, 59], '##')
 		/* second */ //new DatePicker.DateElement([17, 19], [0, 59], '##')
@@ -77,9 +77,9 @@ var DatePicker = function(dom_node) {
 	
 	var _get_date_element = function() {
 		//if(!_dom_node.value.match(/^\d{2}\-\d{2}\-\d{4}\s\d{2}:\d{2}:\d{2}$/)) {
-		if(!_dom_node.value.match(/^\d{2}\-\d{2}\-\d{4}\s\d{2}:\d{2}$/)) {
-			return null;
-		}
+		//if(!_dom_node.value.match(/^\d{2}\-\d{2}\-\d{4}\s\d{2}:\d{2}$/)) {
+		//	return null;
+		//}
 		
 		for(var i in date_elements) {
 			var position_range = date_elements[i].position;
@@ -95,8 +95,7 @@ var DatePicker = function(dom_node) {
 			+ '-' + date_elements[1].print()
 			+ '-' + date_elements[2].print()
 			+ ' ' + date_elements[3].print()
-			+ ':' + date_elements[4].print();
-			// + ':' + date_elements[5].print();
+			+ ':' + date_elements[4].print();		
 	}
 	
 	var _set_selection_range = function(date_element) {
@@ -116,34 +115,46 @@ var DatePicker = function(dom_node) {
 	_attach_event_listeners();
 }
 
-DatePicker.DateElement = function(position, range, mask) {
+DatePicker.DateElement = function(position, range, mask, defaultValue) {
 	this.position = position;
 	this.range = range;
 	this.mask = mask;
 	this.value = null;
+	this.defaultValue = defaultValue || function() { return range[0]; };
 }
 
-DatePicker.DateElement.prototype = {
-	parseValue: function(value) {
+DatePicker.DateElement.prototype =
+{
+	parseValue: function(value)
+	{
 		this.value = parseInt(value.replace(/^0+(\d+)$/, '$1'));
+
+		if (isNaN(this.value))
+			this.value = this.defaultValue();
 	},
 	
-	print: function() {
+	print: function()
+	{
 		value = this.value.toString();
 		
-		while(value.length < this.mask.length) {
+		while (value.length < this.mask.length)
 			value = '0' + value;
-		}
 		
 		return value;
 	},
 	
-	increment: function() {
-		this.value = this.value + 1 > this.range[1] ? this.range[0] : this.value + 1;
+	increment: function()
+	{
+		this.value = this.value + 1 > this.range[1]
+			? this.range[0]
+			: this.value + 1;
 	},
 	
-	decrement: function() {
-		this.value = this.value - 1 < this.range[0] ? this.range[1] : this.value - 1;
+	decrement: function()
+	{
+		this.value = this.value - 1 < this.range[0]
+			? this.range[1]
+			: this.value - 1;
 	}
 
 }
