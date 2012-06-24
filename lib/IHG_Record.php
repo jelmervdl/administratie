@@ -368,6 +368,7 @@ abstract class IHG_Record {
 		
 		foreach($this->__properties() as $id => $property) {
 			if(is_int($id) && $property != 'id' && $this->_get_property($property) !== null) {
+				var_dump($property, $this->_get_property($property));
 				$sql_assignments[] = $property;
 				$sql_values[] = $this->_get_property($property);
 			}
@@ -379,11 +380,9 @@ abstract class IHG_Record {
 			str_repeat('?, ', count($sql_assignments) - 1) . '?'
 		));
 		
-		if($stmt->execute($sql_values)) {
-			return (int) $this->pdo()->lastInsertId();
-		} else {
-			return null;
-		}
+		$stmt->execute($sql_values);
+		
+		return (int) $this->pdo()->lastInsertId();
 	}
 	
 	private function _update_record() {

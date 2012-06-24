@@ -86,7 +86,7 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 			if ($this->_is_post_request())
 			{
 				$uur->bedrijf		= $this->bedrijven->find($_POST['bedrijf_id']);
-				$uur->werk_id		= $_POST['werk_id'];
+				$uur->werk_id		= empty($_POST['werk_id']) ? null : $_POST['werk_id'];
 				$uur->start_tijd	= IHG_DateTime::from_string($_POST['start_tijd']);
 				$uur->eind_tijd		= IHG_DateTime::from_string($_POST['eind_tijd']);
 				$uur->beschrijving	= $_POST['beschrijving'];
