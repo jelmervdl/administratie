@@ -30,13 +30,9 @@ class Administratie_Factuur extends Administratie_Record
 		);
 	}
 	
-	protected function _contains_date_indicator($key)
+	protected function _is_datetime_field($key)
 	{
-		
-		if($key == 'voldaan' || $key == 'aangegeven')
-			return true;
-		else
-			return parent::_contains_date_indicator($key);
+		return $key == 'voldaan' || $key == 'aangegeven' || parent::_is_datetime_field($key);
 	}
 	
 	protected function _validate()

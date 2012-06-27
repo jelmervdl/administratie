@@ -27,7 +27,7 @@
 	
 	<p><strong>Verzenddatum:</strong> <?=$this->_format_date($factuur->verzend_datum)?><br>
 	Uiterste betaaldatum: <?=$this->_format_date($factuur->uiterste_betaal_datum)?><br>
-	Voldaan: <?=$factuur->voldaan ? 'Ja' : ($factuur->termijn_resterend > 0 ? ('Nee (' . $factuur->termijn_resterend . ' dagen)') : '<span class="FAIL">Nee</span>')?></p>
+	Voldaan: <?=$factuur->voldaan ? 'Ja' : ($factuur->termijn_resterend > 0 ? ('Nee (' . $factuur->termijn_resterend . ' dagen)') : '<span class="FAIL">Nee</span>')?> <?=$this->_link_sheet('bewerken', 'Administratie_Factuur_Controller', 'factuur_voldaan', $factuur->id)?></p>
 
         <p><a href="<?=$this->router->link('Administratie_Factuur_Controller', 'factuur_pdf', $factuur->id)?>" target="_new">Exporteer naar PDF</a></p>
 </div>

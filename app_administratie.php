@@ -46,6 +46,7 @@ class Administratie_Application extends IHG_Application_Abstract {
 			->register_route('/facturen/%d.html',		'Administratie_Factuur_Controller::factuur')
 			->register_route('/facturen/%d/project_naam.js', 'Administratie_Factuur_Controller::post_project_naam')
 			->register_route('/facturen/%d/project_beschrijving.js', 'Administratie_Factuur_Controller::post_project_beschrijving')
+			->register_route('/facturen/%d/voldaan.html', 'Administratie_Factuur_Controller::factuur_voldaan')
 			->register_route('/facturen/%d.pdf',		'Administratie_Factuur_Controller::factuur_pdf')
 			->register_route('/belasting/',				'Administratie_Factuur_Controller::belasting_overzicht')
 			->register_route('/bedrijven/', 			'Administratie_Bedrijf_Controller::bedrijven')

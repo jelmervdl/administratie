@@ -1,0 +1,22 @@
+<div class="sheet">
+	<h2>Factuur bewerken</h2>
+	
+	<form
+		method="post"
+		action="<?= $this->router->link('Administratie_Factuur_Controller', 'factuur_voldaan', $factuur->id) ?>"
+		accept-charset="utf-8">
+		
+		<?= $this->form->origin() ?>
+		
+		<p>
+			<label for="voldaan">Voldaan:</label>
+			<input type="checkbox" name="voldaan" value="1" <?=$factuur->voldaan ? 'checked' : '' ?>> Ja, op:
+			<?= $this->form->datepicker('voldaan_op', $factuur->voldaan, $errors) ?>
+		</p>
+
+		<p class="controls">
+			<button type="submit" class="default">Opslaan</button>
+			<button onclick="hide_sheet(this); return false">Sluiten</button>
+		</p>
+	</form>
+</div>

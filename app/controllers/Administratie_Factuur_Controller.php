@@ -273,4 +273,24 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 			return $this->views->false();
 		}
 	}
+
+	public function factuur_voldaan($factuur_id)
+	{
+		$factuur = $this->facturen->find($factuur_id);
+
+		if ($this->_is_post_request())
+		{
+			$factuur->voldaan = !empty($_POST['voldaan'])
+				? IHG_DateTime::from_string($_POST['voldaan_op'])
+				: null;
+
+			if ($factuur->save())
+				return $this->views->redirect($_POST['_origin']);
+		}
+
+		$view = $this->views->from_file('administratie_factuur_voldaan');
+		$view->factuur = $factuur;
+
+		return $view;
+	}
 }
