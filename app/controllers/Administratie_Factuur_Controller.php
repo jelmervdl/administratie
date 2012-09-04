@@ -193,7 +193,7 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 		
 		$bedrijf = $factuur->bedrijf;
 		
-		$aankopen = $factuur->aankopen;
+		$aankopen = $factuur->aankopen->sort('prijs', ORDER_DESC);
 		
 		$view = $this->views->from_file('administratie_factuur_pdf');
 		$view->dont_embed();
