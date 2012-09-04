@@ -4,7 +4,7 @@ class Administratie_Aankoop_Controller extends IHG_Controller_Abstract
 {
 	public function factuur($factuur_id)
 	{
-		$data = $this->aankopen->find_all(array('factuur_id' => $factuur_id));
+		$data = $this->aankopen->find_all(array('factuur_id' => $factuur_id))->sort('prijs', ORDER_DESC);
 		
 		$walker = function($aankoop) {
 			if ($aankoop instanceof Administratie_Aankoop)
