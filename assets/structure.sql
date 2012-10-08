@@ -268,9 +268,22 @@ CREATE TABLE `UrenOverzicht` (
 
 DROP TABLE `PotentieleFacturen`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `PotentieleFacturen`
-AS select
-   `Bedrijven`.`naam` AS `bedrijf_naam`,sum(`OnbetaaldeUren`.`aantal`) AS `aantal`,sum(`OnbetaaldeUren`.`prijs`) AS `prijs`,sum(`OnbetaaldeUren`.`btw`) AS `btw`,min(`OnbetaaldeUren`.`start_tijd`) AS `termijn_start`,max(`OnbetaaldeUren`.`eind_tijd`) AS `termijn_eind`,NULL AS `deleted`
-from (`OnbetaaldeUren` left join `Bedrijven` on((`OnbetaaldeUren`.`bedrijf_id` = `Bedrijven`.`id`))) where isnull(`OnbetaaldeUren`.`deleted`) group by `OnbetaaldeUren`.`bedrijf_id`;
+AS SELECT
+   `Bedrijven`.`naam` AS `bedrijf_naam`,
+   sum(`OnbetaaldeUren`.`aantal`) AS `aantal`,
+   sum(`OnbetaaldeUren`.`prijs`) AS `prijs`,
+   sum(`OnbetaaldeUren`.`btw`) AS `btw`,
+   min(`OnbetaaldeUren`.`start_tijd`) AS `termijn_start`,
+   max(`OnbetaaldeUren`.`eind_tijd`) AS `termijn_eind`,
+   NULL AS `deleted`
+FROM
+  `OnbetaaldeUren`
+LEFT JOIN `Bedrijven` ON
+  `OnbetaaldeUren`.`bedrijf_id` = `Bedrijven`.`id`
+WHERE
+  `OnbetaaldeUren`.`deleted` IS NULL
+GROUP BY
+  `OnbetaaldeUren`.`bedrijf_id`;
 
 
 # Replace placeholder table for AankopenOverzicht with correct view syntax
@@ -392,16 +405,25 @@ RIGHT JOIN `Tarieven` ON
 
 DROP TABLE `FacturenOverzicht`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `FacturenOverzicht`
-AS select
+AS SELECT
    `Facturen`.`id` AS `factuur_id`,
    `Facturen`.`bedrijf_id` AS `bedrijf_id`,
    `Bedrijven`.`naam` AS `bedrijf_naam`,
    `Facturen`.`verzend_datum` AS `verzend_datum`,
-   `Facturen`.`uiterste_betaal_datum` AS `uiterste_betaal_datum`,sum(`AankopenOverzicht`.`prijs`) AS `prijs`,sum(`AankopenOverzicht`.`btw`) AS `btw`,
+   `Facturen`.`uiterste_betaal_datum` AS `uiterste_betaal_datum`,
+   sum(`AankopenOverzicht`.`prijs`) AS `prijs`,
+   sum(`AankopenOverzicht`.`btw`) AS `btw`,
    `Facturen`.`voldaan` AS `voldaan`,
    `Facturen`.`aangegeven` AS `aangegeven`,
    `Facturen`.`deleted` AS `deleted`
-from ((`Facturen` left join `Bedrijven` on((`Bedrijven`.`id` = `Facturen`.`bedrijf_id`))) left join `AankopenOverzicht` on((`AankopenOverzicht`.`factuur_id` = `Facturen`.`id`))) group by `Facturen`.`id`;
+FROM
+  `Facturen`
+LEFT JOIN `Bedrijven` ON
+  `Bedrijven`.`id` = `Facturen`.`bedrijf_id`
+LEFT JOIN `AankopenOverzicht` ON
+  `AankopenOverzicht`.`factuur_id` = `Facturen`.`id`
+GROUP BY
+  `Facturen`.`id`;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
