@@ -1,5 +1,9 @@
 <div class="sheet">
-	<h2>Factuur aanmaken</h2>
+	<?php if ($factuur->is_new): ?>
+		<h2>Factuur aanmaken</h2>
+	<?php else: ?>
+		<h2>Factuur wijzigen</h2>
+	<?php endif ?>
 	
 	<form
 		method="post"

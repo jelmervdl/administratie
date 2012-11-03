@@ -1,5 +1,9 @@
 <div class="sheet">
-	<h2>Contactpersoon <?php echo $contactpersoon->id ? 'Toevoegen' : 'Bewerken' ?></h2>
+	<?php if ($contactpersoon->is_new): ?>
+		<h2>Contactpersoon aanmaken</h2>
+	<?php else: ?>
+		<h2>Contactpersoon wijzigen</h2>
+	<?php endif ?>
 	
 	<form
 		method="post"

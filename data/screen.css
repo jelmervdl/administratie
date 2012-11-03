@@ -5,7 +5,7 @@
     position:fixed;
     top: 0;
     opacity: 0.95;
-    -webkit-border-radius: 2px;
+    border-radius: 0 0 2px 2px;
 }
 
 body {
@@ -79,7 +79,7 @@ h3 small {
 }
 
 .inline_edit {
-	-webkit-transition-property: ;
+	-webkit-transition-property: background-color;
 	-webkit-transition-duration: 150ms;
 	-webkit-transition-timing-function: ease-in-out;
 	background: rgba(255, 255, 0, 0);
@@ -112,8 +112,9 @@ thead th {
 	border: 1px solid #ababab;
 	border-top: 0;
 	box-shadow: grey 0 3px 20px;
-	-webkit-box-shadow: grey 0 3px 20px;
+	box-shadow: grey 0 3px 20px;
 	-webkit-user-select: none;
+	border-radius: 0 0 5px 5px;
 }
 
 .sheet h2 {
