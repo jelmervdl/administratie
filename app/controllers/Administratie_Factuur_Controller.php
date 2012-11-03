@@ -116,6 +116,9 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 		
 		if (!$factuur->bedrijf)
 			$factuur->bedrijf = $bedrijf;
+
+		if (count($factuur->bedrijf->contactpersonen) == 0)
+			throw new Exception("Dit bedrijf heeft geen contactpersonen");
 		
 		$uren = $factuur->id
 			? null

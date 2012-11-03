@@ -11,10 +11,8 @@ class Administratie_Aankoop extends Administratie_Record {
 			'beschrijving',
 			'aantal',
 			'prijs',
-			'btw',
 			'bedrijf_id',
-			'factuur_id',
-			'prijs_incl' => new IHG_SQL_Atom('prijs + btw')
+			'factuur_id'
 			);
 	}
 	

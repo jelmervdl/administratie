@@ -6,25 +6,27 @@ define('ORDER_ASC', 'ASC');
 
 class IHG_Record_Set implements ArrayAccess, Iterator, Countable {
 	
-	protected $_index;
+	private $_index;
 	
-	protected $_last_fetch_index = -1;
+	private $_last_fetch_index = -1;
 	
-	protected $_current = false;
+	private $_current = false;
 	
-	protected $_fetched_records = array();
+	private $_fetched_records = array();
 	
-	protected $_pdo;
+	private $_pdo;
 	
-	protected $_pdo_stmt;
+	private $_pdo_stmt;
 	
-	protected $_query;
+	private $_query;
 	
-	protected $_record_type;
+	private $_record_type;
 	
-	protected $_limit = self::INFINITE;
+	private $_limit = self::INFINITE;
 	
-	protected $_offset = 0;
+	private $_offset = 0;
+
+	private $_placeholder_count;
 	
 	const INFINITE = '18446744073709551610';
 	
@@ -97,7 +99,9 @@ class IHG_Record_Set implements ArrayAccess, Iterator, Countable {
 		
 		$sql = preg_replace('{LIMIT\s+[0-9]+(?:\sOFFSET\s+[0-9]+)*\s*$}i', '', $sql);
 		
-		$sql = preg_replace_callback('{SELECT\s.*\sFROM}i', array($this, '_count_placeholder_callback'), $sql);
+		$sql = preg_replace_callback('{SELECT\s.*\sFROM}is', array($this, '_count_placeholder_callback'), $sql);
+		
+		assert('is_int($this->_placeholder_count)');
 		$bound_values = array_slice($this->_query->bound_values(), $this->_placeholder_count);
 		
 		$sql = preg_replace('{ORDER\sBY\s(.+?)\s*$}i', '', $sql);
@@ -132,7 +136,6 @@ class IHG_Record_Set implements ArrayAccess, Iterator, Countable {
 		
 		return 'SELECT COUNT(*) FROM';
 	}
-	
 	
 	public function slice($offset, $limit = null) {
 		$set = new self($this->_pdo, $this->_record_type, $this->_query);

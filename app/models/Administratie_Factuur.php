@@ -4,9 +4,12 @@ class Administratie_Factuur extends Administratie_Record
 {
 	private $_uren = array();
 	
-	protected function _table_name()
+	protected function _table_name($mode)
 	{
-		return 'Facturen';
+		if ($mode == self::SELECT_QUERY)
+			return 'FacturenOverzicht';
+		else
+			return 'Facturen';
 	}
 	
 	protected function _properties()
@@ -23,10 +26,10 @@ class Administratie_Factuur extends Administratie_Record
 			'termijn_resterend'		=> new IHG_SQL_Atom('DATEDIFF(uiterste_betaal_datum, CURDATE())'),
 			'voldaan',
 			'aangegeven',
-			'prijs'					=> new IHG_SQL_Atom('(SELECT SUM(prijs) FROM AankopenOverzicht WHERE AankopenOverzicht.factuur_id = Facturen.id)'),
-			'btw'					=> new IHG_SQL_Atom('(SELECT SUM(btw) FROM AankopenOverzicht WHERE AankopenOverzicht.factuur_id = Facturen.id)'),
-			'start_tijd'			=> new IHG_SQL_Atom('(SELECT MIN(start_tijd) FROM Uren WHERE Uren.factuur_id = Facturen.id)'),
-			'eind_tijd'				=> new IHG_SQL_Atom('(SELECT MAX(eind_tijd) FROM Uren WHERE Uren.factuur_id = Facturen.id)')
+			'prijs'					=> new IHG_SQL_Atom('prijs'),
+			'btw'					=> new IHG_SQL_Atom('btw'),
+			'start_tijd'			=> new IHG_SQL_Atom('(SELECT MIN(start_tijd) FROM Uren WHERE Uren.factuur_id = id)'),
+			'eind_tijd'				=> new IHG_SQL_Atom('(SELECT MAX(eind_tijd) FROM Uren WHERE Uren.factuur_id = id)')
 		);
 	}
 	
