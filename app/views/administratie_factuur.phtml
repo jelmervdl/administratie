@@ -14,7 +14,7 @@
 			<td><?=$this->_format_price($factuur->prijs)?></td>
 		</tr>
 		<tr>
-			<th>BTW:</th>
+			<th>BTW: <?=$factuur->btw_tarief->percentage * 100?>%</th>
 			<td><?=$this->_format_price($factuur->btw)?></td>
 		</tr>
 		<tr class="summary">

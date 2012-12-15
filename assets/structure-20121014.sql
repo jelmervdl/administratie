@@ -33,34 +33,6 @@ GROUP BY
   `OnbetaaldeUren`.`bedrijf_id`;
 
 
-CREATE OR REPLACE VIEW `WerkenOverzicht`
-AS SELECT
-   w.id,
-   w.bedrijf_id,
-   w.naam,
-   w.taakomschrijving,
-   w.budget,
-   w.deadline,
-   w.tarief_id,
-   w.deleted,
-   SUM(a_o.prijs) as prijs,
-   w.budget - SUM(a_o.prijs) as beschikbaar
-FROM
-   Werken as w
-LEFT JOIN
-   AankopenOverzicht as a_o ON
-   a_o.werk_id = w.id
-GROUP BY
-   w.id,
-   w.bedrijf_id,
-   w.naam,
-   w.taakomschrijving,
-   w.budget,
-   w.deadline,
-   w.tarief_id,
-   w.deleted;
-
-
 CREATE OR REPLACE VIEW `OnbetaaldeUren`
 AS SELECT 
    `UrenOverzicht`.`id` AS `id`,

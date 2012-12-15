@@ -28,6 +28,7 @@ class Administratie_Factuur extends Administratie_Record
 			'aangegeven',
 			'prijs'					=> new IHG_SQL_Atom('prijs'),
 			'btw'					=> new IHG_SQL_Atom('btw'),
+			'btw_tarief_id',
 			'start_tijd'			=> new IHG_SQL_Atom('(SELECT MIN(start_tijd) FROM Uren WHERE Uren.factuur_id = id)'),
 			'eind_tijd'				=> new IHG_SQL_Atom('(SELECT MAX(eind_tijd) FROM Uren WHERE Uren.factuur_id = id)')
 		);
