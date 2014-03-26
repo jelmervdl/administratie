@@ -76,6 +76,8 @@ class Administratie_Uur_Controller extends IHG_Controller_Abstract
 			$bedrijf_uren->valid();
 			
 			$uur->tarief = $bedrijf_uren->current()->tarief;
+			if ($last_registered_uur = $bedrijf_uren->current())
+				$uur->tarief = $last_registered_uur->tarief;
 		}
 		
 		$view = $this->views->from_file('administratie_uur_toevoegen');
