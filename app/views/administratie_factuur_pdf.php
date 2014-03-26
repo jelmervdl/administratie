@@ -133,7 +133,7 @@ $pdf->cell(33.2, 5.65, number_format($factuur->prijs_incl, 2, '.', ','), 'TB', 0
 // Mededeling
 $pdf->setFont(FONT_NORMAL, '', 9);
 $pdf->ln(12);
-$pdf->write($lineheight, 'Gelieve het bovenstaande bedrag binnen het vastgestelde termijn over te maken op GIRO rekeningnummer 88 90 250 op naam van Jelmer van der Linde te Groningen.');
+$pdf->write($lineheight, 'Gelieve het bovenstaande bedrag binnen het vastgestelde termijn over te maken naar NL87 INBG 0008 8902 50 op naam van Jelmer van der Linde te Groningen.');
 $pdf->ln(); $pdf->ln();
 $pdf->write($lineheight, 'En als u ook nog even het factuurnummer bij de omschrijving zou willen vermelden zou dat helemaal te gek zijn.');
 
