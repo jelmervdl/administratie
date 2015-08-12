@@ -26,18 +26,18 @@ function ihg_is_equal($a, $b) {
 	} else {
 		$r = $a == $b;
 	}
-	
+
 	return $r;
 }
 
-function ihg_in_array($needle, $haystack) {	
+function ihg_in_array($needle, $haystack) {
 	if(!method_exists($needle, 'is_equal_to')) {
 		return in_array($needle, $haystack);
 	} else {
 		foreach($haystack as $item) {
 			if($needle->is_equal_to($item)) return true;
 		}
-		
+
 		return false;
 	}
 }
@@ -48,4 +48,3 @@ function array_trim(&$array)
 	while (count($array) && !end($array))
 		array_pop($array); // pop it off
 }
-

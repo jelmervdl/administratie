@@ -62,7 +62,8 @@ class Administratie_Application extends IHG_Application_Abstract {
 			->register_route('/tarieven/nieuw.html', 	'Administratie_Tarief_Controller::tarief_toevoegen')
 			->register_route('/tarieven/%d.html', 		'Administratie_Tarief_Controller::tarief_toevoegen')
 			->register_route('/werken/nieuw.html', 		'Administratie_Werk_Controller::werk_toevoegen')
-			->register_route('/werken/%d.html', 		'Administratie_Werk_Controller::werk_toevoegen');
+			->register_route('/werken/%d.html', 		'Administratie_Werk_Controller::werk_toevoegen')
+			->register_route('/widget.html', 			'Administratie_Uur_Controller::widget');
 		
 		$this->breadcrumbs->add_crumb('<span id="home-breadcrumb">Home</span>',
 			$this->router->link('Administratie_Index_Controller', 'index'));

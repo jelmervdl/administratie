@@ -49,7 +49,7 @@ $pdf->setFont(FONT_NORMAL, '', 7);
 $pdf->setLeftMargin(12.6);
 $pdf->setXY(12.6, 105.8);
 // adresblokje
-$pdf->write($lineheight, "Moesstraat 72a\n9741 AC Groningen");
+$pdf->write($lineheight, "Ganzevoortsingel 24d\n9711 AM Groningen");
 $pdf->ln($breakheight);
 // referentieblokje
 $pdf->write($lineheight, "KvK: 01110869\nBTW: 0133.47.408");
@@ -133,7 +133,7 @@ $pdf->cell(33.2, 5.65, number_format($factuur->prijs_incl, 2, '.', ','), 'TB', 0
 // Mededeling
 $pdf->setFont(FONT_NORMAL, '', 9);
 $pdf->ln(12);
-$pdf->write($lineheight, 'Gelieve het bovenstaande bedrag binnen het vastgestelde termijn over te maken naar NL87 INBG 0008 8902 50 op naam van Jelmer van der Linde te Groningen.');
+$pdf->write($lineheight, 'Gelieve het bovenstaande bedrag binnen het vastgestelde termijn over te maken naar NL87 INGB 0008 8902 50 op naam van Jelmer van der Linde te Groningen.');
 $pdf->ln(); $pdf->ln();
 $pdf->write($lineheight, 'En als u ook nog even het factuurnummer bij de omschrijving zou willen vermelden zou dat helemaal te gek zijn.');
 

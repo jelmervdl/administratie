@@ -47,7 +47,7 @@ class Administratie_Uur extends Administratie_Record {
 	
 	public function is_deletable()
 	{
-		// Aleen verwijderdbaar wanneer hij opgeslagen is, maar nog niet bij
+		// Aleen verwijderbaar wanneer hij opgeslagen is, maar nog niet bij
 		// een factuur hoort.
 		return $this->id && !$this->factuur_id;
 	}
