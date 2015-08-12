@@ -39,6 +39,8 @@
 			$this->router->link('Administratie_Factuur_Controller', 'post_project_beschrijving', $factuur->id),
 			$factuur->project_beschrijving) ?>
 	</p>
-	<?/*=$this->_partial('Administratie_Uur_Controller', 'factuur', $factuur->id)*/?>
+	<h3>Uren</h3>
+	<?=$this->_partial('Administratie_Uur_Controller', 'factuur', $factuur->id)?>
+	<h3>Factuur</h3>
 	<?=$this->_partial('Administratie_Aankoop_Controller', 'factuur', $factuur->id)?>
 </div>
