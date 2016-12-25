@@ -85,7 +85,7 @@ class IHG_Router_Provider extends IHG_Component_Abstract
 			$arguments = array_slice(func_get_args(), 2);
 			array_trim($arguments);
 			$root = $this->root();
-			return $root . $this->link_controller($controller, $action, $arguments);
+			return rtrim($root, '/') . $this->link_controller($controller, $action, $arguments);
 		}
 		catch(Exception $e)
 		{
