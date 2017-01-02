@@ -24,66 +24,66 @@ class FPDF
 	protected $cPadding;
 	
 //Private properties
-var $page;               //current page number
-var $n;                  //current object number
-var $offsets;            //array of object offsets
-var $buffer;             //buffer holding in-memory PDF
-var $pages;              //array containing pages
-var $state;              //current document state
-var $compress;           //compression flag
-var $DefOrientation;     //default orientation
-var $CurOrientation;     //current orientation
-var $OrientationChanges; //array indicating orientation changes
-var $k;                  //scale factor (number of points in user unit)
-var $fwPt,$fhPt;         //dimensions of page format in points
-var $fw,$fh;             //dimensions of page format in user unit
-var $wPt,$hPt;           //current dimensions of page in points
-var $w,$h;               //current dimensions of page in user unit
-var $lMargin;            //left margin
-var $tMargin;            //top margin
-var $rMargin;            //right margin
-var $bMargin;            //page break margin
-var $cMargin;            //cell margin
-var $x,$y;               //current position in user unit for cell positioning
-var $lasth;              //height of last cell printed
-var $LineWidth;          //line width in user unit
-var $CoreFonts;          //array of standard font names
-var $fonts;              //array of used fonts
-var $FontFiles;          //array of font files
-var $diffs;              //array of encoding differences
-var $images;             //array of used images
-var $PageLinks;          //array of links in pages
-var $links;              //array of internal links
-var $FontFamily;         //current font family
-var $FontStyle;          //current font style
-var $underline;          //underlining flag
-var $CurrentFont;        //current font info
-var $FontSizePt;         //current font size in points
-var $FontSize;           //current font size in user unit
-var $DrawColor;          //commands for drawing color
-var $FillColor;          //commands for filling color
-var $TextColor;          //commands for text color
-var $ColorFlag;          //indicates whether fill and text colors are different
-var $ws;                 //word spacing
-var $AutoPageBreak;      //automatic page breaking
-var $PageBreakTrigger;   //threshold used to trigger page breaks
-var $InFooter;           //flag set when processing footer
-var $ZoomMode;           //zoom display mode
-var $LayoutMode;         //layout display mode
-var $title;              //title
-var $subject;            //subject
-var $author;             //author
-var $keywords;           //keywords
-var $creator;            //creator
-var $AliasNbPages;       //alias for total number of pages
-var $PDFVersion;         //PDF version number
+private $page;               //current page number
+private $n;                  //current object number
+private $offsets;            //array of object offsets
+private $buffer;             //buffer holding in-memory PDF
+private $pages;              //array containing pages
+private $state;              //current document state
+private $compress;           //compression flag
+private $DefOrientation;     //default orientation
+private $CurOrientation;     //current orientation
+private $OrientationChanges; //array indicating orientation changes
+private $k;                  //scale factor (number of points in user unit)
+private $fwPt,$fhPt;         //dimensions of page format in points
+private $fw,$fh;             //dimensions of page format in user unit
+private $wPt,$hPt;           //current dimensions of page in points
+private $w,$h;               //current dimensions of page in user unit
+private $lMargin;            //left margin
+private $tMargin;            //top margin
+private $rMargin;            //right margin
+private $bMargin;            //page break margin
+private $cMargin;            //cell margin
+private $x,$y;               //current position in user unit for cell positioning
+private $lasth;              //height of last cell printed
+private $LineWidth;          //line width in user unit
+private $CoreFonts;          //array of standard font names
+private $fonts;              //array of used fonts
+private $FontFiles;          //array of font files
+private $diffs;              //array of encoding differences
+private $images;             //array of used images
+private $PageLinks;          //array of links in pages
+private $links;              //array of internal links
+private $FontFamily;         //current font family
+private $FontStyle;          //current font style
+private $underline;          //underlining flag
+private $CurrentFont;        //current font info
+private $FontSizePt;         //current font size in points
+private $FontSize;           //current font size in user unit
+private $DrawColor;          //commands for drawing color
+private $FillColor;          //commands for filling color
+private $TextColor;          //commands for text color
+private $ColorFlag;          //indicates whether fill and text colors are different
+private $ws;                 //word spacing
+private $AutoPageBreak;      //automatic page breaking
+private $PageBreakTrigger;   //threshold used to trigger page breaks
+private $InFooter;           //flag set when processing footer
+private $ZoomMode;           //zoom display mode
+private $LayoutMode;         //layout display mode
+private $title;              //title
+private $subject;            //subject
+private $author;             //author
+private $keywords;           //keywords
+private $creator;            //creator
+private $AliasNbPages;       //alias for total number of pages
+private $PDFVersion;         //PDF version number
 
 /*******************************************************************************
 *                                                                              *
 *                               Public methods                                 *
 *                                                                              *
 *******************************************************************************/
-function FPDF($orientation='P',$unit='mm',$format='A4')
+function __construct($orientation='P',$unit='mm',$format='A4')
 {
 	//Some checks
 	$this->_dochecks();
@@ -951,8 +951,6 @@ function Image($file,$x,$y,$w=0,$h=0,$type='',$link='')
 			$type=substr($file,$pos+1);
 		}
 		$type=strtolower($type);
-		$mqr=get_magic_quotes_runtime();
-		set_magic_quotes_runtime(0);
 		if($type=='jpg' || $type=='jpeg')
 			$info=$this->_parsejpg($file);
 		elseif($type=='png')
@@ -965,7 +963,6 @@ function Image($file,$x,$y,$w=0,$h=0,$type='',$link='')
 				$this->Error('Unsupported image type: '.$type);
 			$info=$this->$mtd($file);
 		}
-		set_magic_quotes_runtime($mqr);
 		$info['i']=count($this->images)+1;
 		$this->images[$file]=$info;
 	}
@@ -1206,8 +1203,6 @@ function _putfonts()
 		$this->_out('<</Type /Encoding /BaseEncoding /WinAnsiEncoding /Differences ['.$diff.']>>');
 		$this->_out('endobj');
 	}
-	$mqr=get_magic_quotes_runtime();
-	set_magic_quotes_runtime(0);
 	foreach($this->FontFiles as $file=>$info)
 	{
 		//Font file embedding
@@ -1245,7 +1240,6 @@ function _putfonts()
 		$this->_putstream($font);
 		$this->_out('endobj');
 	}
-	set_magic_quotes_runtime($mqr);
 	foreach($this->fonts as $k=>$font)
 	{
 		//Font objects
