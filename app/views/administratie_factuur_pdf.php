@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL);
 
 require_once 'lib/FPDF/fpdf.php';
 
@@ -37,7 +37,7 @@ $pdf->setXY(12.6, 43.0);
 $pdf->cell(45.2, 11.3, 'Factuur');
 
 /* Logo + naam */
-$pdf->image('./data/badeend.png', 166.8, 27.4, 15.3, 16.6, 'PNG');
+$pdf->image('./data/ikhoefgeen.png', 161.5, 38, 24, 10.44, 'PNG');
 $pdf->setFont(FONT_NORMAL, '', 7);
 $pdf->setXY(151.7, 46.1);
 $pdf->cell(45.9, 4.9, 'Jelmer van der Linde', 0, 0, 'C');
