@@ -8,8 +8,8 @@ class Administratie_Uur extends Administratie_Record {
 			: 'Uren';
 	}
 	
-	protected function _properties() {
-		return array(
+	protected function _properties($query_type) {
+		$props = array(
 			'id',
 			'bedrijf_id',
 			'factuur_id',
@@ -17,12 +17,19 @@ class Administratie_Uur extends Administratie_Record {
 			'start_tijd',
 			'eind_tijd',
 			'beschrijving',
-			'tarief_id',
-			'aankopenoverzicht_id' => new IHG_SQL_Atom('aankopenoverzicht_id'), // nasty trick to keep this entry out of the update query
-			'aantal' => new IHG_SQL_Atom('aantal'),
-			'duur'	=> new IHG_SQL_Atom('TIMESTAMPDIFF(SECOND, start_tijd, eind_tijd) / 3600.0'),
-			'prijs' => new IHG_SQL_Atom('prijs')
-		);
+			'tarief_id');
+
+		if ($query_type === self::SELECT_QUERY) {
+			$props = array_merge($props, [
+				// nasty trick to keep this entry out of the update query
+				'aankopenoverzicht_id' => new IHG_SQL_Atom('aankopenoverzicht_id'),
+				'aantal' => new IHG_SQL_Atom('aantal'),
+				'duur'	=> new IHG_SQL_Atom('TIMESTAMPDIFF(SECOND, start_tijd, eind_tijd) / 3600.0'),
+				'prijs' => new IHG_SQL_Atom('prijs')	
+			]);
+		}
+		
+		return $props;
 	}
 	
 	protected function _validate() {

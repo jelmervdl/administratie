@@ -2,11 +2,11 @@
 
 class Administratie_Bedrijf extends Administratie_Record
 {
-	protected function _table_name() {
+	protected function _table_name($query_type) {
 		return 'Bedrijven';
 	}
 		
-	protected function _properties() {
+	protected function _properties($query_type) {
 		return array(
 			'id',
 			'naam',

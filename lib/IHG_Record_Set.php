@@ -4,6 +4,16 @@ define('ORDER_DESC', 'DESC');
 
 define('ORDER_ASC', 'ASC');
 
+class IHG_Record_DatabaseException extends Exception
+{
+	public function __construct($sql, $bound_values, Exception $previous)
+	{
+		echo "<pre>$sql</pre>";
+		var_dump($bound_values);
+		parent::__construct("Exception when executing query:\n$sql\n" . implode("\n", $bound_values), null, $previous);
+	}
+}
+
 class IHG_Record_Set implements ArrayAccess, Iterator, Countable {
 	
 	private $_index;
@@ -184,10 +194,14 @@ class IHG_Record_Set implements ArrayAccess, Iterator, Countable {
 				$this->_limit === null ? self::INFINITE : (int) $this->_limit,
 				$this->_offset);
 		}
+
+		try {
+			$this->_pdo_stmt = $this->_pdo->prepare($sql);
 		
-		$this->_pdo_stmt = $this->_pdo->prepare($sql);
-		
-		$this->_pdo_stmt->execute($this->_query->bound_values());
+			$this->_pdo_stmt->execute($this->_query->bound_values());
+		} catch (PDOException $e) {
+			throw new IHG_Record_DatabaseException($sql, $this->_query->bound_values(), $e);
+		}
 	}
 	
 	protected function _fetch() {

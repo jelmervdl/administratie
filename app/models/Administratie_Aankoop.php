@@ -1,11 +1,11 @@
 <?php
 
 class Administratie_Aankoop extends Administratie_Record {
-	protected function _table_name() {
+	protected function _table_name($query_type) {
 		return 'AankopenOverzicht';
 	}
 	
-	protected function _properties() {
+	protected function _properties($query_type) {
 		return array(
 			'id',
 			'beschrijving',

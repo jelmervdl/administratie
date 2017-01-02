@@ -14,18 +14,21 @@ class Administratie_Werk extends Administratie_Record
 		return $field == 'deadline';
 	}
 	
-	protected function _properties()
+	protected function _properties($query_type)
 	{
-		return array(
+		$props = array(
 			'id',
 			'bedrijf_id',
 			'naam',
 			'taakomschrijving',
 			'budget',
 			'deadline',
-			'tarief_id',
-			'prijs' => new IHG_SQL_Atom('prijs'), // nasty trick to keep this entry out of the update query
-		);
+			'tarief_id');
+
+		if ($query_type === self::SELECT_QUERY)
+			$props['prijs'] = new IHG_SQL_Atom('prijs');
+
+		return $props;
 	}
 	
 	protected function _validate()

@@ -9,12 +9,15 @@ class IHG_SQL_Atom implements IHG_SQL_Atom_Interface {
 	private $sql_atom;
 	
 	private $bound_values;
+
+	private $columns;
 	
 	private $_tmp_table_name;
 	
-	public function __construct($sql_atom, array $bound_values = null) {
+	public function __construct($sql_atom, array $bound_values = array(), array $columns = array()) {
 		$this->sql_atom = $sql_atom;
-		$this->bound_values = $bound_values ? $bound_values : array();
+		$this->bound_values = $bound_values;
+		$this->columns = $columns;
 	}
 	
 	public function sql_atom() {
@@ -35,6 +38,10 @@ class IHG_SQL_Atom implements IHG_SQL_Atom_Interface {
 	
 	public function bound_values() {
 		return $this->bound_values;
+	}
+
+	public function columns() {
+		return $this->columns;
 	}
 
 	public function prepend_table_name($table_name) {

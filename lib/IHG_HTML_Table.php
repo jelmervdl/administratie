@@ -29,7 +29,7 @@ class IHG_HTML_Table implements IHG_View_Interface
 		{
 			$this->_available_columns = array();
 			
-			foreach (IHG_Record::properties_for_record($record_type) as $key => $value)
+			foreach (IHG_Record::properties_for_record($record_type, IHG_Record::SELECT_QUERY) as $key => $value)
 				$this->_available_columns[] = array(
 					self::PROPERTY_NAME => is_int($key) ? $value : $key,
 					self::LABEL 		=> is_int($key) ? $value : $key,

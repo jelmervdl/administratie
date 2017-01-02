@@ -7,7 +7,7 @@ class Administratie_BTW_Tarief extends Administratie_Record
 		return 'btw_tarieven';
 	}
 	
-	protected function _properties()
+	protected function _properties($query_type)
 	{
 		return array(
 			'id',

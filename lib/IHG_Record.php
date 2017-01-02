@@ -3,13 +3,13 @@ abstract class IHG_Record {
 	
 	const SERIALIZED_FLAG = '%serialized%';
 	
-	const INSERT_QUERY = 'insert';
+	const SELECT_QUERY = 1;
+	
+	const INSERT_QUERY = 2;
 
-	const SELECT_QUERY = 'select';
-	
-	const UPDATE_QUERY = 'update';
-	
-	const DELETE_QUERY = 'delete';
+	const UPDATE_QUERY = 4;
+
+	const DELETE_QUERY = 8;
 	
 	private static $_date_indicators = array('_date', 'datum', '_tijd', '_time');
 	
@@ -19,9 +19,7 @@ abstract class IHG_Record {
 	
 	private $_property_values = array();
 	
-	private $_properties; // cache voor IHG_Record::properties() aanroepen
-		
-	abstract protected function _properties();
+	abstract protected function _properties($query_type);
 	
 	protected function _table_name($query_type) {
 		return get_class($this);
@@ -39,7 +37,7 @@ abstract class IHG_Record {
 		$sql_columns = array();
 		$sql_values = array();
 		
-		foreach($this->__properties() as $key => $property) {
+		foreach($this->_properties(self::SELECT_QUERY) as $key => $property) {
 			if(is_int($key)) {
 				$sql_columns[] = sprintf('%s.%s AS %2$s',
 					$this->_table_name(self::SELECT_QUERY),
@@ -145,53 +143,51 @@ abstract class IHG_Record {
 
 	private function _generate_group_by_atom() {
 		
-		$properties = $this->__properties();
-		
-		$column = array_key_exists('id', $properties) ? $properties['id'] : new IHG_SQL_Atom('id');
-		
-		$column->prepend_table_name($this->_table_name(self::SELECT_QUERY));
-		
-		return $column;
-	}
-	
-	private function __properties() {
-		if(!$this->_properties) {
-			$this->_properties = $this->_properties();
+		$properties = $this->_properties(self::SELECT_QUERY);
+
+		$columns = array();
+
+		foreach ($properties as $property) {
+			if ($property instanceof IHG_SQL_Atom)
+				$columns = array_merge($columns, $property->columns());
+			else
+				$columns[] = $property;
 		}
+
+		$columns = array_unique($columns);
+
+		foreach ($columns as &$column)
+			if (strpos($column, '.') === false)
+				$column = $this->_table_name(self::SELECT_QUERY) . '.' . $column;
 		
-		return $this->_properties;
+		return new IHG_SQL_Atom(implode(",\n", $columns), array(), $columns);
 	}
 	
-	private function _property_exists($key) {
-		return is_int(array_search($key, $this->__properties())) || array_key_exists($key, $this->__properties());
+	private function _property_exists($key, $query_type) {
+		$properties = $this->_properties($query_type);
+		return is_int(array_search($key, $properties)) || array_key_exists($key, $properties);
 	}
 	
-	private function _property_isset($key) {
-		return $this->_property_exists($key) && isset($this->_property_values[$key]);
+	private function _property_isset($key, $query_type) {
+		return $this->_property_exists($key, $query_type) && isset($this->_property_values[$key]);
 	}
 	
 	private function _get_property($key) {
-		if(!in_array($key, $this->__properties()) && !array_key_exists($key, $this->__properties())) {
-			trigger_error("Property $key does not exist", E_USER_NOTICE);
-			return null;
-		}
+		if (!$this->_property_exists($key, self::SELECT_QUERY))
+			throw new InvalidArgumentException("Property $key does not exist for this query type (SELECT_QUERY)");
 
-		if(!isset($this->_property_values[$key])) {
+		if(!isset($this->_property_values[$key]))
 			return null;
-		}
-
+		
 		return $this->_property_values[$key];
 	}
 	
 	private function _set_property($key, $value) {
-		if(!is_int(array_search($key, $this->__properties()))) {
-			trigger_error("Writable property $key does not exist. Property ignored", E_USER_NOTICE);
-			return null;
-		}
+		if (!$this->_property_exists($key, self::UPDATE_QUERY))
+			throw new InvalidArgumentException("Property $key does not exist for this query type (WRITE_QUERY)");
 		
-		if(!isset($this->_property_values[$key]) || $this->_property_values[$key] != $value) {
+		if(!isset($this->_property_values[$key]) || $this->_property_values[$key] != $value)
 			$this->_is_dirty = true;
-		}
 
 		$this->_property_values[$key] = $value;
 		
@@ -201,10 +197,10 @@ abstract class IHG_Record {
 	public function __get($key) {
 		
 		if(method_exists($this, $key)) {
-			return $this->$key();
-		} elseif(!$this->_property_exists($key) && $this->_property_exists($key . '_id') && class_exists($this->_record_type_class($key))) {
+			return call_user_func([$this, $key]);
+		} elseif(!$this->_property_exists($key, self::SELECT_QUERY) && $this->_property_exists($key . '_id', self::SELECT_QUERY) && class_exists($this->_record_type_class($key))) {
 			
-			if($this->_property_isset($key . '_id')) {
+			if($this->_property_isset($key . '_id', self::SELECT_QUERY)) {
 				$value = self::find_record($this->pdo(), $this->_record_type_class($key), $this->_get_property($key . '_id'));
 			} else {
 				$value = null;
@@ -251,10 +247,10 @@ abstract class IHG_Record {
 		elseif ($value instanceof DateTime && $this->_is_datetime_field($key))
 			$value = $value->format('Y-m-d H:i:s');
 		
-		elseif ($this->_property_exists($key . '_id') &&
+		elseif ($this->_property_exists($key . '_id', $this->is_new() ? self::INSERT_QUERY : self::UPDATE_QUERY) &&
 		  ($value instanceof IHG_Record || $value === null))
 		{
-			if ($value && !$value->_property_isset('id'))
+			if ($value && !$value->_property_isset('id', self::SELECT_QUERY))
 				throw new InvalidArgumentException('Only a previously saved IHG_Record instances can start a relationship');
 			
 			$key .= '_id';
@@ -280,7 +276,7 @@ abstract class IHG_Record {
 	}
 	
 	public function __isset($key) {
-		return $this->_property_isset($key);
+		return $this->_property_isset($key, self::SELECT_QUERY);
 	}
 	
 	public function __unset($key) {
@@ -366,7 +362,7 @@ abstract class IHG_Record {
 		$sql_values = array();
 		$sql_assignments = array();
 		
-		foreach($this->__properties() as $id => $property) {
+		foreach($this->_properties(self::INSERT_QUERY) as $id => $property) {
 			if(is_int($id) && $property != 'id' && $this->_get_property($property) !== null) {
 				var_dump($property, $this->_get_property($property));
 				$sql_assignments[] = $property;
@@ -390,7 +386,7 @@ abstract class IHG_Record {
 		$sql_values = array();
 		$sql_assignments = array();
 		
-		foreach($this->__properties() as $id => $property) {
+		foreach($this->_properties(self::UPDATE_QUERY) as $id => $property) {
 			if(is_int($id) && $property != 'id') {
 				$sql_assignments[] = $property . ' = ?';
 				$sql_values[] = $this->_get_property($property);
@@ -435,7 +431,6 @@ abstract class IHG_Record {
 		$dummy_record = new $record_type();
 		
 		$selector_atom = $dummy_record->_generate_selector_atom();
-		$group_by_atom = $dummy_record->_generate_group_by_atom();
 		
 		if($conditions instanceof IHG_SQL_Atom_Interface) {
 			$condition_atom = $conditions;
@@ -447,15 +442,13 @@ abstract class IHG_Record {
 			$condition_atom = $dummy_record->_generate_condition_atom($conditions, self::SELECT_QUERY);
 		}
 		
-		$stmt = $pdo->prepare(sprintf("SELECT %s \nFROM \n\t%s \nWHERE %s AND deleted IS NULL \nGROUP BY %s \nLIMIT 1",
+		$stmt = $pdo->prepare(sprintf("SELECT %s \nFROM \n\t%s \nWHERE %s AND deleted IS NULL\nLIMIT 1",
 			$selector_atom->sql_atom(),
 			$dummy_record->_table_name(self::SELECT_QUERY),
-			$condition_atom->sql_atom(),
-			$group_by_atom->sql_atom()));
+			$condition_atom->sql_atom()));
 		
 		$stmt->execute($selector_atom->bound_values()
-			+ $condition_atom->bound_values()
-			+ $group_by_atom->bound_values());
+			+ $condition_atom->bound_values());
 		
 		$results = $stmt->fetch(PDO::FETCH_ASSOC);
 		
@@ -478,15 +471,13 @@ abstract class IHG_Record {
 		$condition_atom = $dummy_record->_generate_condition_atom($conditions, self::SELECT_QUERY);
 		$group_by_atom = $dummy_record->_generate_group_by_atom();
 		
-		$stmt = new IHG_SQL_Atom(sprintf("SELECT %s \nFROM \n\t%s \nWHERE %s AND deleted IS NULL \nGROUP BY %s",
+		$stmt = new IHG_SQL_Atom(sprintf("SELECT %s \nFROM \n\t%s \nWHERE %s AND deleted IS NULL",
 			$selector_atom->sql_atom(),
 			$dummy_record->_table_name(self::SELECT_QUERY),
-			$condition_atom->sql_atom(),
-			$group_by_atom->sql_atom()),
+			$condition_atom->sql_atom()),
 			array_merge(
 				$selector_atom->bound_values(),
-				$condition_atom->bound_values(),
-				$group_by_atom->bound_values()
+				$condition_atom->bound_values()
 			));
 			
 		return new IHG_Record_Set($pdo, $record_type, $stmt);
@@ -521,9 +512,9 @@ abstract class IHG_Record {
 		return $dummy_record->_table_name($query_type);
 	}
 	
-	static public function properties_for_record($record_type) {
+	static public function properties_for_record($record_type, $query_type) {
 		$dummy_record = new $record_type();
-		return $dummy_record->_properties();
+		return $dummy_record->_properties($query_type);
 	}
 }
 
@@ -538,5 +529,3 @@ class IHG_Record_Exception extends Exception {
 	}
 	
 }
-
-?>

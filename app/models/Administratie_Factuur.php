@@ -12,9 +12,9 @@ class Administratie_Factuur extends Administratie_Record
 			return 'Facturen';
 	}
 	
-	protected function _properties()
+	protected function _properties($query_type)
 	{
-		return array(
+		$props = array(
 			'id',
 			'bedrijf_id',
 			'contactpersoon_id',
@@ -22,16 +22,23 @@ class Administratie_Factuur extends Administratie_Record
 			'project_beschrijving',
 			'verzend_datum',
 			'uiterste_betaal_datum',
-			'termijn'				=> new IHG_SQL_Atom('DATEDIFF(uiterste_betaal_datum, verzend_datum)'),
-			'termijn_resterend'		=> new IHG_SQL_Atom('DATEDIFF(uiterste_betaal_datum, CURDATE())'),
 			'voldaan',
 			'aangegeven',
-			'prijs'					=> new IHG_SQL_Atom('prijs'),
-			'btw'					=> new IHG_SQL_Atom('btw'),
-			'btw_tarief_id',
-			'start_tijd'			=> new IHG_SQL_Atom('(SELECT MIN(start_tijd) FROM Uren WHERE Uren.factuur_id = id)'),
-			'eind_tijd'				=> new IHG_SQL_Atom('(SELECT MAX(eind_tijd) FROM Uren WHERE Uren.factuur_id = id)')
+			'btw_tarief_id'
 		);
+
+		if ($query_type == self::SELECT_QUERY) {
+			$props = array_merge($props, [
+				'termijn' => new IHG_SQL_Atom('DATEDIFF(uiterste_betaal_datum, verzend_datum)', [], ['uiterste_betaal_datum', 'verzend_datum']),
+				'termijn_resterend' => new IHG_SQL_Atom('DATEDIFF(uiterste_betaal_datum, CURDATE())', [], ['uiterste_betaal_datum']),
+				'prijs',
+				'btw',
+				'start_tijd' => new IHG_SQL_Atom('(SELECT MIN(start_tijd) FROM Uren WHERE Uren.factuur_id = id)', [], ['id']),
+				'eind_tijd' => new IHG_SQL_Atom('(SELECT MAX(eind_tijd) FROM Uren WHERE Uren.factuur_id = id)', [], ['id'])
+			]);
+		}
+
+		return $props;
 	}
 	
 	protected function _is_datetime_field($key)

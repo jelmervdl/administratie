@@ -2,11 +2,11 @@
 
 class Administratie_Contactpersoon extends Administratie_Record {
 	
-	protected function _table_name() {
+	protected function _table_name($query_type) {
 		return 'Contactpersonen';
 	}
 	
-	protected function _properties() {
+	protected function _properties($query_type) {
 		return array(
 			'id',
 			'bedrijf_id',
