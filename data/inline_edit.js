@@ -31,7 +31,11 @@ add_onload_listener(function(root) {
 			if(inner_text.data !== input_element.value) {
 				var data = new FormData();
 				data.append('data', input_element.value);
-				fetch(new Request(element.getAttribute('rel'), {method: 'POST', body: data}));
+				fetch(new Request(element.getAttribute('rel'), {
+					method: 'POST',
+					body: data,
+					credentials: 'same-origin'
+				}));
 			}
 		
 			inner_text.data = input_element.value;
