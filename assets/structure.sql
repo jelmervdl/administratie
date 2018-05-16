@@ -290,16 +290,14 @@ GROUP BY
 # ------------------------------------------------------------
 
 DROP TABLE `AankopenOverzicht`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `AankopenOverzicht`
+CREATE OR REPLACE VIEW `AankopenOverzicht`
 AS SELECT
    concat(
       _latin1'uur',
       `UrenOverzicht`.`tarief_id`, ':',
       `UrenOverzicht`.`bedrijf_id`, ':',
-      if(`UrenOverzicht`.`factuur_id`,
-         `UrenOverzicht`.`factuur_id`,
-         0
-      )
+      COALESCE(`UrenOverzicht`.`factuur_id`, ''), ':',
+      COALESCE(`UrenOverzicht`.`werk_id`, '')
    ) AS `id`,
    cast(
       concat(
@@ -310,9 +308,9 @@ AS SELECT
    ) AS `beschrijving`,
    sum(`UrenOverzicht`.`aantal`) AS `aantal`,
    sum(`UrenOverzicht`.`prijs`) AS `prijs`,
-   sum(`UrenOverzicht`.`btw`) AS `btw`,
    `UrenOverzicht`.`bedrijf_id` AS `bedrijf_id`,
    `UrenOverzicht`.`factuur_id` AS `factuur_id`,
+   `UrenOverzicht`.`werk_id` AS `werk_id`,
    `UrenOverzicht`.`deleted` AS `deleted`
 FROM
    `UrenOverzicht`
@@ -321,21 +319,25 @@ RIGHT JOIN `Tarieven` ON
 GROUP BY
    `UrenOverzicht`.`factuur_id`,
    `UrenOverzicht`.`bedrijf_id`,
-   `UrenOverzicht`.`tarief_id`
+   `UrenOverzicht`.`tarief_id`,
+   `Tarieven`.`prijs_per_uur`,
+   `UrenOverzicht`.`werk_id`,
+   `UrenOverzicht`.`deleted`
 UNION
 SELECT
    concat(
       _latin1'aankoop',
-      `Aankopen`.`factuur_id`, ':',
+      `Aankopen`.`product_id`, ':',
       `Aankopen`.`bedrijf_id`, ':',
-      `Aankopen`.`product_id`
+      COALESCE(`Aankopen`.`factuur_id`, ''), ':',
+      COALESCE(`Aankopen`.`werk_id`, ''), ':'
    ) AS `id`,
    cast(`Producten`.`beschrijving` as char charset latin1) AS `beschrijving`,
-   count(`Aankopen`.`product_id`) AS `aantal`,
-   (`Producten`.`prijs` * count(`Aankopen`.`product_id`)) AS `prijs`,
-   ((`Producten`.`prijs` * count(`Aankopen`.`product_id`)) * 0.19) AS `btw`,
+   SUM(`Aankopen`.`aantal`) AS `aantal`,
+   (`Producten`.`prijs` * SUM(`Aankopen`.`aantal`)) AS `prijs`,
    `Aankopen`.`bedrijf_id` AS `bedrijf_id`,
    `Aankopen`.`factuur_id` AS `factuur_id`,
+   `Aankopen`.`werk_id` as `werk_id`,
    `Aankopen`.`deleted` AS `deleted`
 FROM
    `Aankopen`
@@ -344,7 +346,11 @@ RIGHT JOIN `Producten` ON
 GROUP BY
    `Aankopen`.`factuur_id`,
    `Aankopen`.`bedrijf_id`,
-   `Aankopen`.`product_id`;
+   `Aankopen`.`product_id`,
+   `Aankopen`.`werk_id`,
+   `Aankopen`.`deleted`,
+   `Producten`.`beschrijving`,
+   `Producten`.`prijs`;
 
 
 # Replace placeholder table for OnbetaaldeUren with correct view syntax

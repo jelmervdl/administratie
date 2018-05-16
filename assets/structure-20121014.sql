@@ -86,8 +86,8 @@ AS SELECT
       _latin1'uur',
       `UrenOverzicht`.`tarief_id`, ':',
       `UrenOverzicht`.`bedrijf_id`, ':',
-      `UrenOverzicht`.`factuur_id`, ':',
-      `UrenOverzicht`.`werk_id`
+      COALESCE(`UrenOverzicht`.`factuur_id`, ''), ':',
+      COALESCE(`UrenOverzicht`.`werk_id`, '')
    ) AS `id`,
    cast(
       concat(
@@ -110,15 +110,17 @@ GROUP BY
    `UrenOverzicht`.`factuur_id`,
    `UrenOverzicht`.`bedrijf_id`,
    `UrenOverzicht`.`tarief_id`,
-   `UrenOverzicht`.`werk_id`
+   `Tarieven`.`prijs_per_uur`,
+   `UrenOverzicht`.`werk_id`,
+   `UrenOverzicht`.`deleted`
 UNION
 SELECT
    concat(
       _latin1'aankoop',
-      `Aankopen`.`factuur_id`, ':',
+      `Aankopen`.`product_id`, ':',
       `Aankopen`.`bedrijf_id`, ':',
-      `Aankopen`.`werk_id`, ':',
-      `Aankopen`.`product_id`
+      COALESCE(`Aankopen`.`factuur_id`, ''), ':',
+      COALESCE(`Aankopen`.`werk_id`, ''), ':'
    ) AS `id`,
    cast(`Producten`.`beschrijving` as char charset latin1) AS `beschrijving`,
    SUM(`Aankopen`.`aantal`) AS `aantal`,
@@ -135,7 +137,10 @@ GROUP BY
    `Aankopen`.`factuur_id`,
    `Aankopen`.`bedrijf_id`,
    `Aankopen`.`product_id`,
-   `Aankopen`.`werk_id`;
+   `Aankopen`.`werk_id`,
+   `Aankopen`.`deleted`,
+   `Producten`.`beschrijving`,
+   `Producten`.`prijs`;
 
 
 CREATE OR REPLACE VIEW FacturenOverzicht
