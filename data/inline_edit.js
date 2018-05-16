@@ -21,9 +21,8 @@ add_onload_listener(function(root) {
 			input_element.value = inner_text.data;
 			element.replaceChild(input_element, inner_text);
 			input_element.focus();
-			input_element
-				.addEventListener('blur', switch_to_show)
-				.addEventListener('keydown', check_key);
+			input_element.addEventListener('blur', switch_to_show);
+			input_element.addEventListener('keydown', check_key);
 		}
 	
 		var switch_to_show = function() {
