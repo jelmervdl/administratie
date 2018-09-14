@@ -40,7 +40,7 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 			->set_data($facturen)
 			->add_column('nummer', '', IHG_HTML_Table::checkbox_decorator('factuur_nummers'))
 			->add_column('nummer', '#', array($this, '_link_factuur'))
-			->add_column('bedrijf', 'Bedrijf', create_function('$bedrijf', 'return $bedrijf->naam;'))
+			->add_column('bedrijf', 'Bedrijf', function($berdrijf) { return $bedrijf->naam; })
 			->add_column('verzend_datum', 'Verzonden op')
 			->add_column('btw', 'BTW', $price_format);
 		
@@ -67,8 +67,8 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 		return $this->views->from_record($this->facturen)
 			->set_data($openstaande_facturen)
 			->add_column('nummer', '#', array($this, '_link_factuur'))
-			->add_column('bedrijf', 'Bedrijf', create_function('$bedrijf', 'return $bedrijf->naam;'))
-			->add_column('termijn_resterend', 'Termijn', create_function('$x', 'return $x . " dagen";'))
+			->add_column('bedrijf', 'Bedrijf', function($bedrijf) { return $bedrijf->naam; })
+			->add_column('termijn_resterend', 'Termijn', function($x) { return $x . " dagen"; })
 			->add_column('verzend_datum', 'Verzonden op', new IHG_Formatter_Date())
 			->add_column('uiterste_betaal_datum', 'Uiterlijk betaald op', new IHG_Formatter_Date());
 	}

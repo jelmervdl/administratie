@@ -17,12 +17,12 @@
 		
 		<p>
 			<label for="bedrijf_id">Bedrijf:</label>
-			<?= $this->form->popupbutton('bedrijf_id', $this->bedrijven, $werk->bedrijf, $errors, create_function('$bedrijf', 'return $bedrijf->naam;'), false) ?>
+			<?= $this->form->popupbutton('bedrijf_id', $this->bedrijven, $werk->bedrijf, $errors, function($bedrijf) { return $bedrijf->naam; }, false) ?>
 		</p>
 	
 		<p>
 			<label for="tarief_id">Tarief:</label>
-			<?= $this->form->popupbutton('tarief_id', $this->tarieven, $werk->tarief, $errors, create_function('$tarief', 'return sprintf("%s (&euro; %01.2f)", $tarief->naam, $tarief->prijs_per_uur);'), true) ?>
+			<?= $this->form->popupbutton('tarief_id', $this->tarieven, $werk->tarief, $errors, function($tarief) { return sprintf("%s (&euro; %01.2f)", $tarief->naam, $tarief->prijs_per_uur); }, true) ?>
 		</p>
 
 		<p>

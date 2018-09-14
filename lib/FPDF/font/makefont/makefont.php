@@ -423,7 +423,7 @@ if($argc < 2) {
 }
 
 $install_target = dirname(__FILE__) . '/../%s';
-//$ttf_files = array_map(create_function('$ttf', 'return realpath(getcwd() . "/$ttf"); '), $argv);
+//$ttf_files = array_map(function($ttf) { return realpath(getcwd() . "/$ttf");  }, $argv);
 $ttf_files = $argv;
 
 foreach($ttf_files as $ttf_file) {
