@@ -111,7 +111,7 @@ class IHG_Record_Set implements ArrayAccess, Iterator, Countable {
 		
 		$sql = preg_replace_callback('{SELECT\s.*\sFROM}is', array($this, '_count_placeholder_callback'), $sql);
 		
-		assert('is_int($this->_placeholder_count)');
+		assert(is_int($this->_placeholder_count));
 		$bound_values = array_slice($this->_query->bound_values(), $this->_placeholder_count);
 		
 		$sql = preg_replace('{ORDER\sBY\s(.+?)\s*$}i', '', $sql);
