@@ -2,5 +2,5 @@ Options +FollowSymLinks
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ app_administratie.php?__path=/$1	[QSA,L]
-RewriteRule ^$ app_administratie.php?__path=/ [QSA,L]
+RewriteRule ^(.*)$ index.php?__path=/$1	[QSA,L]
+RewriteRule ^$ index.php?__path=/ [QSA,L]
