@@ -11,7 +11,9 @@ set_include_path(implode(PATH_SEPARATOR, array(
 	get_include_path()
 	)));
 
-function __autoload($classname) {
+spl_autoload_register('ihg_autoload');
+
+function ihg_autoload($classname) {
 	include sprintf('%s.php', $classname);
 }
 
