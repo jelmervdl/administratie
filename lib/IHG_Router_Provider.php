@@ -40,7 +40,7 @@ class IHG_Router_Provider extends IHG_Component_Abstract
 		if(isset($_GET['__path']))
 			return dirname($_SERVER['SCRIPT_NAME']);
 		else
-			return dirname($_SERVER['SCRIPT_NAME']) . '/' . basename($_SERVER['SCRIPT_NAME'], '.php');
+			return dirname($_SERVER['SCRIPT_NAME']) . basename($_SERVER['SCRIPT_NAME']);
 	}
 	
 	public function register_route($route, $controller_name)
@@ -84,8 +84,7 @@ class IHG_Router_Provider extends IHG_Component_Abstract
 		{
 			$arguments = array_slice(func_get_args(), 2);
 			array_trim($arguments);
-			$root = $this->root();
-			return rtrim($root, '/') . $this->link_controller($controller, $action, $arguments);
+			return rtrim($this->root(), '/') . $this->link_controller($controller, $action, $arguments);
 		}
 		catch(Exception $e)
 		{
