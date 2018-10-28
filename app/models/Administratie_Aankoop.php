@@ -11,6 +11,8 @@ class Administratie_Aankoop extends Administratie_Record {
 			'beschrijving',
 			'aantal',
 			'prijs',
+			'valuta_naam',
+			'valuta_symbool',
 			'bedrijf_id',
 			'factuur_id'
 			);

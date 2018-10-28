@@ -86,10 +86,10 @@ class IHG_View_Template_Native implements IHG_View_Interface
 		return $formatter($date);
 	}
 	
-	protected function _format_price($price)
+	protected function _format_price($price, $model = null)
 	{
 		$formatter = new IHG_Formatter_Price();
-		return $formatter($price);
+		return $formatter($price, $model);
 	}
 	
 	static public function from_file(IHG_Application_Abstract $application, $file)

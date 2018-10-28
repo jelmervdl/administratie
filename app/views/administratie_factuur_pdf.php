@@ -111,24 +111,23 @@ $pdf->setFont(FONT_NORMAL, '', 9);
 $pdf->ln(6);
 
 foreach($aankopen as $aankoop) {
-	//$pdf->cell(86.7, 5.65, 'Werkuren ' . chr(224) . ' 20 euro per uur', 0, 'L');
 	$pdf->cell(86.7, 5.65, _iso_8859_1($aankoop->beschrijving), 0, 0, 'L');
     $pdf->cell(16.4, 5.65, number_format($aankoop->aantal, 2),       0, 0, 'R');
-    $pdf->cell(16.8, 5.65, number_format($aankoop->prijs, 2, '.', ','),   0, 0, 'R');
+    $pdf->cell(16.8, 5.65, _iso_8859_1($aankoop->valuta_symbool) . number_format($aankoop->prijs, 2, '.', ','),   0, 0, 'R');
 	$pdf->ln();
 }
 // Tabeltotalen
 $pdf->setFont(FONT_BOLD, '', 9);
 $pdf->cell(86.7, 5.65, 'Totaal excl. BTW', 'TB', 0, 'L');
-$pdf->cell(33.2, 5.65, number_format($factuur->prijs, 2, '.', ','), 'TB', 0, 'R');
+$pdf->cell(33.2, 5.65, _iso_8859_1($factuur->valuta_symbool) . number_format($factuur->prijs, 2, '.', ','), 'TB', 0, 'R');
 $pdf->ln();
 $pdf->setFont(FONT_NORMAL, '', 9);
 $pdf->cell(86.7, 5.65, $factuur->btw_tarief->percentage * 100 . '% BTW over totaalbedrag', 0, 0, 'L');
-$pdf->cell(33.2, 5.65, number_format($factuur->btw, 2, '.', ','), 0, 0, 'R');
+$pdf->cell(33.2, 5.65, _iso_8859_1($factuur->valuta_symbool) . number_format($factuur->btw, 2, '.', ','), 0, 0, 'R');
 $pdf->ln();
 $pdf->setFont(FONT_BOLD, '', 9);
 $pdf->cell(86.7, 5.65, 'Totaal incl. BTW',	'TB', 0, 'L');
-$pdf->cell(33.2, 5.65, number_format($factuur->prijs_incl, 2, '.', ','), 'TB', 0, 'R');
+$pdf->cell(33.2, 5.65, _iso_8859_1($factuur->valuta_symbool) . number_format($factuur->prijs_incl, 2, '.', ','), 'TB', 0, 'R');
 
 // Mededeling
 $pdf->setFont(FONT_NORMAL, '', 9);

@@ -2,8 +2,8 @@
 
 class IHG_Formatter_Price
 {
-	public function __invoke($price)
+	public function __invoke($price, $model = null)
 	{
-		return '&euro; ' . number_format($price, 2, '.', ',');
+		return htmlspecialchars($model ? $model->valuta_symbool : '€') . ' ' . number_format($price, 2, '.', ',');
 	}
 }

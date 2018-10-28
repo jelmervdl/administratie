@@ -25,7 +25,9 @@ class Administratie_Uur extends Administratie_Record {
 				'aankopenoverzicht_id' => new IHG_SQL_Atom('aankopenoverzicht_id'),
 				'aantal' => new IHG_SQL_Atom('aantal'),
 				'duur'	=> new IHG_SQL_Atom('TIMESTAMPDIFF(SECOND, start_tijd, eind_tijd) / 3600.0'),
-				'prijs' => new IHG_SQL_Atom('prijs')	
+				'prijs' => new IHG_SQL_Atom('prijs'),
+				'valuta_naam' => new IHG_SQL_Atom('valuta_naam'),
+				'valuta_symbool' => new IHG_SQL_Atom('valuta_symbool')
 			]);
 		}
 		

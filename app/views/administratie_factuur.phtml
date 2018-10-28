@@ -11,7 +11,7 @@
 	<table class="prijs">
 		<tr>
 			<th>Prijs:</th>
-			<td><?=$this->_format_price($factuur->prijs)?></td>
+			<td><?=$this->_format_price($factuur->prijs, $factuur)?></td>
 		</tr>
 		<tr>
 			<th>BTW: <?=$factuur->btw_tarief->percentage * 100?>%</th>
@@ -19,7 +19,7 @@
 		</tr>
 		<tr class="summary">
 			<th>Totaal:</th>
-			<td><?=$this->_format_price($factuur->prijs_incl)?></td>
+			<td><?=$this->_format_price($factuur->prijs_incl, $factuur)?></td>
 		</tr>
 	</table>
 	

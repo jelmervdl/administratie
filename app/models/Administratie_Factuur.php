@@ -33,6 +33,8 @@ class Administratie_Factuur extends Administratie_Record
 				'termijn_resterend' => new IHG_SQL_Atom('DATEDIFF(uiterste_betaal_datum, CURDATE())', [], ['uiterste_betaal_datum']),
 				'prijs',
 				'btw',
+				'valuta_naam',
+				'valuta_symbool',
 				'start_tijd' => new IHG_SQL_Atom('(SELECT MIN(start_tijd) FROM Uren WHERE Uren.factuur_id = id)', [], ['id']),
 				'eind_tijd' => new IHG_SQL_Atom('(SELECT MAX(eind_tijd) FROM Uren WHERE Uren.factuur_id = id)', [], ['id'])
 			]);
