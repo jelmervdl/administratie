@@ -141,8 +141,9 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 					$factuur->verzend_datum = IHG_DateTime::from_string($_POST['verzend_datum']);
 					$factuur->contactpersoon_id = $factuur->bedrijf->contactpersonen[0]->id;
 				
-					foreach ($_POST['uur'] as $uur_id)
-						$factuur->add_uur($this->uren->find($uur_id));
+					if (!empty($_POST['uur']))
+						foreach ($_POST['uur'] as $uur_id)
+							$factuur->add_uur($this->uren->find($uur_id));
 				}
 				
 				if (
