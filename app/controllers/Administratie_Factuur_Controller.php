@@ -40,7 +40,7 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 			->set_data($facturen)
 			->add_column('nummer', '', IHG_HTML_Table::checkbox_decorator('factuur_nummers'))
 			->add_column('nummer', '#', array($this, '_link_factuur'))
-			->add_column('bedrijf', 'Bedrijf', function($berdrijf) { return $bedrijf->naam; })
+			->add_column('bedrijf', 'Bedrijf', function($bedrijf) { return $bedrijf->naam; })
 			->add_column('verzend_datum', 'Verzonden op')
 			->add_column('btw', 'BTW', $price_format);
 		
@@ -140,13 +140,6 @@ class Administratie_Factuur_Controller extends IHG_Controller_Abstract
 				{
 					$factuur->verzend_datum = IHG_DateTime::from_string($_POST['verzend_datum']);
 					$factuur->contactpersoon_id = $factuur->bedrijf->contactpersonen[0]->id;
-				
-					if (empty($_POST['uur']))
-					{
-						$e = Exception('Geen uren geselecteerd');
-						$e->errors = 'uren';
-						throw $e;
-					}
 				
 					foreach ($_POST['uur'] as $uur_id)
 						$factuur->add_uur($this->uren->find($uur_id));
